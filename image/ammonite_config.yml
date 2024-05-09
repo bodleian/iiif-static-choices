@@ -1,0 +1,30 @@
+---
+full_shelfmark: "Pyritised Ammonite"
+summary: "An RTI of a pyritised ammonite"
+object_id: "pyritised-ammonite"
+object_label: "Pyritized Ammonite"
+provider_id: "richard-benjamin-allen"
+provider_name: "Richard Benjamin Allen"
+logo_image_id: "example-logo"
+language: "en"
+thumbnail_image_id: "pyritised_ammonite_thumb"
+html_terms: "<span>Terms of use</span>"
+range: "1"
+
+metadata:
+  Title: "Pyritised Ammonite"
+  Shelfmark: "Pyritised Ammonite"
+  Description: "An RTI of pyritised ammonite"
+
+part_of:
+  fossils: "Richard Benjamin Allen's Fossils"
+
+items:
+  canvas_id: "pyritised-ammonite"
+  folio: "Lateral right side view"
+  preferred_image: "ammonite-albedo.png"
+  images:
+    - image_id: "ammonite-albedo"
+      map_type: "albedo"
+    - image_id: "ammonite-normals"
+      map_type: "normal"

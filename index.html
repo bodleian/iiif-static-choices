@@ -1,0 +1,63 @@
+<!-- This is just for testing and documentation - do not deploy this anywhere unless you know what you're doing -->
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <!-- By default Mirador uses Roboto font. Be sure to load this or change the font -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
+    <title>Mirador Example</title>
+    <script src="/mirador/dist/mirador-with-plugins.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const config = {
+          id: 'viewer',
+          windows: [{
+            // enable and show the image tools plugin controls
+            imageToolsEnabled: true,
+            imageToolsOpen: true,
+            // open a specific manifest (optional)
+            manifestId: 'http://0.0.0.0:8000/iiif/manifest/pyritised-ammonite.json',
+          }],
+
+          /* If you want to try this repository out with bodleian objects Manipulate IIIF HTTP requests
+          (info.json, IIIF presentation manifests, annotations, etc) to add an Accept header so that this uses the
+          Bodleian v3 manifests and images. */
+          requests: {
+            preprocessors: [
+              (url, options) => ({...options,
+                headers: {
+                  ...options.headers,
+                  Accept: url.endsWith('/info.json')
+                          ? 'application/ld+json;profile=http://iiif.io/api/image/3/context.json'
+                          : 'application/ld+json;profile="http://iiif.io/api/presentation/3/context.json"'
+                }
+              })
+            ],
+          },
+          theme: {
+            palette: {
+              primary: {
+                main: '#1967d2',
+              },
+            },
+          },
+          osdConfig:{
+            crossOriginPolicy: "Anonymous",
+            subPixelRoundingForTransparency: 2,
+            immediateRender: true,
+            //debugMode: true
+          },
+        };
+
+        /* this includes all the plug-ins under MiradorPlugins
+        it's the equivalent of [ ...MiradorPlugins.pluginA, ...MiradorPlugins.pluginB, ...MiradorPlugins.pluginC]
+        for all plugins in MiradorPlugins */
+        Mirador.viewer(config, Object.values(MiradorPlugins).flatMap((e) => ([...e])));
+      });
+    </script>
+  </head>
+  <body>
+    <!-- Container element of Mirador whose id should be passed to the instantiating call as "id" -->
+    <div id="viewer"></div>
+  </body>
+</html>

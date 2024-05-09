@@ -1,0 +1,19 @@
+version: 1
+disable_existing_loggers: true
+formatters:
+  simple:
+    format: "[%(levelname)s] %(message)s (%(filename)s:%(lineno)s)"
+handlers:
+  console:
+    class: logging.StreamHandler
+    level: INFO
+    formatter: simple
+    stream: ext://sys.stdout
+loggers:
+  iiif-generator:
+    level: NOTSET
+    handlers: [console]
+    propagate: no
+root:
+  level: NOTSET
+  handlers: [console]
