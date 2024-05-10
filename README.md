@@ -68,6 +68,13 @@ To use your own images and manifest-config.yml do the following:
 
 3. Run through the steps in [Basic Instructions](#basic-instructions) again.
 
+What should it look like?
+===
+
+If you've done the above set up correctly and the server is running, you can go to your browser and enter the address: http://0.0.0.0:8000/ and you will see the following.  Click the buttons like the cursor does in the animated gif to play around in 2.5D in Mirador.
+
+![Animated picture showing a pyritised ammonite and someone interacting with it using the ARCHiOx Mirador plug-in](examples/fossil.gif)
+
 Todo
 ===
 
