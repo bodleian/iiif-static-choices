@@ -62,6 +62,7 @@ class Items:
                             {
                                 "id": f"{ host }/iiif/annotation/{ canvas_id }.json",
                                 "type": "Annotation",
+                                "motivation": "painting",
                                 "target": f"{ host }/iiif/canvas/{ canvas_id }.json",
                                 "body": {
                                     "type": "Choice",
@@ -69,7 +70,6 @@ class Items:
                                 }
                             }
                         ],
-                        "motivation": "painting"
                     }
                 ]
             }
