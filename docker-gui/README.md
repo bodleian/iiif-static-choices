@@ -1,0 +1,100 @@
+# IIIF Static Choices - Docker + GUI
+
+This extension provides a web-based graphical interface and a Docker configuration to facilitate the creation of 2.5D relighting viewers using IIIF Static Choices.
+
+## What is it?
+
+IIIF Static Choices is a tool that allows generating interactive 2.5D viewers from 2D images (albedo) and normal maps. This extension adds:
+
+1.  **Docker Container**: Packages the entire necessary environment (Python, dependencies, web server) into a portable container that works on any operating system.
+2.  **Web Interface**: Provides an intuitive graphical interface to upload images, configure metadata, and generate the viewer without needing to use commands.
+3.  **Cross-Platform Compatibility**: Solves platform-specific issues (like the black screen problem on Windows) by running in a consistent Linux environment.
+
+## Screenshots
+
+![Alternative text for the image](gui.png)
+
+## Requirements
+
+*   Docker
+*   Docker Compose
+
+## Usage Instructions
+
+### Installation
+
+1.  Clone the repository:
+    ```bash
+    git clone https://github.com/bodleian/iiif-static-choices.git
+    cd iiif-static-choices
+    ```
+
+2.  Build and run the Docker container:
+    ```bash
+    docker-compose up -d
+    ```
+
+### Usage
+
+1.  Open your browser at http://localhost:8080
+2.  Upload your albedo and normal map images
+3.  Configure the viewer metadata
+4.  Click on "Generate 2.5D Viewer"
+5.  Open the generated link to see your 2.5D model
+
+## Project Structure
+
+```
+docker-gui/
+├── Dockerfile             # Docker container configuration
+├── docker-entrypoint.sh   # Container startup script
+├── README.md              # This file
+├── web-interface/
+│   ├── server.js          # Express web server
+│   ├── package.json       # Node.js dependencies
+│   ├── public/            # Static files (CSS, JavaScript)
+│   └── views/             # EJS templates (index, help)
+└── sample-config.yml      # Example configuration
+```
+
+## Development
+
+### Modifying the Web Interface
+
+The web interface is built with:
+-   **Node.js** + **Express**: For the server
+-   **EJS**: For templates
+-   **Bootstrap**: For styles
+
+To modify the interface, edit the files in `docker-gui/web-interface/views/`.
+
+### Rebuilding the Container
+
+After making changes, rebuild the container:
+```bash
+docker-compose down
+docker-compose up --build -d
+```
+
+## Troubleshooting
+
+### The viewer appears black in 2.5D mode
+
+If the viewer appears black when activating 2.5D mode, it could be due to several reasons:
+
+1.  **WebGL**: Ensure your browser supports WebGL. You can check this at [get.webgl.org](https://get.webgl.org/).
+2.  **Normal Map Format**: The normal map must be in standard RGB tangent-space format.
+3.  **Browser Configuration**: Try a different browser like Chrome or Firefox.
+
+### The container does not start
+
+Verify that Docker is installed and running correctly. You can use these commands to diagnose problems:
+
+```bash
+# View container logs
+docker-compose logs
+
+# Check container status
+docker-compose ps
+```
+
