@@ -7,6 +7,15 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <link href="/css/styles.css" rel="stylesheet">
+    <style>
+        .export-container {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 30px;
+            border: 1px solid #dee2e6;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -127,9 +136,26 @@
                     </button>
                 </div>
             </div>
+            
+            <!-- Sección para exportar el visor -->
+            <div class="export-container">
+                <h4><i class="bi bi-box-seam"></i> Exportar Visor</h4>
+                <p>Si deseas desplegar este visor en tu propio servidor, puedes exportar todos los archivos necesarios en un paquete ZIP.</p>
+                
+                <div class="mb-3">
+                    <label for="target-url" class="form-label">URL de destino</label>
+                    <input type="text" id="target-url" class="form-control" placeholder="https://ejemplo.com/visor/">
+                    <small class="form-text text-muted">Introduce la URL base donde se ubicará el visor en tu servidor.</small>
+                </div>
+                
+                <button id="export-button" class="btn btn-primary">
+                    <i class="bi bi-download"></i> Exportar Visor
+                </button>
+                <div id="export-status" class="mt-2"></div>
+            </div>
         </div>
         
-        <div class="footer">
+        <div class="footer mt-5">
             <p>Basado en <a href="https://github.com/bodleian/iiif-static-choices" target="_blank">IIIF Static Choices</a> | Desarrollado para facilitar la creación de visores de relighting 2.5D</p>
         </div>
     </div>
@@ -140,6 +166,9 @@
             // Funcionalidad de arrastrar y soltar
             setupDragDrop('albedo');
             setupDragDrop('normals');
+            
+            // Variable para almacenar el ID del manifiesto generado
+            let currentManifestId = '';
             
             // Manejar envío del formulario
             document.getElementById('upload-form').addEventListener('submit', function(e) {
@@ -170,6 +199,9 @@
                         document.querySelectorAll('.step')[3].classList.add('active');
                         
                         statusDiv.innerHTML = '<div class="alert alert-success"><i class="bi bi-check-circle-fill"></i> ¡El visor se ha generado correctamente!</div>';
+                        
+                        // Guardar el ID del manifiesto
+                        currentManifestId = data.manifestId || document.getElementById('outputId').value;
                         
                         // Mostrar el contenedor del visor
                         const viewerContainer = document.getElementById('viewer-container');
@@ -209,6 +241,71 @@
                     console.error('Error:', error);
                     statusDiv.innerHTML = `<div class="alert alert-danger"><i class="bi bi-exclamation-triangle-fill"></i> Error: ${error.message}</div>`;
                 });
+            });
+            
+            // Manejar la exportación del visor
+            document.addEventListener('click', function(e) {
+                if (e.target && e.target.id === 'export-button') {
+                    const targetUrl = document.getElementById('target-url').value.trim();
+                    const exportStatus = document.getElementById('export-status');
+                    
+                    if (!targetUrl) {
+                        exportStatus.innerHTML = '<div class="alert alert-warning"><i class="bi bi-exclamation-triangle-fill"></i> Por favor, introduce una URL de destino válida.</div>';
+                        return;
+                    }
+                    
+                    if (!currentManifestId) {
+                        currentManifestId = document.getElementById('outputId').value;
+                    }
+                    
+                    exportStatus.innerHTML = '<div class="alert alert-info"><i class="bi bi-hourglass-split"></i> Generando paquete de exportación, por favor espera...</div>';
+                    
+                    // Realizar la solicitud de exportación
+                    fetch('/export', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            manifestId: currentManifestId,
+                            targetUrl: targetUrl
+                        })
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            // Descargar el archivo ZIP
+                            const contentDisposition = response.headers.get('content-disposition');
+                            let filename = 'visor-exportado.zip';
+                            if (contentDisposition) {
+                                const filenameMatch = contentDisposition.match(/filename="?([^"]*)"?/);
+                                if (filenameMatch && filenameMatch[1]) {
+                                    filename = filenameMatch[1];
+                                }
+                            }
+                            
+                            return response.blob().then(blob => {
+                                const url = window.URL.createObjectURL(blob);
+                                const a = document.createElement('a');
+                                a.style.display = 'none';
+                                a.href = url;
+                                a.download = filename;
+                                document.body.appendChild(a);
+                                a.click();
+                                window.URL.revokeObjectURL(url);
+                                
+                                exportStatus.innerHTML = '<div class="alert alert-success"><i class="bi bi-check-circle-fill"></i> ¡Exportación completada! El archivo ZIP se ha descargado.</div>';
+                            });
+                        } else {
+                            return response.json().then(data => {
+                                throw new Error(data.message || 'Error en la exportación');
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        exportStatus.innerHTML = `<div class="alert alert-danger"><i class="bi bi-exclamation-triangle-fill"></i> Error: ${error.message}</div>`;
+                    });
+                }
             });
         });
         
