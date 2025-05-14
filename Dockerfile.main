@@ -35,10 +35,16 @@ RUN npm install
 
 # Preparar directorios para tiles y manifiestos
 WORKDIR /app
-RUN mkdir -p /app/iiif/image /app/iiif/manifest && chmod -R 777 /app/iiif
+RUN mkdir -p /app/iiif/image /app/iiif/manifest && chmod -R 777 /app/iiif && \
+    mkdir -p /app/data/uploads && chmod -R 777 /app/data
 
 # Exponer puertos
 EXPOSE 8000 8080
 
 # Volumen para datos persistentes
 VOLUME ["/app/data"]
+
+# Script de inicio
+COPY docker-gui/docker-entrypoint.sh /
+RUN chmod +x /docker-entrypoint.sh
+ENTRYPOINT ["/docker-entrypoint.sh"]

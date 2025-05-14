@@ -4,7 +4,7 @@ services:
   iiif-static-choices:
     build:
       context: .
-      dockerfile: Dockerfile.clean
+      dockerfile: Dockerfile.main
     ports:
       - "8000:8000"  # Puerto para el visor IIIF
       - "8080:8080"  # Puerto para la interfaz web
@@ -13,5 +13,3 @@ services:
     environment:
       - NODE_ENV=production
     restart: unless-stopped
-    # Comando directo para iniciar ambos servicios
-    command: bash -c "cd /app/docker-gui/web-interface && npm start & sleep 5 && cd /app && python server.py 8000"
