@@ -5,7 +5,7 @@ const fs = require('fs');
 const { exec } = require('child_process');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const archiver = require('archiver'); // Añadido para soporte de exportación ZIP
+const archiver = require('archiver');
 
 const app = express();
 const port = 8080;
@@ -74,12 +74,16 @@ app.post('/upload', upload.fields([
     fs.mkdirSync(imageDir, { recursive: true });
   }
 
-  // Copiar las imágenes al directorio image con nombres estándar
-  fs.copyFileSync(albedoPath, path.join(imageDir, 'ammonite-albedo.png'));
-  fs.copyFileSync(normalsPath, path.join(imageDir, 'ammonite-normals.png'));
+  // Generar IDs dinámicos para las imágenes basados en el outputId
+  const outputId = req.body.outputId || 'relighting-viewer';
+  const albedoId = `${outputId}-albedo`;
+  const normalsId = `${outputId}-normals`;
+  
+  // Copiar las imágenes al directorio image con nombres basados en el ID
+  fs.copyFileSync(albedoPath, path.join(imageDir, `${albedoId}.png`));
+  fs.copyFileSync(normalsPath, path.join(imageDir, `${normalsId}.png`));
 
   // Generar config.yml basado en la información proporcionada
-  const outputId = req.body.outputId || 'relighting-viewer';
   const configContent = `
 title: ${req.body.title || 'Sin título'}
 description: ${req.body.description || 'Sin descripción'}
@@ -111,15 +115,15 @@ part_of:
 items:
   canvas_id: "canvas-1"
   folio: "folio-1"
-  preferred_image: "ammonite-albedo.png"
+  preferred_image: "${albedoId}.png"
   images:
-    - image_id: "ammonite-albedo"
+    - image_id: "${albedoId}"
       map_type: "albedo"
-    - image_id: "ammonite-normals"
+    - image_id: "${normalsId}"
       map_type: "normal"
 `;
 
-  const configPath = path.join(imageDir, 'ammonite-config.yml');
+  const configPath = path.join(imageDir, `${outputId}-config.yml`);
   fs.writeFileSync(configPath, configContent);
 
   console.log('Archivos preparados. Ejecutando generación de tiles...');
@@ -137,7 +141,7 @@ items:
 
     console.log('Tiles generados. Generando manifiesto...');
 
-    exec(`cd /app && python iiif_generator.py manifest -f ammonite-config.yml -o ${outputId}.json`, (error, stdout, stderr) => {
+    exec(`cd /app && python iiif_generator.py manifest -f ${outputId}-config.yml -o ${outputId}.json`, (error, stdout, stderr) => {
       if (error) {
         console.error(`Error generando manifiesto: ${error}`);
         return res.status(500).json({
@@ -160,7 +164,7 @@ items:
         if (err) {
           console.error(`Error leyendo archivo index.html base: ${err}`);
           // Continuar con la respuesta aunque haya error
-          fixHostUrlInFiles(outputId);
+          fixHostUrlInFiles(outputId, albedoId, normalsId);
           return res.json({
             success: true,
             message: 'Visor generado correctamente, pero no se pudo crear la página personalizada',
@@ -204,7 +208,7 @@ items:
         console.log(`Página del visor generada en: /viewers/${outputId}/index.html`);
 
         // Corregir URL del host en los archivos generados para evitar problemas
-        fixHostUrlInFiles(outputId);
+        fixHostUrlInFiles(outputId, albedoId, normalsId);
 
         // Responder con éxito y la URL para visualizar
         res.json({
@@ -258,25 +262,75 @@ app.post('/export', bodyParser.json(), (req, res) => {
       });
     }
     
-    // Leer el manifiesto, reemplazar las URLs y guardarlo
+    // Leer el manifiesto y obtener los IDs de las imágenes
     let manifestContent = fs.readFileSync(manifestSrc, 'utf8');
+    const manifestData = JSON.parse(manifestContent);
+    
+    // Extraer los IDs de las imágenes del manifiesto
+    const imageIds = [];
+    try {
+      if (manifestData.items && manifestData.items[0] && manifestData.items[0].items && 
+          manifestData.items[0].items[0] && manifestData.items[0].items[0].items && 
+          manifestData.items[0].items[0].items[0] && manifestData.items[0].items[0].items[0].body && 
+          manifestData.items[0].items[0].items[0].body.items) {
+        
+        const items = manifestData.items[0].items[0].items[0].body.items;
+        items.forEach(item => {
+          if (item.service && item.service.length > 0) {
+            // Extraer el ID del servicio (ejemplo: http://localhost:8000/iiif/image/some-id)
+            const serviceUrl = item.service[0]['@id'] || item.service[0].id;
+            if (serviceUrl) {
+              // Obtener solo el último componente de la URL
+              const parts = serviceUrl.split('/');
+              const id = parts[parts.length - 1];
+              if (id && !imageIds.includes(id)) {
+                imageIds.push(id);
+              }
+            }
+          }
+        });
+      }
+    } catch (error) {
+      console.error('Error extrayendo IDs de imágenes del manifiesto:', error);
+      // Si hay un error, usar un enfoque alternativo
+      imageIds.push(`${manifestId}-albedo`);
+      imageIds.push(`${manifestId}-normals`);
+    }
+    
+    // Si no se encontraron IDs de imágenes, usar IDs basados en el ID del manifiesto
+    if (imageIds.length === 0) {
+      imageIds.push(`${manifestId}-albedo`);
+      imageIds.push(`${manifestId}-normals`);
+    }
+    
+    console.log(`IDs de imágenes encontrados: ${imageIds.join(', ')}`);
+    
+    // Reemplazar las URLs en el manifiesto
     manifestContent = manifestContent.replace(/http:\/\/localhost:8000/g, targetUrl.replace(/\/$/, ''));
     fs.writeFileSync(manifestDest, manifestContent);
     
     // Copiar los directorios de imágenes
-    ['ammonite-albedo', 'ammonite-normals'].forEach(dir => {
+    imageIds.forEach(dir => {
       // Crear el directorio de destino
       const imageSrcDir = `/app/iiif/image/${dir}`;
       const imageDestDir = `${imageDir}/${dir}`;
+      
+      if (!fs.existsSync(imageSrcDir)) {
+        console.warn(`Directorio de imágenes no encontrado: ${imageSrcDir}`);
+        return; // Continuar con el siguiente directorio
+      }
+      
       fs.mkdirSync(imageDestDir, { recursive: true });
       
       // Copiar el archivo info.json, reemplazando las URLs
       const infoSrc = `${imageSrcDir}/info.json`;
-      const infoDest = `${imageDestDir}/info.json`;
-      
-      let infoContent = fs.readFileSync(infoSrc, 'utf8');
-      infoContent = infoContent.replace(/http:\/\/localhost:8000/g, targetUrl.replace(/\/$/, ''));
-      fs.writeFileSync(infoDest, infoContent);
+      if (fs.existsSync(infoSrc)) {
+        const infoDest = `${imageDestDir}/info.json`;
+        
+        let infoContent = fs.readFileSync(infoSrc, 'utf8');
+        infoContent = infoContent.replace(/http:\/\/localhost:8000/g, targetUrl.replace(/\/$/, ''));
+        fs.writeFileSync(infoDest, infoContent);
+      }
       
       // Copiar los tiles (de forma recursiva)
       copyDirectoryRecursiveSync(imageSrcDir, imageDestDir, (file) => {
@@ -368,7 +422,7 @@ function copyDirectoryRecursiveSync(src, dest, filter = null) {
 }
 
 // Función para corregir URLs de 0.0.0.0 a localhost en los archivos generados
-function fixHostUrlInFiles(outputId) {
+function fixHostUrlInFiles(outputId, albedoId, normalsId) {
   try {
     // Corregir en el manifiesto
     const manifestPath = `/app/iiif/manifest/${outputId}.json`;
@@ -380,7 +434,8 @@ function fixHostUrlInFiles(outputId) {
     }
 
     // Corregir en los info.json de los tiles
-    ['ammonite-albedo', 'ammonite-normals'].forEach(dir => {
+    const imageIds = [albedoId, normalsId];
+    imageIds.forEach(dir => {
       const infoPath = `/app/iiif/image/${dir}/info.json`;
       if (fs.existsSync(infoPath)) {
         let content = fs.readFileSync(infoPath, 'utf8');
