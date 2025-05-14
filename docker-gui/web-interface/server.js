@@ -5,7 +5,7 @@ const fs = require('fs');
 const { exec } = require('child_process');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const archiver = require('archiver');
+const archiver = require('archiver'); // Añadido para soporte de exportación ZIP
 
 const app = express();
 const port = 8080;
@@ -90,7 +90,7 @@ outputId: ${outputId}
 # Añadir los campos necesarios
 full_shelfmark: "${req.body.shelfmark || 'Sin marca'}"
 summary: "${req.body.description || 'Sin descripción'}"
-object_id: "digital-object-1"
+object_id: "${outputId}"
 object_label: "${req.body.title || 'Sin título'}"
 provider_id: "provider-1"
 provider_name: "Proveedor"
@@ -147,17 +147,72 @@ items:
         });
       }
 
-      console.log('Manifiesto generado correctamente. Proceso completado.');
+      console.log('Manifiesto generado correctamente. Generando página del visor...');
 
-      // Corregir URL del host en los archivos generados para evitar problemas
-      fixHostUrlInFiles(outputId);
+      // Generar una página index personalizada para este visor
+      const viewerDir = `/app/data/viewers/${outputId}`;
+      if (!fs.existsSync(viewerDir)) {
+        fs.mkdirSync(viewerDir, { recursive: true });
+      }
 
-      // Responder con éxito y la URL para visualizar
-      res.json({
-        success: true,
-        message: 'Visor generado correctamente',
-        viewerUrl: `http://localhost:8000/#?manifest=http://localhost:8000/iiif/manifest/${outputId}.json`,
-        manifestId: outputId
+      // Leer el archivo index.html base
+      fs.readFile('/app/index.html', 'utf8', (err, data) => {
+        if (err) {
+          console.error(`Error leyendo archivo index.html base: ${err}`);
+          // Continuar con la respuesta aunque haya error
+          fixHostUrlInFiles(outputId);
+          return res.json({
+            success: true,
+            message: 'Visor generado correctamente, pero no se pudo crear la página personalizada',
+            viewerUrl: `http://localhost:8000/#?manifest=http://localhost:8000/iiif/manifest/${outputId}.json`
+          });
+        }
+
+        // Reemplazar la referencia al manifiesto
+        let viewerContent = data.replace(
+          /manifestId:.*?,/g, 
+          `manifestId: 'http://localhost:8000/iiif/manifest/${outputId}.json',`
+        );
+
+        // Asegurarse de que todas las URLs usen localhost en lugar de 0.0.0.0
+        viewerContent = viewerContent.replace(/http:\/\/0\.0\.0\.0:8000/g, 'http://localhost:8000');
+
+        // Guardar el nuevo archivo
+        const viewerPath = `${viewerDir}/index.html`;
+        fs.writeFileSync(viewerPath, viewerContent);
+
+        // Crear un enlace simbólico para acceder a este visor específico
+        const publicDir = '/app/data/public';
+        if (!fs.existsSync(publicDir)) {
+          fs.mkdirSync(publicDir, { recursive: true });
+        }
+        
+        const publicPath = `${publicDir}/${outputId}.html`;
+        const publicContent = `
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="refresh" content="0;url=http://localhost:8000/viewers/${outputId}/index.html">
+    <title>Redirigiendo al visor ${outputId}</title>
+  </head>
+  <body>
+    <p>Redirigiendo al visor...</p>
+  </body>
+</html>`;
+        fs.writeFileSync(publicPath, publicContent);
+
+        console.log(`Página del visor generada en: /viewers/${outputId}/index.html`);
+
+        // Corregir URL del host en los archivos generados para evitar problemas
+        fixHostUrlInFiles(outputId);
+
+        // Responder con éxito y la URL para visualizar
+        res.json({
+          success: true,
+          message: 'Visor generado correctamente',
+          viewerUrl: `http://localhost:8000/viewers/${outputId}/index.html`,
+          manifestUrl: `http://localhost:8000/iiif/manifest/${outputId}.json`
+        });
       });
     });
   });
@@ -342,8 +397,10 @@ function fixHostUrlInFiles(outputId) {
   }
 }
 
-// Servir los archivos de exportación
-app.use('/exports', express.static('/app/data/exports'));
+// Añadir estas rutas para servir los visores personalizados
+app.use('/viewers', express.static('/app/data/viewers'));
+app.use('/public', express.static('/app/data/public'));
+app.use('/exports', express.static('/app/data/exports')); // Añadido para servir archivos de exportación
 
 // Iniciar servidor
 app.listen(port, '0.0.0.0', () => {

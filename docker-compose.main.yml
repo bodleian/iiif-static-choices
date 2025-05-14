@@ -13,3 +13,4 @@ services:
     environment:
       - NODE_ENV=production
     restart: unless-stopped
+    command: bash -c "cd /app/docker-gui/web-interface && npm start & sleep 5 && cd /app && python /app/data/server.py 8000"
