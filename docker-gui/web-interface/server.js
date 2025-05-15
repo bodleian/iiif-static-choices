@@ -10,7 +10,33 @@ const archiver = require('archiver');
 const app = express();
 const port = 8080;
 
-// Configuración de middleware
+// Constants for paths and URLs
+const PATHS = {
+  uploads: '/app/data/uploads',
+  image: '/app/image',
+  iiif: '/app/iiif',
+  iiifImage: '/app/iiif/image',
+  iiifManifest: '/app/iiif/manifest',
+  viewers: '/app/data/viewers',
+  public: '/app/data/public',
+  exports: '/app/data/exports',
+  indexTemplate: '/app/index.html'
+};
+
+const HOST_URL = {
+  internal: 'http://0.0.0.0:8000',
+  external: 'http://localhost:8000'
+};
+
+// Ensure all required directories exist
+function ensureDirectoryExists(dirPath) {
+  if (!fs.existsSync(dirPath)) {
+    fs.mkdirSync(dirPath, { recursive: true });
+  }
+  return dirPath;
+}
+
+// Express middleware configuration
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -18,14 +44,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-// Configuración de multer para la subida de archivos
+// Multer storage configuration for file uploads
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    const uploadDir = '/app/data/uploads';
-    if (!fs.existsSync(uploadDir)) {
-      fs.mkdirSync(uploadDir, { recursive: true });
-    }
-    cb(null, uploadDir);
+    cb(null, ensureDirectoryExists(PATHS.uploads));
   },
   filename: function (req, file, cb) {
     cb(null, file.originalname);
@@ -34,17 +56,15 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-// Rutas
+// Routes
 app.get('/', (req, res) => {
   res.render('index');
 });
 
-// Ruta para la página de ayuda
 app.get('/help', (req, res) => {
   res.render('help');
 });
 
-// Ruta para verificar el estado del servidor
 app.get('/api/status', (req, res) => {
   res.json({
     status: 'ok',
@@ -53,49 +73,31 @@ app.get('/api/status', (req, res) => {
   });
 });
 
-// Ruta para subir imágenes
-app.post('/upload', upload.fields([
-  { name: 'albedo', maxCount: 1 },
-  { name: 'normals', maxCount: 1 }
-]), (req, res) => {
-  if (!req.files || !req.files.albedo || !req.files.normals) {
-    return res.status(400).json({
-      success: false,
-      message: 'Es necesario subir ambas imágenes (albedo y normales).'
-    });
-  }
+// Helper function to replace host URLs in file content
+function fixHostUrls(content) {
+  return content.replace(new RegExp(HOST_URL.internal, 'g'), HOST_URL.external);
+}
 
-  const albedoPath = req.files.albedo[0].path;
-  const normalsPath = req.files.normals[0].path;
-
-  // Asegurarse de que el directorio image existe
-  const imageDir = '/app/image';
-  if (!fs.existsSync(imageDir)) {
-    fs.mkdirSync(imageDir, { recursive: true });
-  }
-
-  // Generar IDs dinámicos para las imágenes basados en el outputId
-  const outputId = req.body.outputId || 'relighting-viewer';
+// Helper function to write a config file based on form data
+function generateConfigFile(outputId, formData) {
+  const { title, description, shelfmark } = formData;
+  
+  // Consistent image IDs derived from outputId
   const albedoId = `${outputId}-albedo`;
   const normalsId = `${outputId}-normals`;
   
-  // Copiar las imágenes al directorio image con nombres basados en el ID
-  fs.copyFileSync(albedoPath, path.join(imageDir, `${albedoId}.png`));
-  fs.copyFileSync(normalsPath, path.join(imageDir, `${normalsId}.png`));
-
-  // Generar config.yml basado en la información proporcionada
   const configContent = `
-title: ${req.body.title || 'Sin título'}
-description: ${req.body.description || 'Sin descripción'}
-shelfmark: ${req.body.shelfmark || 'Sin marca'}
-homepage: http://localhost:8000/
+title: ${title || 'Sin título'}
+description: ${description || 'Sin descripción'}
+shelfmark: ${shelfmark || 'Sin marca'}
+homepage: ${HOST_URL.external}/
 outputId: ${outputId}
 
-# Añadir los campos necesarios
-full_shelfmark: "${req.body.shelfmark || 'Sin marca'}"
-summary: "${req.body.description || 'Sin descripción'}"
+# Additional required fields
+full_shelfmark: "${shelfmark || 'Sin marca'}"
+summary: "${description || 'Sin descripción'}"
 object_id: "${outputId}"
-object_label: "${req.body.title || 'Sin título'}"
+object_label: "${title || 'Sin título'}"
 provider_id: "provider-1"
 provider_name: "Proveedor"
 logo_image_id: "logo"
@@ -105,9 +107,9 @@ html_terms: "<span>Términos de uso</span>"
 range: "range-1"
 
 metadata:
-  Title: "${req.body.title || 'Sin título'}"
-  Shelfmark: "${req.body.shelfmark || 'Sin marca'}"
-  Description: "${req.body.description || 'Sin descripción'}"
+  Title: "${title || 'Sin título'}"
+  Shelfmark: "${shelfmark || 'Sin marca'}"
+  Description: "${description || 'Sin descripción'}"
 
 part_of:
   fossils: "collection-1"
@@ -123,106 +125,203 @@ items:
       map_type: "normal"
 `;
 
-  const configPath = path.join(imageDir, `${outputId}-config.yml`);
+  const configPath = path.join(PATHS.image, `${outputId}-config.yml`);
   fs.writeFileSync(configPath, configContent);
+  
+  return {
+    configPath,
+    albedoId,
+    normalsId
+  };
+}
 
-  console.log('Archivos preparados. Ejecutando generación de tiles...');
+// Helper function to execute a command and return a promise
+function execCommand(command) {
+  return new Promise((resolve, reject) => {
+    exec(command, (error, stdout, stderr) => {
+      if (error) {
+        console.error(`Command execution error: ${error}`);
+        reject({ error, stderr });
+      } else {
+        resolve(stdout);
+      }
+    });
+  });
+}
 
-  // Ejecutar comandos para generar tiles y manifiesto
-  exec('cd /app && python iiif_generator.py tiles -t 256 -v 3.0', (error, stdout, stderr) => {
-    if (error) {
-      console.error(`Error generando tiles: ${error}`);
-      return res.status(500).json({
-        success: false,
-        message: 'Error generando tiles',
-        error: stderr
-      });
+// Helper function to fix URLs in generated IIIF files
+function fixUrlsInGeneratedFiles(outputId, imageIds) {
+  try {
+    // Fix manifest
+    const manifestPath = path.join(PATHS.iiifManifest, `${outputId}.json`);
+    if (fs.existsSync(manifestPath)) {
+      let content = fs.readFileSync(manifestPath, 'utf8');
+      content = fixHostUrls(content);
+      fs.writeFileSync(manifestPath, content);
+      console.log(`URLs fixed in ${manifestPath}`);
     }
 
-    console.log('Tiles generados. Generando manifiesto...');
-
-    exec(`cd /app && python iiif_generator.py manifest -f ${outputId}-config.yml -o ${outputId}.json`, (error, stdout, stderr) => {
-      if (error) {
-        console.error(`Error generando manifiesto: ${error}`);
-        return res.status(500).json({
-          success: false,
-          message: 'Error generando manifiesto',
-          error: stderr
-        });
+    // Fix info.json files for each image
+    imageIds.forEach(imageId => {
+      const infoPath = path.join(PATHS.iiifImage, imageId, 'info.json');
+      if (fs.existsSync(infoPath)) {
+        let content = fs.readFileSync(infoPath, 'utf8');
+        content = fixHostUrls(content);
+        // Fix any backslash issues in paths
+        content = content.replace(/\\\\/g, '/');
+        content = content.replace(/\\/g, '/');
+        fs.writeFileSync(infoPath, content);
+        console.log(`URLs fixed in ${infoPath}`);
       }
+    });
+  } catch (err) {
+    console.error('Error fixing URLs:', err);
+  }
+}
 
-      console.log('Manifiesto generado correctamente. Generando página del visor...');
+// Helper function to create custom viewer page
+function createViewerPage(outputId) {
+  const viewerDir = path.join(PATHS.viewers, outputId);
+  ensureDirectoryExists(viewerDir);
 
-      // Generar una página index personalizada para este visor
-      const viewerDir = `/app/data/viewers/${outputId}`;
-      if (!fs.existsSync(viewerDir)) {
-        fs.mkdirSync(viewerDir, { recursive: true });
-      }
+  try {
+    // Read template and replace manifest reference
+    let viewerContent = fs.readFileSync(PATHS.indexTemplate, 'utf8');
+    viewerContent = viewerContent.replace(
+      /manifestId:.*?,/g, 
+      `manifestId: '${HOST_URL.external}/iiif/manifest/${outputId}.json',`
+    );
+    viewerContent = fixHostUrls(viewerContent);
 
-      // Leer el archivo index.html base
-      fs.readFile('/app/index.html', 'utf8', (err, data) => {
-        if (err) {
-          console.error(`Error leyendo archivo index.html base: ${err}`);
-          // Continuar con la respuesta aunque haya error
-          fixHostUrlInFiles(outputId, albedoId, normalsId);
-          return res.json({
-            success: true,
-            message: 'Visor generado correctamente, pero no se pudo crear la página personalizada',
-            viewerUrl: `http://localhost:8000/#?manifest=http://localhost:8000/iiif/manifest/${outputId}.json`
-          });
-        }
-
-        // Reemplazar la referencia al manifiesto
-        let viewerContent = data.replace(
-          /manifestId:.*?,/g, 
-          `manifestId: 'http://localhost:8000/iiif/manifest/${outputId}.json',`
-        );
-
-        // Asegurarse de que todas las URLs usen localhost en lugar de 0.0.0.0
-        viewerContent = viewerContent.replace(/http:\/\/0\.0\.0\.0:8000/g, 'http://localhost:8000');
-
-        // Guardar el nuevo archivo
-        const viewerPath = `${viewerDir}/index.html`;
-        fs.writeFileSync(viewerPath, viewerContent);
-
-        // Crear un enlace simbólico para acceder a este visor específico
-        const publicDir = '/app/data/public';
-        if (!fs.existsSync(publicDir)) {
-          fs.mkdirSync(publicDir, { recursive: true });
-        }
-        
-        const publicPath = `${publicDir}/${outputId}.html`;
-        const publicContent = `
+    // Save custom viewer page
+    const viewerPath = path.join(viewerDir, 'index.html');
+    fs.writeFileSync(viewerPath, viewerContent);
+    
+    // Create redirect HTML file
+    ensureDirectoryExists(PATHS.public);
+    const publicPath = path.join(PATHS.public, `${outputId}.html`);
+    const redirectContent = `
 <!DOCTYPE html>
 <html>
   <head>
-    <meta http-equiv="refresh" content="0;url=http://localhost:8000/viewers/${outputId}/index.html">
+    <meta http-equiv="refresh" content="0;url=${HOST_URL.external}/viewers/${outputId}/index.html">
     <title>Redirigiendo al visor ${outputId}</title>
   </head>
   <body>
     <p>Redirigiendo al visor...</p>
   </body>
 </html>`;
-        fs.writeFileSync(publicPath, publicContent);
+    fs.writeFileSync(publicPath, redirectContent);
+    
+    return {
+      viewerPath,
+      viewerUrl: `${HOST_URL.external}/viewers/${outputId}/index.html`,
+      manifestUrl: `${HOST_URL.external}/iiif/manifest/${outputId}.json`
+    };
+  } catch (err) {
+    console.error(`Error creating viewer page: ${err}`);
+    throw err;
+  }
+}
 
-        console.log(`Página del visor generada en: /viewers/${outputId}/index.html`);
-
-        // Corregir URL del host en los archivos generados para evitar problemas
-        fixHostUrlInFiles(outputId, albedoId, normalsId);
-
-        // Responder con éxito y la URL para visualizar
-        res.json({
-          success: true,
-          message: 'Visor generado correctamente',
-          viewerUrl: `http://localhost:8000/viewers/${outputId}/index.html`,
-          manifestUrl: `http://localhost:8000/iiif/manifest/${outputId}.json`
-        });
+// Route for uploading images and generating viewer
+app.post('/upload', upload.fields([
+  { name: 'albedo', maxCount: 1 },
+  { name: 'normals', maxCount: 1 }
+]), async (req, res) => {
+  try {
+    // Validate uploaded files
+    if (!req.files || !req.files.albedo || !req.files.normals) {
+      return res.status(400).json({
+        success: false,
+        message: 'Es necesario subir ambas imágenes (albedo y normales).'
       });
+    }
+
+    const albedoPath = req.files.albedo[0].path;
+    const normalsPath = req.files.normals[0].path;
+    
+    // Ensure destination directory exists
+    ensureDirectoryExists(PATHS.image);
+
+    // Generate IDs based on the outputId
+    const outputId = req.body.outputId || 'relighting-viewer';
+    
+    // Generate config and get image IDs
+    const { configPath, albedoId, normalsId } = generateConfigFile(outputId, req.body);
+    
+    // Copy uploaded images to image directory with proper naming
+    fs.copyFileSync(albedoPath, path.join(PATHS.image, `${albedoId}.png`));
+    fs.copyFileSync(normalsPath, path.join(PATHS.image, `${normalsId}.png`));
+
+    console.log('Files prepared. Generating tiles...');
+
+    try {
+      // Generate tiles
+      await execCommand('cd /app && python iiif_generator.py tiles -t 256 -v 3.0');
+      console.log('Tiles generated. Generating manifest...');
+      
+      // Generate manifest
+      await execCommand(`cd /app && python iiif_generator.py manifest -f ${outputId}-config.yml -o ${outputId}.json`);
+      console.log('Manifest generated. Creating viewer page...');
+      
+      // Fix URLs in generated files
+      fixUrlsInGeneratedFiles(outputId, [albedoId, normalsId]);
+      
+      // Create custom viewer page
+      const { viewerUrl, manifestUrl } = createViewerPage(outputId);
+      
+      // Return success response
+      res.json({
+        success: true,
+        message: 'Visor generado correctamente',
+        viewerUrl,
+        manifestUrl
+      });
+    } catch (error) {
+      return res.status(500).json({
+        success: false,
+        message: 'Error procesando imágenes',
+        error: error.stderr || error.message
+      });
+    }
+  } catch (err) {
+    console.error(`Error uploading files: ${err}`);
+    res.status(500).json({
+      success: false,
+      message: 'Error interno del servidor',
+      error: err.message
     });
-  });
+  }
 });
 
-// Ruta para exportar el visor
+// Helper function to copy directories recursively
+function copyDirectoryRecursiveSync(src, dest, filter = null) {
+  const exists = fs.existsSync(src);
+  const stats = exists && fs.statSync(src);
+  const isDirectory = exists && stats.isDirectory();
+  
+  if (isDirectory) {
+    ensureDirectoryExists(dest);
+    
+    fs.readdirSync(src).forEach(childItemName => {
+      copyDirectoryRecursiveSync(
+        path.join(src, childItemName),
+        path.join(dest, childItemName),
+        filter
+      );
+    });
+  } else {
+    // If it's a file, check if it passes the filter
+    if (filter && !filter(path.basename(src))) {
+      return;
+    }
+    
+    fs.copyFileSync(src, dest);
+  }
+}
+
+// Route for exporting the viewer
 app.post('/export', bodyParser.json(), (req, res) => {
   const { manifestId, targetUrl } = req.body;
   
@@ -233,27 +332,21 @@ app.post('/export', bodyParser.json(), (req, res) => {
     });
   }
 
-  // Crear directorio temporal para la exportación
-  const exportDir = `/app/data/exports/${manifestId}`;
-  if (!fs.existsSync(exportDir)) {
-    fs.mkdirSync(exportDir, { recursive: true });
-  }
-
-  // Crear estructura de directorios
-  const iiifDir = `${exportDir}/iiif`;
-  const manifestDir = `${iiifDir}/manifest`;
-  const imageDir = `${iiifDir}/image`;
-  const miradorDir = `${exportDir}/mirador`;
-  
-  // Crear los directorios necesarios
-  fs.mkdirSync(manifestDir, { recursive: true });
-  fs.mkdirSync(imageDir, { recursive: true });
-  fs.mkdirSync(miradorDir, { recursive: true });
-
   try {
-    // Copiar el manifiesto
-    const manifestSrc = `/app/iiif/manifest/${manifestId}.json`;
-    const manifestDest = `${manifestDir}/${manifestId}.json`;
+    // Create export directory structure
+    const exportDir = path.join(PATHS.exports, manifestId);
+    const iiifDir = path.join(exportDir, 'iiif');
+    const manifestDir = path.join(iiifDir, 'manifest');
+    const imageDir = path.join(iiifDir, 'image');
+    const miradorDir = path.join(exportDir, 'mirador');
+    
+    ensureDirectoryExists(manifestDir);
+    ensureDirectoryExists(imageDir);
+    ensureDirectoryExists(miradorDir);
+
+    // Copy manifest file
+    const manifestSrc = path.join(PATHS.iiifManifest, `${manifestId}.json`);
+    const manifestDest = path.join(manifestDir, `${manifestId}.json`);
     
     if (!fs.existsSync(manifestSrc)) {
       return res.status(404).json({
@@ -262,25 +355,29 @@ app.post('/export', bodyParser.json(), (req, res) => {
       });
     }
     
-    // Leer el manifiesto y obtener los IDs de las imágenes
+    // Extract image IDs from manifest
     let manifestContent = fs.readFileSync(manifestSrc, 'utf8');
-    const manifestData = JSON.parse(manifestContent);
+    let imageIds = [];
     
-    // Extraer los IDs de las imágenes del manifiesto
-    const imageIds = [];
     try {
-      if (manifestData.items && manifestData.items[0] && manifestData.items[0].items && 
-          manifestData.items[0].items[0] && manifestData.items[0].items[0].items && 
-          manifestData.items[0].items[0].items[0] && manifestData.items[0].items[0].items[0].body && 
+      const manifestData = JSON.parse(manifestContent);
+      
+      // Navigate through manifest structure to find image IDs
+      if (manifestData.items && 
+          manifestData.items[0] && 
+          manifestData.items[0].items && 
+          manifestData.items[0].items[0] && 
+          manifestData.items[0].items[0].items && 
+          manifestData.items[0].items[0].items[0] && 
+          manifestData.items[0].items[0].items[0].body && 
           manifestData.items[0].items[0].items[0].body.items) {
         
         const items = manifestData.items[0].items[0].items[0].body.items;
         items.forEach(item => {
           if (item.service && item.service.length > 0) {
-            // Extraer el ID del servicio (ejemplo: http://localhost:8000/iiif/image/some-id)
+            // Extract ID from service URL
             const serviceUrl = item.service[0]['@id'] || item.service[0].id;
             if (serviceUrl) {
-              // Obtener solo el último componente de la URL
               const parts = serviceUrl.split('/');
               const id = parts[parts.length - 1];
               if (id && !imageIds.includes(id)) {
@@ -291,90 +388,81 @@ app.post('/export', bodyParser.json(), (req, res) => {
         });
       }
     } catch (error) {
-      console.error('Error extrayendo IDs de imágenes del manifiesto:', error);
-      // Si hay un error, usar un enfoque alternativo
-      imageIds.push(`${manifestId}-albedo`);
-      imageIds.push(`${manifestId}-normals`);
+      console.error('Error extracting image IDs:', error);
     }
     
-    // Si no se encontraron IDs de imágenes, usar IDs basados en el ID del manifiesto
+    // Fallback if no image IDs found
     if (imageIds.length === 0) {
-      imageIds.push(`${manifestId}-albedo`);
-      imageIds.push(`${manifestId}-normals`);
+      imageIds = [`${manifestId}-albedo`, `${manifestId}-normals`];
     }
     
-    console.log(`IDs de imágenes encontrados: ${imageIds.join(', ')}`);
+    console.log(`Image IDs found: ${imageIds.join(', ')}`);
     
-    // Reemplazar las URLs en el manifiesto
-    manifestContent = manifestContent.replace(/http:\/\/localhost:8000/g, targetUrl.replace(/\/$/, ''));
+    // Replace URLs in manifest
+    manifestContent = manifestContent.replace(new RegExp(HOST_URL.external, 'g'), targetUrl.replace(/\/$/, ''));
     fs.writeFileSync(manifestDest, manifestContent);
     
-    // Copiar los directorios de imágenes
-    imageIds.forEach(dir => {
-      // Crear el directorio de destino
-      const imageSrcDir = `/app/iiif/image/${dir}`;
-      const imageDestDir = `${imageDir}/${dir}`;
+    // Copy image directories
+    imageIds.forEach(id => {
+      const imageSrcDir = path.join(PATHS.iiifImage, id);
+      const imageDestDir = path.join(imageDir, id);
       
       if (!fs.existsSync(imageSrcDir)) {
-        console.warn(`Directorio de imágenes no encontrado: ${imageSrcDir}`);
-        return; // Continuar con el siguiente directorio
+        console.warn(`Image directory not found: ${imageSrcDir}`);
+        return; // Skip to next directory
       }
       
-      fs.mkdirSync(imageDestDir, { recursive: true });
+      ensureDirectoryExists(imageDestDir);
       
-      // Copiar el archivo info.json, reemplazando las URLs
-      const infoSrc = `${imageSrcDir}/info.json`;
+      // Update and copy info.json
+      const infoSrc = path.join(imageSrcDir, 'info.json');
       if (fs.existsSync(infoSrc)) {
-        const infoDest = `${imageDestDir}/info.json`;
-        
+        const infoDest = path.join(imageDestDir, 'info.json');
         let infoContent = fs.readFileSync(infoSrc, 'utf8');
-        infoContent = infoContent.replace(/http:\/\/localhost:8000/g, targetUrl.replace(/\/$/, ''));
+        infoContent = infoContent.replace(new RegExp(HOST_URL.external, 'g'), targetUrl.replace(/\/$/, ''));
         fs.writeFileSync(infoDest, infoContent);
       }
       
-      // Copiar los tiles (de forma recursiva)
+      // Copy tiles (recursively)
       copyDirectoryRecursiveSync(imageSrcDir, imageDestDir, (file) => {
-        return file !== 'info.json'; // Excluir info.json porque ya lo hemos copiado con URL modificada
+        return file !== 'info.json'; // Exclude info.json as we've already handled it
       });
     });
     
-    // Copiar los archivos del visor Mirador
-    copyDirectoryRecursiveSync('/app/mirador/dist', `${miradorDir}/dist`);
+    // Copy Mirador viewer files
+    copyDirectoryRecursiveSync('/app/mirador/dist', path.join(miradorDir, 'dist'));
     
-    // Crear un index.html personalizado
-    const indexTemplate = fs.readFileSync('/app/index.html', 'utf8');
+    // Create customized index.html
+    const indexTemplate = fs.readFileSync(PATHS.indexTemplate, 'utf8');
     const customIndex = indexTemplate
-      .replace(/http:\/\/localhost:8000/g, targetUrl.replace(/\/$/, ''))
+      .replace(new RegExp(HOST_URL.external, 'g'), targetUrl.replace(/\/$/, ''))
       .replace(/manifestId:.*?'(.*?)'/g, `manifestId: '${targetUrl.replace(/\/$/, '')}/iiif/manifest/${manifestId}.json'`);
     
-    fs.writeFileSync(`${exportDir}/index.html`, customIndex);
+    fs.writeFileSync(path.join(exportDir, 'index.html'), customIndex);
     
-    // Crear un archivo ZIP con todo el contenido
-    const zipPath = `/app/data/exports/${manifestId}.zip`;
+    // Create ZIP file
+    const zipPath = path.join(PATHS.exports, `${manifestId}.zip`);
     const output = fs.createWriteStream(zipPath);
     const archive = archiver('zip', {
-      zlib: { level: 9 } // Nivel de compresión máximo
+      zlib: { level: 9 } // Maximum compression
     });
     
     output.on('close', () => {
-      console.log(`Archivo ZIP creado: ${zipPath} (${archive.pointer()} bytes)`);
+      console.log(`ZIP file created: ${zipPath} (${archive.pointer()} bytes)`);
       
-      // Devolver el archivo ZIP como descarga
+      // Return ZIP file as download
       res.download(zipPath, `${manifestId}.zip`, (err) => {
         if (err) {
-          console.error(`Error al enviar el archivo ZIP: ${err}`);
-        } else {
-          // Opcional: Eliminar el directorio temporal después de enviar el ZIP
-          // fs.rmSync(exportDir, { recursive: true, force: true });
+          console.error(`Error sending ZIP file: ${err}`);
         }
       });
     });
     
     archive.on('error', (err) => {
-      console.error(`Error creando el archivo ZIP: ${err}`);
+      console.error(`Error creating ZIP file: ${err}`);
       res.status(500).json({
         success: false,
-        message: 'Error creando el archivo ZIP',
+        message: 'Error creating ZIP file',
         error: err.message
       });
     });
@@ -384,81 +472,22 @@ app.post('/export', bodyParser.json(), (req, res) => {
     archive.finalize();
     
   } catch (err) {
-    console.error(`Error en el proceso de exportación: ${err}`);
+    console.error(`Export process error: ${err}`);
     res.status(500).json({
       success: false,
-      message: 'Error en el proceso de exportación',
+      message: 'Error in export process',
       error: err.message
     });
   }
 });
 
-// Función para copiar directorios recursivamente
-function copyDirectoryRecursiveSync(src, dest, filter = null) {
-  const exists = fs.existsSync(src);
-  const stats = exists && fs.statSync(src);
-  const isDirectory = exists && stats.isDirectory();
-  
-  if (isDirectory) {
-    if (!fs.existsSync(dest)) {
-      fs.mkdirSync(dest, { recursive: true });
-    }
-    
-    fs.readdirSync(src).forEach(childItemName => {
-      copyDirectoryRecursiveSync(
-        path.join(src, childItemName),
-        path.join(dest, childItemName),
-        filter
-      );
-    });
-  } else {
-    // Es un archivo, verificar si pasa el filtro
-    if (filter && !filter(path.basename(src))) {
-      return;
-    }
-    
-    fs.copyFileSync(src, dest);
-  }
-}
+// Serve static files from data directories
+app.use('/viewers', express.static(PATHS.viewers));
+app.use('/public', express.static(PATHS.public));
+app.use('/exports', express.static(PATHS.exports));
 
-// Función para corregir URLs de 0.0.0.0 a localhost en los archivos generados
-function fixHostUrlInFiles(outputId, albedoId, normalsId) {
-  try {
-    // Corregir en el manifiesto
-    const manifestPath = `/app/iiif/manifest/${outputId}.json`;
-    if (fs.existsSync(manifestPath)) {
-      let content = fs.readFileSync(manifestPath, 'utf8');
-      content = content.replace(/http:\/\/0\.0\.0\.0:8000/g, 'http://localhost:8000');
-      fs.writeFileSync(manifestPath, content);
-      console.log(`URLs corregidas en ${manifestPath}`);
-    }
-
-    // Corregir en los info.json de los tiles
-    const imageIds = [albedoId, normalsId];
-    imageIds.forEach(dir => {
-      const infoPath = `/app/iiif/image/${dir}/info.json`;
-      if (fs.existsSync(infoPath)) {
-        let content = fs.readFileSync(infoPath, 'utf8');
-        content = content.replace(/http:\/\/0\.0\.0\.0:8000/g, 'http://localhost:8000');
-        // Asegurarse de que no haya barras invertidas en las rutas
-        content = content.replace(/\\\\/g, '/');
-        content = content.replace(/\\/g, '/');
-        fs.writeFileSync(infoPath, content);
-        console.log(`URLs corregidas en ${infoPath}`);
-      }
-    });
-  } catch (err) {
-    console.error('Error al corregir URLs:', err);
-  }
-}
-
-// Añadir estas rutas para servir los visores personalizados
-app.use('/viewers', express.static('/app/data/viewers'));
-app.use('/public', express.static('/app/data/public'));
-app.use('/exports', express.static('/app/data/exports')); // Añadido para servir archivos de exportación
-
-// Iniciar servidor
+// Start server
 app.listen(port, '0.0.0.0', () => {
-  console.log(`Servidor web iniciado en http://localhost:${port}`);
-  console.log(`Visor IIIF disponible en http://localhost:8000`);
+  console.log(`Web server started on http://localhost:${port}`);
+  console.log(`IIIF viewer available at http://localhost:8000`);
 });
