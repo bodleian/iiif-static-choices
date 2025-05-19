@@ -1,3 +1,11 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * Copyright © 2025 Factum Foundation for Digital Technology in Preservation / Jorge Cano
+ */
+
 const express = require('express');
 const multer = require('multer');
 const path = require('path');
@@ -10,7 +18,8 @@ const archiver = require('archiver');
 const app = express();
 const port = 8080;
 
-// Constants for paths and URLs
+// Constants for paths and URLs (DOCKER)
+
 const PATHS = {
   uploads: '/app/data/uploads',
   image: '/app/image',
@@ -22,6 +31,21 @@ const PATHS = {
   exports: '/app/data/exports',
   indexTemplate: '/app/index.html'
 };
+
+/*
+// Constants for paths and URLs (LOCAL)
+const PATHS = {
+  uploads: './uploads',  // Cambia esta ruta a donde quieras guardar los archivos
+  image: './image',      // Ajusta esta ruta
+  iiif: './iiif',        // Ajusta esta ruta
+  iiifImage: './iiif/image',
+  iiifManifest: './iiif/manifest',
+  viewers: './viewers',
+  public: './public',
+  exports: './exports',
+  indexTemplate: './index.html'  // Asegúrate de tener este archivo
+};
+*/
 
 const HOST_URL = {
   internal: 'http://0.0.0.0:8000',
