@@ -12,6 +12,7 @@ Key features:
 - Simple Python-based implementation
 - Docker container with web interface for easy use
 - Export functionality for deployment on external servers
+- Consistent naming conventions for multiple viewer management
 
 The tool includes the Bodleian Libraries Mirador plug-in from the ARCHiOx project and is designed to test using 2D images to encode and present 3D information.
 
@@ -131,6 +132,23 @@ Data is stored persistently using Docker volumes:
 - Generated files remain available even after restarting the container
 - You can back up or inspect data directly from the `./data` folder
 
+### File and Directory Structure
+
+The application uses a consistent naming scheme for all files and directories:
+
+- **Upload files**: Stored in `/app/data/uploads/`
+- **Image files**: Stored as `/app/image/{id}-albedo.png` and `/app/image/{id}-normals.png`
+- **Configuration**: Stored as `/app/image/{id}-config.yml`
+- **Manifest file**: Generated as `/app/iiif/manifest/{id}.json`
+- **Image tiles**: Generated in directories `/app/iiif/image/{id}-albedo/` and `/app/iiif/image/{id}-normals/`
+- **Viewer pages**: Created in `/app/data/viewers/{id}/index.html`
+- **Redirects**: Created as `/app/data/public/{id}.html`
+
+This consistent naming structure ensures that:
+- Each viewer has its own unique resources
+- Multiple viewers can exist without conflicts
+- All files related to a specific viewer can be easily identified
+
 ### Troubleshooting Docker
 
 If you encounter issues:
@@ -144,7 +162,10 @@ If you encounter issues:
    ```bash
    docker-compose -f docker-compose.main.yml restart
    ```
-
+3. Stop the container:
+   ```bash
+   docker-compose -f docker-compose.main.yml down
+   ```
 3. Rebuild the container:
    ```bash
    docker-compose -f docker-compose.main.yml up -d --build
@@ -165,6 +186,11 @@ If you encounter issues:
      - Increase Docker memory allocation in Docker Desktop Settings > Resources
      - Try processing smaller images or reduce the resolution
      - Use the `--memory=4g` flag when running Docker manually
+     
+   - **Naming Issues or Resource Conflicts**: If different viewers seem to be using the same resources:
+     - Ensure you're using the latest version of the application
+     - Try using a very distinct outputId when creating viewers
+     - Check server.js file to ensure the naming conventions are being applied
 
 ## Exporting Viewers for External Servers
 
@@ -259,10 +285,37 @@ iiif-static-choices/
 ├── server.py                 # Simple HTTP server
 ├── image/                    # Directory for input images
 ├── iiif/                     # Generated IIIF tiles and manifests
+│   ├── image/                # Generated image tiles for each viewer
+│   │   ├── {id}-albedo/      # Tiles for albedo image
+│   │   └── {id}-normals/     # Tiles for normal map
+│   └── manifest/             # Generated manifest files
 ├── data/                     # Persistent data (when using Docker)
+│   ├── uploads/              # Uploaded source files
+│   ├── viewers/              # Custom viewer HTML pages
+│   │   └── {id}/             # Viewer page for each model
+│   └── public/               # Redirect pages for easy access
 └── docker-gui/               # Web interface files
     └── web-interface/        # Node.js Express application
+        ├── server.js         # Express server with organized code
+        ├── views/            # EJS templates
+        └── public/           # Static assets
 ```
+
+## Recent Improvements
+
+The project has undergone several improvements:
+
+1. **Code Refactoring**: The server.js file has been refactored for better organization, using modern JavaScript patterns and improved error handling.
+
+2. **Consistent Naming Conventions**: A consistent naming scheme has been implemented for all files and directories, ensuring that each viewer has its own unique resources.
+
+3. **File Path Management**: All file paths are now centralized, making the code more maintainable and reducing errors.
+
+4. **Enhanced Error Handling**: Improved error handling with try/catch blocks and better error reporting.
+
+5. **Multiple Viewer Support**: Better support for creating and managing multiple viewers without resource conflicts.
+
+6. **Improved Documentation**: Added detailed documentation of file flows and naming conventions.
 
 ## Licensing
 
@@ -276,3 +329,5 @@ The tile generation part of this project is based on and translated from the wor
 - Add logo generation
 - Add multi-page manifests
 - Add unit tests to prevent development breaking
+- Make symbolic link creation permanent in Docker configuration
+- Implement progress indicators for long-running operations
