@@ -43,8 +43,3 @@ EXPOSE 8000 8080
 
 # Volumen para datos persistentes
 VOLUME ["/app/data"]
-
-# Script de inicio
-COPY docker-gui/docker-entrypoint.sh /
-RUN chmod +x /docker-entrypoint.sh
-ENTRYPOINT ["/docker-entrypoint.sh"]
