@@ -13,5 +13,5 @@ services:
     environment:
       - NODE_ENV=production
     restart: unless-stopped
-    # Comando modificado para crear enlaces simbólicos adicionales
-    command: bash -c "mkdir -p /app/data/iiif && ln -sf /app/iiif/manifest /app/data/iiif/manifest && ln -sf /app/iiif/image /app/data/iiif/image && ln -sf /app/data/viewers /app/viewers && ln -sf /app/data/public /app/public && cd /app/docker-gui/web-interface && npm start & sleep 5 && cd /app && python /app/data/server.py 8000"
+    # Comando modificado para crear enlaces simbólicos adicionales incluyendo mirador
+    command: bash -c "mkdir -p /app/data/iiif && ln -sf /app/iiif/manifest /app/data/iiif/manifest && ln -sf /app/iiif/image /app/data/iiif/image && ln -sf /app/data/viewers /app/viewers && ln -sf /app/data/public /app/public && ln -sf /app/mirador /app/data/mirador && cd /app/docker-gui/web-interface && npm start & sleep 5 && cd /app && python /app/data/server.py 8000"
