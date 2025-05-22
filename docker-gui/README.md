@@ -90,26 +90,6 @@ This means:
 - This data will persist even if you stop and restart the Docker containers.
 - You can manage, backup, or inspect this data directly from the `./data` folder in your project directory.
 
-## Recent Improvements
-
-The web interface has undergone several improvements:
-
-1. **Code Refactoring**: The server.js file has been refactored to improve:
-   - Code organization with logical sections
-   - Error handling with try/catch blocks
-   - Asynchronous operations using promises and async/await instead of nested callbacks
-   - Path management with centralized constants
-   - Function separation for better maintainability
-
-2. **Consistent Naming Conventions**: Implemented a systematic approach to file and directory naming, ensuring:
-   - Clear relationships between viewer ID and resource names
-   - Unique resources for each viewer to prevent conflicts
-   - Predictable file paths for easier debugging
-
-3. **Enhanced Error Handling**: Better error reporting and recovery to improve user experience.
-
-4. **Better Documentation**: Added comprehensive documentation of file flows and processes.
-
 ## Development
 
 ### Modifying the Web Interface
@@ -121,18 +101,6 @@ The web interface is built with:
 
 To modify the interface, edit the files in `docker-gui/web-interface/views/`.
 
-### Understanding the Server Code
-
-The `server.js` file has been organized into logical sections:
-
-1. **Constants and Configuration**: At the top, defining paths and URLs
-2. **Helper Functions**: Standalone functions for common operations
-3. **Express Configuration**: Middleware and server setup
-4. **Route Handlers**: HTTP endpoint implementation
-5. **Server Startup**: At the bottom, starting the server
-
-This organization makes it easier to understand the code flow and make modifications.
-
 ### Rebuilding the Container
 
 After making changes, rebuild the container:
@@ -142,14 +110,6 @@ docker-compose -f docker-compose.main.yml up --build -d
 ```
 
 ## Troubleshooting
-
-### The viewer appears black in 2.5D mode
-
-If the viewer appears black when activating 2.5D mode, it could be due to several reasons:
-
-1.  **WebGL**: Ensure your browser supports WebGL. You can check this at [get.webgl.org](https://get.webgl.org/).
-2.  **Normal Map Format**: The normal map must be in standard RGB tangent-space format.
-3.  **Browser Configuration**: Try a different browser like Chrome or Firefox.
 
 ### The container does not start
 
@@ -168,6 +128,5 @@ docker-compose -f docker-compose.main.yml ps
 If you experience issues where different viewers seem to be using the same resources:
 
 1. **Check the outputId**: Ensure each viewer has a unique outputId
-2. **Clear existing resources**: Sometimes manually removing conflicting directories in `/app/iiif/image/` can help
-3. **Check server logs**: Look for any errors related to file operations
-4. **Restart the container**: Sometimes a clean restart resolves file access issues
+2. **Check server logs**: Look for any errors related to file operations
+3. **Restart the container**: Sometimes a clean restart resolves file access issues
