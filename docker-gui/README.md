@@ -2,6 +2,8 @@
 
 This extension provides a web-based graphical interface and a Docker configuration to facilitate the creation of 2.5D relighting viewers using IIIF Static Choices.
 
+> **Note**: This document focuses on the Docker GUI component. For complete project overview, installation options, and general usage, see the main [`README.md`](../README.md).
+
 ## What is it?
 
 IIIF Static Choices is a tool that allows generating interactive 2.5D viewers from 2D images (albedo) and normal maps. This extension adds:
@@ -32,7 +34,7 @@ IIIF Static Choices is a tool that allows generating interactive 2.5D viewers fr
 
 2.  Build and run the Docker container:
     ```bash
-    docker-compose up -d
+    docker-compose -f docker-compose.main.yml up -d
     ```
 
 ### Usage
@@ -47,17 +49,16 @@ IIIF Static Choices is a tool that allows generating interactive 2.5D viewers fr
 
 ```
 docker-gui/
-├── Dockerfile             # Docker container configuration
-├── docker-entrypoint.sh   # Container startup script
 ├── README.md              # This file
 ├── user_manual_export.md  # Detailed export instructions
-├── web-interface/
-│   ├── server.js          # Express web server (refactored for better organization)
-│   ├── package.json       # Node.js dependencies
-│   ├── public/            # Static files (CSS, JavaScript)
-│   └── views/             # EJS templates (index, help)
-└── sample-config.yml      # Example configuration
+└── web-interface/
+    ├── server.js          # Express web server (refactored for better organization)
+    ├── package.json       # Node.js dependencies
+    ├── public/            # Static files (CSS, JavaScript)
+    └── views/             # EJS templates (index, help)
 ```
+
+**Note**: The main Docker configuration files (`Dockerfile.main` and `docker-compose.main.yml`) are located in the repository root.
 
 ## Data Persistence and File Structure
 
@@ -82,7 +83,7 @@ This consistent naming structure ensures that:
 
 ### Volume Mapping
 
-The `docker-compose.yml` file configures a volume that maps the `./data` directory (located at the root of the project, alongside `docker-compose.yml`) on your host machine to the `/app/data` directory inside the Docker container.
+The `docker-compose.main.yml` file configures a volume that maps the `./data` directory (located at the root of the project, alongside `docker-compose.main.yml`) on your host machine to the `/app/data` directory inside the Docker container.
 
 This means:
 - Any files the application writes to its internal `/app/data` path are actually saved in the `./data` folder on your computer.
@@ -136,8 +137,8 @@ This organization makes it easier to understand the code flow and make modificat
 
 After making changes, rebuild the container:
 ```bash
-docker-compose down
-docker-compose up --build -d
+docker-compose -f docker-compose.main.yml down
+docker-compose -f docker-compose.main.yml up --build -d
 ```
 
 ## Troubleshooting
@@ -156,10 +157,10 @@ Verify that Docker is installed and running correctly. You can use these command
 
 ```bash
 # View container logs
-docker-compose logs
+docker-compose -f docker-compose.main.yml logs
 
 # Check container status
-docker-compose ps
+docker-compose -f docker-compose.main.yml ps
 ```
 
 ### Naming issues or resource conflicts

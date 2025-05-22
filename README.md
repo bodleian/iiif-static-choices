@@ -51,6 +51,8 @@ The easiest way to use IIIF Static Choices is with Docker, which includes a web 
 
 4. Access the IIIF viewer at http://localhost:8000
 
+For detailed Docker GUI development and component-specific information, see [`docker-gui/README.md`](docker-gui/README.md).
+
 For more detailed Docker instructions, see the [Docker Usage](#docker-usage) section below.
 
 ### Option 2: Local Installation
@@ -177,20 +179,12 @@ If you encounter issues:
      docker exec -it iiif-static-choices-iiif-static-choices-1 pip install pyyaml imageio jinja2 pillow numpy
      ```
    
-   - **Black Screen in 2.5D Mode**: Check if:
-     - Your browser supports WebGL (verify at [get.webgl.org](https://get.webgl.org/))
-     - The normal map is in standard RGB tangent-space format
-     - Try a different browser like Chrome or Firefox
 
    - **Memory Issues with Large Images**: For very large images:
      - Increase Docker memory allocation in Docker Desktop Settings > Resources
      - Try processing smaller images or reduce the resolution
      - Use the `--memory=4g` flag when running Docker manually
      
-   - **Naming Issues or Resource Conflicts**: If different viewers seem to be using the same resources:
-     - Ensure you're using the latest version of the application
-     - Try using a very distinct outputId when creating viewers
-     - Check server.js file to ensure the naming conventions are being applied
 
 ## Exporting Viewers for External Servers
 
@@ -209,46 +203,6 @@ The export feature allows you to generate a package with all necessary files to 
 2. Ensure the directory structure is preserved
 3. Access your viewer at the configured URL
 
-### Server Configuration Examples
-
-#### Apache
-
-```apache
-<VirtualHost *:80>
-    ServerName example.com
-    DocumentRoot /var/www/html
-    
-    <Directory "/var/www/html/viewers">
-        Options Indexes FollowSymLinks
-        AllowOverride All
-        Require all granted
-        
-        # Enable CORS for IIIF
-        Header set Access-Control-Allow-Origin "*"
-        Header set Access-Control-Allow-Headers "Content-Type"
-        Header set Access-Control-Allow-Methods "GET, OPTIONS"
-    </Directory>
-</VirtualHost>
-```
-
-#### Nginx
-
-```nginx
-server {
-    listen 80;
-    server_name example.com;
-    root /var/www/html;
-    
-    location /viewers {
-        try_files $uri $uri/ =404;
-        
-        # Enable CORS for IIIF
-        add_header 'Access-Control-Allow-Origin' '*';
-        add_header 'Access-Control-Allow-Methods' 'GET, OPTIONS';
-        add_header 'Access-Control-Allow-Headers' 'Content-Type';
-    }
-}
-```
 
 ## Advanced Usage
 
@@ -300,22 +254,6 @@ iiif-static-choices/
         ├── views/            # EJS templates
         └── public/           # Static assets
 ```
-
-## Recent Improvements
-
-The project has undergone several improvements:
-
-1. **Code Refactoring**: The server.js file has been refactored for better organization, using modern JavaScript patterns and improved error handling.
-
-2. **Consistent Naming Conventions**: A consistent naming scheme has been implemented for all files and directories, ensuring that each viewer has its own unique resources.
-
-3. **File Path Management**: All file paths are now centralized, making the code more maintainable and reducing errors.
-
-4. **Enhanced Error Handling**: Improved error handling with try/catch blocks and better error reporting.
-
-5. **Multiple Viewer Support**: Better support for creating and managing multiple viewers without resource conflicts.
-
-6. **Improved Documentation**: Added detailed documentation of file flows and naming conventions.
 
 ## Licensing
 
