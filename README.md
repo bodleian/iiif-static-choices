@@ -327,7 +327,6 @@ The tile generation part of this project is based on and translated from the wor
 
 - Add thumbnail generation for choices layers in Mirador
 - Add logo generation
-- Add multi-page manifests
+- Add multi-page manifests 
 - Add unit tests to prevent development breaking
-- Make symbolic link creation permanent in Docker configuration
 - Implement progress indicators for long-running operations
