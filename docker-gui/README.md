@@ -50,7 +50,6 @@ IIIF Static Choices is a tool that allows generating interactive 2.5D viewers fr
 ```
 docker-gui/
 ├── README.md              # This file
-├── user_manual_export.md  # Detailed export instructions
 └── web-interface/
     ├── server.js          # Express web server (refactored for better organization)
     ├── package.json       # Node.js dependencies
@@ -130,3 +129,33 @@ If you experience issues where different viewers seem to be using the same resou
 1. **Check the outputId**: Ensure each viewer has a unique outputId
 2. **Check server logs**: Look for any errors related to file operations
 3. **Restart the container**: Sometimes a clean restart resolves file access issues
+
+## Advanced Usage
+
+### Verification Commands
+
+```bash
+# Check container status
+docker ps | grep iiif-static-choices
+
+# View container logs
+docker logs -f iiif-static-choices-iiif-static-choices-1
+
+# Check if services are responding
+curl -s -o /dev/null -w "%{http_code}" http://localhost:8080
+curl -s -o /dev/null -w "%{http_code}" http://localhost:8000
+```
+
+### Manual Commands
+
+For advanced users who want to run generation commands manually:
+
+```bash
+# Manual tile generation
+docker exec -w /app iiif-static-choices-iiif-static-choices-1 python iiif_generator.py tiles -t 256 -v 3.0
+
+# Manual manifest generation
+docker exec -w /app iiif-static-choices-iiif-static-choices-1 bash -c 'cp image/ammonite-config.yml . && python iiif_generator.py manifest -f ammonite-config.yml -o iiif/manifest/pyritised-ammonite.json -d .'
+```
+
+**Note**: These commands are useful for debugging or when you need more control over the generation process. For normal usage, the web interface handles all these steps automatically.
