@@ -255,6 +255,23 @@ iiif-static-choices/
         └── public/           # Static assets
 ```
 
+## Credits & Attribution
+
+### Development Team
+
+- **Richard Allen** (Bodleian Libraries, ARCHiOx Project) - IIIF Core & Manifest Generation
+  - Python port of Glen Robson's iiif-tiler
+  - IIIF manifest generation and handling
+  - Core tiling algorithms and image processing
+
+- **Jorge Cano** (Factum Foundation, ARCHiOx Project) - GUI & Docker Implementation
+  - Web interface development
+  - Docker containerization and deployment
+  - Cross-platform compatibility and user experience
+
+### Original Work
+- **Glen Robson** - Original Java [iiif-tiler](https://github.com/glenrobson/iiif-tiler) implementation
+
 ## Licensing
 
 This project is covered by the [Mozilla Public License](LICENSE) except for the bundled [Mirador](https://github.com/ProjectMirador/mirador?tab=Apache-2.0-1-ov-file#readme) and [Openseadragon](https://github.com/openseadragon/openseadragon?tab=BSD-3-Clause-1-ov-file#readme) builds which are covered by their own licenses.

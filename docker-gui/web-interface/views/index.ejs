@@ -15,11 +15,33 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <link href="/css/styles.css" rel="stylesheet">
+    <style>
+        .subtitle-link {
+            color: var(--accent-color);
+            text-decoration: none;
+            transition: text-decoration 0.2s, color 0.2s;
+        }
+        .subtitle-link:hover {
+            text-decoration: underline;
+        }
+        .custom-navbar-divider {
+            border-top: 1px solid var(--border-subtle);
+            margin-top: 1.2rem;
+            margin-bottom: 0.7rem;
+        }
+        .navbar-nav {
+            gap: 1.2rem;
+        }
+    </style>
 </head>
 <body>
     <div class="header-container">
-        <h1 class="main-title">2.5D Relighting Viewer Generator</h1>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
+        <h1 class="main-title" style="font-style: normal; font-weight: 700;">2.5D Relighting Viewer Generator</h1>
+        <p class="lead" style="margin-bottom: 0.5rem;">
+            This tool has been designed to facilitate the creation of viewers with <a href="https://github.com/bodleian/archiox-mirador-plugin" target="_blank" class="subtitle-link">ArchiOX Relight Plugin</a> technology.
+        </p>
+        <div class="custom-navbar-divider"></div>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4" style="margin-top: 0;">
             <div class="container-fluid">
                 <a class="navbar-brand" href="/">IIIF Static Choices</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="#navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -132,10 +154,11 @@
                 <div id="export-status" class="mt-2"></div>
             </div>
         </div>
-        
-        <div class="footer mt-5">
-            <p>Developed to facilitate the creation of viewers with <a href="https://github.com/bodleian/archiox-mirador-plugin" target="_blank">ArchiOX Relight Plugin</a> technology</p>
-        </div>
+    </div>
+
+    <div class="footer mt-5">
+        <p class="mb-1">Developed under the <a href="https://digital.bodleian.ox.ac.uk/collections/archiox/" target="_blank" rel="noopener" style="color: var(--accent-color); text-decoration: none;">ARCHIOx</a> project, a collaboration between the <a href="https://www.bodleian.ox.ac.uk/home" target="_blank" rel="noopener" style="color: var(--accent-color); text-decoration: none;">Bodleian Libraries</a> and <a href="https://factumfoundation.org/" target="_blank" rel="noopener" style="color: var(--accent-color); text-decoration: none;">Factum Foundation</a>.</p>
+        <p class="text-muted" style="font-size:0.95em; margin-top: -0.25rem;">Credits: <a href="https://github.com/BeebBenjamin" target="_blank" rel="noopener" style="color: var(--accent-color); text-decoration: none;">Richard Allen</a> (IIIF Core &amp; Manifest Generation) &amp; <a href="https://github.com/jcanofuentes" target="_blank" rel="noopener" style="color: var(--accent-color); text-decoration: none;">Jorge Cano</a> (GUI/Web Interface &amp; Docker Implementation)</p>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
