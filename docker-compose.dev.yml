@@ -1,0 +1,35 @@
+services:
+  iiif-static-choices-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "8080:8080"
+      - "8000:8000"
+    volumes:
+      # Mount all source code for development
+      - ./docker-gui/web-interface:/app/docker-gui/web-interface
+      - ./data:/app/data
+      - ./iiif:/app/iiif
+      - ./mirador:/app/mirador
+      - ./openseadragon:/app/openseadragon
+      - ./tiler:/app/tiler
+      - ./manifest:/app/manifest
+      - ./examples:/app/examples
+      # Prevent node_modules conflicts by using anonymous volume
+      - /app/docker-gui/web-interface/node_modules
+      # Mount Python files for development
+      - ./server.py:/app/server.py
+      - ./iiif_generator.py:/app/iiif_generator.py
+    env_file:
+      - .env.dev
+    environment:
+      - NODE_ENV=development
+      - PYTHONUNBUFFERED=1
+    restart: unless-stopped
+    networks:
+      - iiif-dev-network
+
+networks:
+  iiif-dev-network:
+    driver: bridge

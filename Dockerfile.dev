@@ -1,0 +1,69 @@
+# Dockerfile.dev - Based on working Dockerfile.main with development optimizations
+FROM python:3.9-slim
+
+# Environment variables for development
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+ENV PATH="/root/.local/bin:$PATH"
+ENV NODE_ENV=development
+
+# Install system dependencies including Node.js and nodemon
+RUN apt-get update && apt-get install -y \
+    git \
+    curl \
+    nodejs \
+    npm \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install nodemon globally for development hot-reload
+RUN npm install -g nodemon
+
+# Install Poetry
+RUN curl -sSL https://install.python-poetry.org | python3 -
+
+# Set working directory
+WORKDIR /app
+
+# Copy project files (will be overridden by volumes in development)
+COPY . /app/
+
+# Install Python dependencies with Poetry
+RUN cd /app && \
+    poetry config virtualenvs.create false && \
+    poetry install --no-interaction --no-ansi --no-root && \
+    pip install pyyaml imageio jinja2 pillow numpy
+
+# Install Node.js dependencies for web interface
+WORKDIR /app/docker-gui/web-interface
+RUN npm install
+
+# Prepare directories for tiles and manifests
+WORKDIR /app
+RUN mkdir -p /app/iiif/image /app/iiif/manifest && chmod -R 777 /app/iiif && \
+    mkdir -p /app/data/uploads && chmod -R 777 /app/data
+
+# Expose ports
+EXPOSE 8000 8080
+
+# Volume for persistent data
+VOLUME ["/app/data"]
+
+# Development command with nodemon for auto-restart and symbolic links
+CMD ["bash", "-c", "\
+    echo 'Starting IIIF Static Choices in DEVELOPMENT mode...' && \
+    mkdir -p /app/data/iiif && \
+    ln -sf /app/iiif/manifest /app/data/iiif/manifest && \
+    ln -sf /app/iiif/image /app/data/iiif/image && \
+    ln -sf /app/data/viewers /app/viewers && \
+    ln -sf /app/data/public /app/public && \
+    ln -sf /app/mirador /app/data/mirador && \
+    echo 'Symbolic links created successfully' && \
+    cd /app/docker-gui/web-interface && \
+    echo 'Starting Node.js server with nodemon...' && \
+    nodemon server.js & \
+    echo 'Node.js server started' && \
+    sleep 5 && \
+    echo 'Starting Python IIIF server...' && \
+    cd /app && \
+    python server.py 8000 \
+    "]
