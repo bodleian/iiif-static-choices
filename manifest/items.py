@@ -10,6 +10,7 @@ Copyright © 2024 Bodleian Libraries
 import imageio
 import os
 
+from helpers.images.images import create_thumbnail
 from typing import Dict, List, Tuple
 
 
@@ -101,6 +102,20 @@ class Items:
         image_width: int = image_metrics.get("image_width")
         image_height: int = image_metrics.get("image_height")
         map_type: str = image_data.get("map_type")
+
+        # create a 120px thumbnail
+        create_thumbnail(
+            os.path.join("./image", image_id + self.preferred_image_format),
+            f'./iiif/image/{image_id}/full/120,/0/default.jpg',
+            (120, 120)
+        )
+
+        # create a 256px thumbnail
+        create_thumbnail(
+            os.path.join("./image", image_id + self.preferred_image_format),
+            f'./iiif/image/{image_id}/full/256,/0/default.jpg',
+            (256, 256)
+        )
 
         body_item: Dict = {
             "id": f"{ self.host }/iiif/image/{ image_id }/full/max/0/default{self.preferred_image_format}",
