@@ -7,11 +7,11 @@
 %>
 
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IIIF Static Choices - Visor 2.5D</title>
+    <title>IIIF Static Choices - 2.5D Viewer</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <link href="/css/styles.css" rel="stylesheet">
@@ -27,7 +27,7 @@
 </head>
 <body>
     <div class="container">
-        <h1 class="mb-4">Generador de Visor Relighting 2.5D</h1>
+        <h1 class="mb-4">2.5D Relighting Viewer Generator</h1>
         
         <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
             <div class="container-fluid">
@@ -38,10 +38,10 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="/">Inicio</a>
+                            <a class="nav-link active" aria-current="page" href="/">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/help">Ayuda</a>
+                            <a class="nav-link" href="/help">Help</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="https://github.com/bodleian/iiif-static-choices" target="_blank">GitHub</a>
@@ -54,39 +54,39 @@
         <div class="step-indicator">
             <div class="step active">
                 <div class="step-number">1</div>
-                <div class="step-title">Subir imágenes</div>
+                <div class="step-title">Upload images</div>
             </div>
             <div class="step">
                 <div class="step-number">2</div>
-                <div class="step-title">Configurar</div>
+                <div class="step-title">Configure</div>
             </div>
             <div class="step">
                 <div class="step-number">3</div>
-                <div class="step-title">Generar</div>
+                <div class="step-title">Generate</div>
             </div>
             <div class="step">
                 <div class="step-number">4</div>
-                <div class="step-title">Visualizar</div>
+                <div class="step-title">View</div>
             </div>
         </div>
                 
         <form id="upload-form" enctype="multipart/form-data">
             <div class="row">
                 <div class="col-md-6 mb-3">
-                    <h3>Imagen Albedo</h3>
+                    <h3>Albedo Image</h3>
                     <div id="albedo-drop" class="drag-drop-area">
                         <i class="bi bi-cloud-upload fs-1 mb-2"></i><br>
-                        Arrastra aquí la imagen de albedo o haz clic para seleccionar
+                        Drag the albedo image here or click to select
                     </div>
                     <input type="file" id="albedo" name="albedo" class="form-control" accept="image/*" style="display: none;">
                     <div id="albedo-preview" class="preview-container"></div>
                 </div>
                 
                 <div class="col-md-6 mb-3">
-                    <h3>Mapa de Normales</h3>
+                    <h3>Normal Map</h3>
                     <div id="normals-drop" class="drag-drop-area">
                         <i class="bi bi-cloud-upload fs-1 mb-2"></i><br>
-                        Arrastra aquí el mapa de normales o haz clic para seleccionar
+                        Drag the normal map here or click to select
                     </div>
                     <input type="file" id="normals" name="normals" class="form-control" accept="image/*" style="display: none;">
                     <div id="normals-preview" class="preview-container"></div>
@@ -94,66 +94,66 @@
             </div>
             
             <div class="mb-3">
-                <label for="title" class="form-label">Título</label>
+                <label for="title" class="form-label">Title</label>
                 <input type="text" id="title" name="title" class="form-control" required>
             </div>
             
             <div class="mb-3">
-                <label for="description" class="form-label">Descripción</label>
+                <label for="description" class="form-label">Description</label>
                 <textarea id="description" name="description" class="form-control"></textarea>
             </div>
             
             <div class="mb-3">
-                <label for="shelfmark" class="form-label">Marca de Referencia</label>
+                <label for="shelfmark" class="form-label">Shelfmark</label>
                 <input type="text" id="shelfmark" name="shelfmark" class="form-control">
             </div>
             
             <div class="mb-3">
-                <label for="outputId" class="form-label">ID del Manifiesto</label>
+                <label for="outputId" class="form-label">Manifest ID</label>
                 <input type="text" id="outputId" name="outputId" class="form-control" value="relighting-viewer">
-                <small class="text-muted">Este será el nombre del archivo del manifiesto generado</small>
+                <small class="text-muted">This will be the filename of the generated manifest</small>
             </div>
             
             <button type="submit" class="btn btn-primary">
-                <i class="bi bi-lightning-charge"></i> Generar Visor 2.5D
+                <i class="bi bi-lightning-charge"></i> Generate 2.5D Viewer
             </button>
         </form>
         
         <div id="status" class="mt-4"></div>
         
         <div id="viewer-container" class="mt-4" style="display: none;">
-            <h3><i class="bi bi-eye"></i> Visor 2.5D</h3>
+            <h3><i class="bi bi-eye"></i> 2.5D Viewer</h3>
             <div class="alert alert-success">
-                <i class="bi bi-check-circle-fill"></i> ¡El visor se ha generado correctamente!
+                <i class="bi bi-check-circle-fill"></i> The viewer has been generated successfully!
             </div>
             <div class="mb-3">
                 <a id="viewer-link" href="#" target="_blank" class="btn btn-success">
-                    <i class="bi bi-box-arrow-up-right"></i> Abrir Visor
+                    <i class="bi bi-box-arrow-up-right"></i> Open Viewer
                 </a>
             </div>
             <div class="mb-3">
-                <label for="viewer-url" class="form-label">URL del Visor</label>
+                <label for="viewer-url" class="form-label">Viewer URL</label>
                 <div class="input-group">
                     <input type="text" id="viewer-url" class="form-control" readonly>
                     <button class="btn btn-outline-secondary" type="button" id="copy-url">
-                        <i class="bi bi-clipboard"></i> Copiar
+                        <i class="bi bi-clipboard"></i> Copy
                     </button>
                 </div>
             </div>
             
-            <!-- Sección para exportar el visor -->
+            <!-- Export viewer section -->
             <div class="export-container">
-                <h4><i class="bi bi-box-seam"></i> Exportar Visor</h4>
-                <p>Si deseas desplegar este visor en tu propio servidor, puedes exportar todos los archivos necesarios en un paquete ZIP.</p>
+                <h4><i class="bi bi-box-seam"></i> Export Viewer</h4>
+                <p>If you want to deploy this viewer on your own server, you can export all necessary files in a ZIP package.</p>
                 
                 <div class="mb-3">
-                    <label for="target-url" class="form-label">URL de destino</label>
-                    <input type="text" id="target-url" class="form-control" placeholder="https://ejemplo.com/visor/">
-                    <small class="form-text text-muted">Introduce la URL base donde se ubicará el visor en tu servidor.</small>
+                    <label for="target-url" class="form-label">Target URL</label>
+                    <input type="text" id="target-url" class="form-control" placeholder="https://example.com/viewer/">
+                    <small class="form-text text-muted">Enter the base URL where the viewer will be located on your server.</small>
                 </div>
                 
                 <button id="export-button" class="btn btn-primary">
-                    <i class="bi bi-download"></i> Exportar Visor
+                    <i class="bi bi-download"></i> Export Viewer
                 </button>
                 <div id="export-status" class="mt-2"></div>
             </div>
@@ -167,18 +167,18 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Funcionalidad de arrastrar y soltar
+            // Drag and drop functionality
             setupDragDrop('albedo');
             setupDragDrop('normals');
             
-            // Variable para almacenar el ID del manifiesto generado
+            // Variable to store the generated manifest ID
             let currentManifestId = '';
             
-            // Manejar envío del formulario
+            // Handle form submission
             document.getElementById('upload-form').addEventListener('submit', function(e) {
                 e.preventDefault();
                 
-                // Actualizar los indicadores de pasos
+                // Update step indicators
                 document.querySelectorAll('.step')[0].classList.remove('active');
                 document.querySelectorAll('.step')[0].classList.add('completed');
                 document.querySelectorAll('.step')[1].classList.remove('active');
@@ -188,7 +188,7 @@
                 const formData = new FormData(this);
                 const statusDiv = document.getElementById('status');
                 
-                statusDiv.innerHTML = '<div class="alert alert-info"><i class="bi bi-hourglass-split"></i> Generando visor, por favor espera...</div>';
+                statusDiv.innerHTML = '<div class="alert alert-info"><i class="bi bi-hourglass-split"></i> Generating viewer, please wait...</div>';
                 
                 fetch('/upload', {
                     method: 'POST',
@@ -197,47 +197,47 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        // Actualizar paso final
+                        // Update final step
                         document.querySelectorAll('.step')[2].classList.remove('active');
                         document.querySelectorAll('.step')[2].classList.add('completed');
                         document.querySelectorAll('.step')[3].classList.add('active');
                         
-                        statusDiv.innerHTML = '<div class="alert alert-success"><i class="bi bi-check-circle-fill"></i> ¡El visor se ha generado correctamente!</div>';
+                        statusDiv.innerHTML = '<div class="alert alert-success"><i class="bi bi-check-circle-fill"></i> The viewer has been generated successfully!</div>';
                         
-                        // Guardar el ID del manifiesto
+                        // Save the manifest ID
                         currentManifestId = data.manifestId || document.getElementById('outputId').value;
                         
-                        // Mostrar el contenedor del visor
+                        // Show the viewer container
                         const viewerContainer = document.getElementById('viewer-container');
                         viewerContainer.style.display = 'block';
                         
-                        // Configurar la URL del visor
+                        // Configure the viewer URL
                         const viewerLink = document.getElementById('viewer-link');
                         const viewerUrl = document.getElementById('viewer-url');
                         
                         viewerLink.href = data.viewerUrl;
                         viewerUrl.value = data.viewerUrl;
                         
-                        // Funcionalidad de copiar URL
+                        // URL copy functionality
                         document.getElementById('copy-url').addEventListener('click', function() {
                             viewerUrl.select();
                             document.execCommand('copy');
-                            this.innerHTML = '<i class="bi bi-clipboard-check"></i> Copiado!';
+                            this.innerHTML = '<i class="bi bi-clipboard-check"></i> Copied!';
                             setTimeout(() => {
-                                this.innerHTML = '<i class="bi bi-clipboard"></i> Copiar';
+                                this.innerHTML = '<i class="bi bi-clipboard"></i> Copy';
                             }, 2000);
                         });
                     } else {
-                        // Revertir al paso anterior si hay error
+                        // Revert to previous step if error
                         document.querySelectorAll('.step')[2].classList.remove('active');
                         document.querySelectorAll('.step')[1].classList.remove('completed');
                         document.querySelectorAll('.step')[1].classList.add('active');
                         
-                        statusDiv.innerHTML = `<div class="alert alert-danger"><i class="bi bi-exclamation-triangle-fill"></i> Error: ${data.message || 'No se pudo generar el visor'}</div>`;
+                        statusDiv.innerHTML = `<div class="alert alert-danger"><i class="bi bi-exclamation-triangle-fill"></i> Error: ${data.message || 'Could not generate the viewer'}</div>`;
                     }
                 })
                 .catch(error => {
-                    // Revertir al paso anterior si hay error
+                    // Revert to previous step if error
                     document.querySelectorAll('.step')[2].classList.remove('active');
                     document.querySelectorAll('.step')[1].classList.remove('completed');
                     document.querySelectorAll('.step')[1].classList.add('active');
@@ -247,14 +247,14 @@
                 });
             });
             
-            // Manejar la exportación del visor
+            // Handle viewer export
             document.addEventListener('click', function(e) {
                 if (e.target && e.target.id === 'export-button') {
                     const targetUrl = document.getElementById('target-url').value.trim();
                     const exportStatus = document.getElementById('export-status');
                     
                     if (!targetUrl) {
-                        exportStatus.innerHTML = '<div class="alert alert-warning"><i class="bi bi-exclamation-triangle-fill"></i> Por favor, introduce una URL de destino válida.</div>';
+                        exportStatus.innerHTML = '<div class="alert alert-warning"><i class="bi bi-exclamation-triangle-fill"></i> Please enter a valid target URL.</div>';
                         return;
                     }
                     
@@ -262,9 +262,9 @@
                         currentManifestId = document.getElementById('outputId').value;
                     }
                     
-                    exportStatus.innerHTML = '<div class="alert alert-info"><i class="bi bi-hourglass-split"></i> Generando paquete de exportación, por favor espera...</div>';
+                    exportStatus.innerHTML = '<div class="alert alert-info"><i class="bi bi-hourglass-split"></i> Generating export package, please wait...</div>';
                     
-                    // Realizar la solicitud de exportación
+                    // Make the export request
                     fetch('/export', {
                         method: 'POST',
                         headers: {
@@ -277,9 +277,9 @@
                     })
                     .then(response => {
                         if (response.ok) {
-                            // Descargar el archivo ZIP
+                            // Download the ZIP file
                             const contentDisposition = response.headers.get('content-disposition');
-                            let filename = 'visor-exportado.zip';
+                            let filename = 'exported-viewer.zip';
                             if (contentDisposition) {
                                 const filenameMatch = contentDisposition.match(/filename="?([^"]*)"?/);
                                 if (filenameMatch && filenameMatch[1]) {
@@ -297,11 +297,11 @@
                                 a.click();
                                 window.URL.revokeObjectURL(url);
                                 
-                                exportStatus.innerHTML = '<div class="alert alert-success"><i class="bi bi-check-circle-fill"></i> ¡Exportación completada! El archivo ZIP se ha descargado.</div>';
+                                exportStatus.innerHTML = '<div class="alert alert-success"><i class="bi bi-check-circle-fill"></i> Export completed! The ZIP file has been downloaded.</div>';
                             });
                         } else {
                             return response.json().then(data => {
-                                throw new Error(data.message || 'Error en la exportación');
+                                throw new Error(data.message || 'Export error');
                             });
                         }
                     })
@@ -318,12 +318,12 @@
             const fileInput = document.getElementById(fieldName);
             const previewContainer = document.getElementById(`${fieldName}-preview`);
             
-            // Abrir el selector de archivos al hacer clic en el área de arrastrar y soltar
+            // Open file selector when clicking on drag and drop area
             dropArea.addEventListener('click', () => {
                 fileInput.click();
             });
             
-            // Manejo de eventos de arrastre
+            // Handle drag events
             ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
                 dropArea.addEventListener(eventName, preventDefaults, false);
             });
@@ -345,7 +345,7 @@
                 }, false);
             });
             
-            // Manejar la caída del archivo
+            // Handle file drop
             dropArea.addEventListener('drop', e => {
                 const dt = e.dataTransfer;
                 const files = dt.files;
@@ -354,7 +354,7 @@
                     fileInput.files = files;
                     handleFiles(files);
                     
-                    // Activar paso 2 si ambos archivos están cargados
+                    // Activate step 2 if both files are loaded
                     if (document.getElementById('albedo').files.length > 0 &&
                         document.getElementById('normals').files.length > 0) {
                         document.querySelectorAll('.step')[0].classList.remove('active');
@@ -364,12 +364,12 @@
                 }
             });
             
-            // Manejar el cambio del input de archivo
+            // Handle file input change
             fileInput.addEventListener('change', () => {
                 if (fileInput.files.length > 0) {
                     handleFiles(fileInput.files);
                     
-                    // Activar paso 2 si ambos archivos están cargados
+                    // Activate step 2 if both files are loaded
                     if (document.getElementById('albedo').files.length > 0 &&
                         document.getElementById('normals').files.length > 0) {
                         document.querySelectorAll('.step')[0].classList.remove('active');
@@ -379,18 +379,18 @@
                 }
             });
             
-            // Función para manejar los archivos
+            // Function to handle files
             function handleFiles(files) {
                 if (files.length > 0) {
                     const file = files[0];
                     
-                    // Verificar que sea una imagen
+                    // Verify it's an image
                     if (!file.type.match('image.*')) {
-                        previewContainer.innerHTML = '<p class="error-message">Por favor, selecciona un archivo de imagen.</p>';
+                        previewContainer.innerHTML = '<p class="error-message">Please select an image file.</p>';
                         return;
                     }
                     
-                    // Mostrar vista previa
+                    // Show preview
                     const reader = new FileReader();
                     reader.onload = e => {
                         previewContainer.innerHTML = `
