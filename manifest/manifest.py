@@ -74,14 +74,13 @@ class Manifest:
         logo_image_id: str = parameters.get("logo_image_id")
         thumbnail_image_id: str = parameters.get("thumbnail_image_id")
         html_terms: str = parameters.get("html_terms")
-        partof: Dict = parameters.get("part_of")
+        part_of: Dict = parameters.get("part_of")
         items: List = Items(host, self.imagedata).items
         object_range: str = parameters.get("range")
         canvas_id: str = self.imagedata.get("canvas_id")
-
         self.context: List = [
-                "http://iiif.io/api/presentation/3/context.json",
-                f"https://{ host }/contexts/lightingmap/context/json"
+            "http://iiif.io/api/presentation/3/context.json",
+            f"{ host }/contexts/lightingmap/context/json"
         ]
         self.id: str = f"{ host }/iiif/manifest/{ object_id }.json"
         self.type: str = "Manifest"
@@ -96,7 +95,6 @@ class Manifest:
             ]
         }
         self.metadata: List = Metadata(metadata).items()
-
         self.homepage: List = [
             {
                 "id": f"{ host }/objects/{ object_id }",
@@ -112,18 +110,6 @@ class Manifest:
                 ]
             }
         ]
-        self.provider: List = [
-            {
-                "id": f"{ provider_id }",
-                "type": "Agent",
-                "label": {
-                    f"{ language }": [
-                        f"{ provider_name }"
-                    ]
-                },
-                "format": "text/html"
-                }
-            ]
         self.logo: List = [
             {
                 "id": f"{ host }/iiif/image/{ logo_image_id }/full/256,/0/default.jpg",
@@ -140,6 +126,19 @@ class Manifest:
                         "profile": "level1"
                     }
                 ]
+            }
+        ]
+        self.provider: List = [
+            {
+                "id": f"{ provider_id }",
+                "type": "Agent",
+                "label": {
+                    f"{ language }": [
+                        f"{ provider_name }"
+                    ]
+                },
+                "logo": self.logo,
+                "format": "text/html"
             }
         ]
         self.thumbnail: List = [
@@ -160,21 +159,19 @@ class Manifest:
                 ]
             }
         ]
-        self.requirements: List = [
-            {
-                "label": {
-                    f"{ language }": [
-                        "Terms of Use"
-                    ]
-                },
-                "value": {
-                    f"{ language }": [
-                        f"{ html_terms }"
-                    ]
-                }
+        self.required_statement: Dict = {
+            "label": {
+                f"{ language }": [
+                    "Terms of Use"
+                ]
+            },
+            "value": {
+                f"{ language }": [
+                    f"{ html_terms }"
+                ]
             }
-        ]
-        self.part_of: List = PartOf(host, partof).items()
+        }
+        self.part_of: List = PartOf(host, part_of).items()
         self.behavior: List = ["paged"]
         self.items: List = items
         self.structures: List = [
@@ -209,16 +206,16 @@ class Manifest:
         manifest: Dict = {
             "@context": self.context,
             "id": self.id,
+            "label": self.label,
             "type": self.type,
             "summary": self.summary,
             "metadata": self.metadata,
             "homepage": self.homepage,
             "provider": self.provider,
-            "logo": self.logo,
             "thumbnail": self.thumbnail,
-            "requiredStatement": self.requirements,
-            "partof": self.part_of,
-            "behaviour": self.behavior,
+            "requiredStatement": self.required_statement,
+            "partOf": self.part_of,
+            "behavior": self.behavior,
             "items": self.items,
             "structures": self.structures,
             "viewingDirection": self.viewing_direction

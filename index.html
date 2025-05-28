@@ -6,8 +6,8 @@
     <!-- By default Mirador uses Roboto font. Be sure to load this or change the font -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
     <title>Mirador Example</title>
-    <script src="/mirador/dist/mirador-with-plugins.js"></script>
-    <script>
+    <script type="module">
+      import {Mirador, MiradorPlugins} from "./mirador/dist/mirador-with-plugins.js";
       document.addEventListener('DOMContentLoaded', function() {
         const config = {
           id: 'viewer',
