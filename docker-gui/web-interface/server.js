@@ -47,10 +47,29 @@ const PATHS = {
 };
 */
 
-const HOST_URL = {
-  internal: 'http://0.0.0.0:8000',
-  external: 'http://localhost:8000'
+// Dynamic URL configuration based on environment
+const getHostUrls = () => {
+  const serverUrl = process.env.SERVER_URL;
+  const defaultExternal = 'http://localhost:8000';
+  
+  if (serverUrl) {
+    // Remove trailing slash if present
+    const cleanUrl = serverUrl.replace(/\/$/, '');
+    return {
+      internal: 'http://0.0.0.0:8000',
+      external: cleanUrl
+    };
+  }
+  
+  return {
+    internal: 'http://0.0.0.0:8000',
+    external: defaultExternal
+  };
 };
+
+const HOST_URL = getHostUrls();
+
+console.log('Using HOST_URL configuration:', HOST_URL);
 
 // Ensure all required directories exist
 function ensureDirectoryExists(dirPath) {

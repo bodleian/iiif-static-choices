@@ -26,6 +26,7 @@ services:
     environment:
       - NODE_ENV=development
       - PYTHONUNBUFFERED=1
+      - SERVER_URL=${SERVER_URL:-http://localhost:8000}
     restart: unless-stopped
     networks:
       - iiif-dev-network
