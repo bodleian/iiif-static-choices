@@ -83,6 +83,50 @@ docker exec -w /app iiif-static-choices-iiif-static-choices-1 bash -c 'cp image/
 - **Tiles**: `/app/iiif/image/{id}-albedo/`, `/app/iiif/image/{id}-normals/`
 - **Viewers**: `/app/data/viewers/{id}/index.html`
 
+### Data Cleanup Commands
+
+Generated data can accumulate over time, especially during development. Use these commands to clean up space:
+
+#### Complete Cleanup (All Generated Data)
+```bash
+# Clean all generated content (uploads, exports, tiles, manifests)
+docker run --rm -v "$(pwd)/data:/data" -v "$(pwd)/iiif:/iiif" alpine sh -c 'find /data -mindepth 2 -delete && find /iiif -mindepth 2 -delete'
+```
+
+#### Selective Cleanup
+```bash
+# Clean only exports and uploads (keep viewers and manifests)
+docker run --rm -v "$(pwd)/data:/data" alpine sh -c 'rm -rf /data/exports/* /data/uploads/*'
+
+# Clean only large export files (keep extracted folders)
+docker run --rm -v "$(pwd)/data:/data" alpine sh -c 'find /data/exports -name "*.zip" -delete'
+
+# Clean specific viewer data
+docker run --rm -v "$(pwd)/data:/data" -v "$(pwd)/iiif:/iiif" alpine sh -c 'rm -rf /data/viewers/VIEWER_ID /iiif/image/VIEWER_ID-* /iiif/manifest/VIEWER_ID.json'
+```
+
+#### Alternative with Sudo (if Docker unavailable)
+```bash
+# Requires sudo privileges
+sudo rm -rf data/uploads/* data/exports/* iiif/image/* iiif/manifest/*
+sudo rm -rf data/viewers/* data/public/*
+```
+
+#### Why Docker for Cleanup?
+Files created by Docker containers have root permissions and cannot be deleted directly by regular users. Using Docker ensures proper cleanup without permission issues.
+
+#### Monitor Disk Usage
+```bash
+# Check size of data directories
+du -sh data/* iiif/*
+
+# Check Docker image sizes
+docker images --format "table {{.Repository}}\t{{.Tag}}\t{{.Size}}"
+
+# Clean up unused Docker resources
+docker system prune -a
+```
+
 ## Using Your Own Images
 
 1. **Prepare images**:
