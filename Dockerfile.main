@@ -36,7 +36,8 @@ RUN npm install
 # Preparar directorios para tiles y manifiestos
 WORKDIR /app
 RUN mkdir -p /app/iiif/image /app/iiif/manifest && chmod -R 777 /app/iiif && \
-    mkdir -p /app/data/uploads && chmod -R 777 /app/data
+    mkdir -p /app/data/uploads /app/data/exports /app/data/viewers /app/data/public /app/data/iiif && \
+    chmod -R 777 /app/data
 
 # Exponer puertos
 EXPOSE 8000 8080
