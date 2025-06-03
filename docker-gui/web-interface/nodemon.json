@@ -11,7 +11,7 @@
     "*.log",
     "data/"
   ],
-  "exec": "node server.js",
+  "exec": "node --max-old-space-size=8192 server.js",
   "env": {
     "NODE_ENV": "development"
   },
