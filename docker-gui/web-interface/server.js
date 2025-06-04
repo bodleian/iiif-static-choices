@@ -301,7 +301,7 @@ app.post('/upload', upload.fields([
     if (!req.files || !req.files.albedo || !req.files.normals) {
       return res.status(400).json({
         success: false,
-        message: 'Es necesario subir ambas imágenes (albedo y normales).'
+        message: 'Both images (albedo and normals) must be uploaded.'
       });
     }
 
