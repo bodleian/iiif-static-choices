@@ -110,12 +110,44 @@
             
             <div class="mb-3">
                 <label for="description" class="form-label">Description</label>
-                <textarea id="description" name="description" class="form-control"></textarea>
+                <textarea id="description" name="description" class="form-control" rows="3"></textarea>
             </div>
             
             <div class="mb-3">
-                <label for="shelfmark" class="form-label">Shelfmark</label>
-                <input type="text" id="shelfmark" name="shelfmark" class="form-control">
+                <label for="summary" class="form-label">Summary</label>
+                <textarea id="summary" name="summary" class="form-control" rows="2" placeholder="Brief summary of the object"></textarea>
+                <small class="text-muted">Main summary text that will appear in the IIIF manifest</small>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="shelfmark" class="form-label">Shelfmark</label>
+                    <input type="text" id="shelfmark" name="shelfmark" class="form-control" placeholder="e.g., MS 123/45">
+                </div>
+                
+                <div class="col-md-6 mb-3">
+                    <label for="language" class="form-label">Language</label>
+                    <select id="language" name="language" class="form-control">
+                        <option value="en">English (en)</option>
+                        <option value="es">Spanish (es)</option>
+                        <option value="fr">French (fr)</option>
+                        <option value="de">German (de)</option>
+                        <option value="it">Italian (it)</option>
+                        <option value="pt">Portuguese (pt)</option>
+                        <option value="nl">Dutch (nl)</option>
+                        <option value="ru">Russian (ru)</option>
+                        <option value="zh">Chinese (zh)</option>
+                        <option value="ja">Japanese (ja)</option>
+                        <option value="ar">Arabic (ar)</option>
+                    </select>
+                    <small class="text-muted">ISO language code for metadata</small>
+                </div>
+            </div>
+            
+            <div class="mb-3">
+                <label for="providerName" class="form-label">Provider name</label>
+                <input type="text" id="providerName" name="providerName" class="form-control" placeholder="e.g., Bodleian Libraries, University of Oxford">
+                <small class="text-muted">Name of the institution providing this object</small>
             </div>
             
             <div class="mb-3">
@@ -139,12 +171,12 @@
             </div>
             <!-- Export viewer section -->
             <div class="export-container">
-                <h4><i class="bi bi-box-seam"></i> Export Viewer</h4>
+                <h4><i class="bi bi-box-seam"></i> Export viewer</h4>
                 <p>If you want to deploy this viewer on your own server, you can export all necessary files in a ZIP package.</p>
                 
                 <div class="mb-3">
                     <label for="target-url" class="form-label">
-                        Target Base URL 
+                        Target base URL 
                         <button type="button" class="btn btn-sm btn-outline-secondary ms-2" data-bs-toggle="modal" data-bs-target="#exportHelpModal">
                             <i class="bi bi-question-circle"></i> Help
                         </button>
@@ -156,7 +188,7 @@
                 </div>
                 
                 <div class="mb-3">
-                    <label class="form-label"><i class="bi bi-folder-fill text-warning me-2"></i>Export Structure</label>
+                    <label class="form-label">Export structure</label>
                     <div class="form-check">
                         <input class="form-check-input" type="radio" name="exportType" id="selfContained" value="self-contained" checked>
                         <label class="form-check-label" for="selfContained">
@@ -307,6 +339,13 @@
                         document.querySelectorAll('.step')[3].classList.add('active');
                         
                         statusDiv.innerHTML = '<div class="alert alert-success"><i class="bi bi-check-circle-fill"></i> The viewer has been generated successfully!</div>';
+                        
+                        // Disable Generate viewer button to avoid confusion
+                        const generateButton = document.querySelector('button[type="submit"]');
+                        generateButton.disabled = true;
+                        generateButton.textContent = 'Viewer generated';
+                        generateButton.classList.add('btn-secondary');
+                        generateButton.classList.remove('btn-primary');
                         
                         // Save the manifest ID
                         currentManifestId = data.manifestId || document.getElementById('outputId').value;

@@ -293,6 +293,25 @@ textarea.form-control:focus {
     box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.25);
 }
 
+/* Disabled button state */
+.btn-primary:disabled,
+.btn-secondary:disabled {
+    background-color: var(--text-secondary);
+    border-color: var(--text-secondary);
+    color: var(--bg-primary);
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.btn-primary:disabled:hover,
+.btn-secondary:disabled:hover {
+    background-color: var(--text-secondary);
+    transform: none;
+    box-shadow: none;
+}
+
 /* Secondary buttons */
 .btn-success {
     background-color: var(--success-color);
@@ -370,6 +389,77 @@ textarea.form-control:focus {
     font-weight: 500;
 }
 
+/* Configuration sections */
+.configuration-section {
+    background-color: var(--bg-input);
+    border-radius: 8px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    border: 1px solid var(--border-subtle);
+}
+
+.section-title {
+    color: var(--accent-color);
+    font-weight: 600;
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border-subtle);
+    padding-bottom: 0.75rem;
+}
+
+/* Select dropdown styling */
+select.form-control {
+    background-color: var(--bg-primary);
+    border: 2px solid var(--text-secondary);
+    border-radius: 4px;
+    color: var(--text-primary);
+    font-family: 'EB Garamond', serif;
+    font-size: 1rem;
+    padding: 0.75rem;
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+}
+
+select.form-control:focus {
+    border-color: var(--accent-color);
+    box-shadow: none;
+    outline: none;
+}
+
+select.form-control option {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    padding: 0.5rem;
+}
+
+/* Enhanced form layout */
+.row .col-md-6 .mb-3:last-child {
+    margin-bottom: 0;
+}
+
+/* Responsive adjustments for configuration sections */
+@media (max-width: 768px) {
+    .configuration-section {
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .section-title {
+        font-size: 1.1rem;
+        margin-bottom: 1rem;
+    }
+}
+
+/* Input group styling */
+.input-group .form-control {
+    border-bottom: 2px solid var(--text-secondary);
+    border-right: none;
+}
+
+.input-group .btn {
+    border-bottom: 2px solid var(--text-secondary);
+}
+
 /* Export container */
 .export-container {
     background-color: var(--bg-input);
@@ -382,16 +472,6 @@ textarea.form-control:focus {
 .export-container h4 {
     color: var(--accent-color);
     margin-bottom: 1rem;
-}
-
-/* Input group styling */
-.input-group .form-control {
-    border-bottom: 2px solid var(--text-secondary);
-    border-right: none;
-}
-
-.input-group .btn {
-    border-bottom: 2px solid var(--text-secondary);
 }
 
 /* Footer */

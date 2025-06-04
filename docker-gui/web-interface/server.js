@@ -123,36 +123,43 @@ function fixHostUrls(content) {
 
 // Helper function to write a config file based on form data
 function generateConfigFile(outputId, formData) {
-  const { title, description, shelfmark } = formData;
+  const { 
+    title, 
+    description, 
+    summary,
+    shelfmark, 
+    language = 'en',
+    providerName = 'Digital Repository'
+  } = formData;
   
   // Consistent image IDs derived from outputId
   const albedoId = `${outputId}-albedo`;
   const normalsId = `${outputId}-normals`;
   
   const configContent = `
-title: ${title || 'Sin título'}
-description: ${description || 'Sin descripción'}
-shelfmark: ${shelfmark || 'Sin marca'}
+title: ${title || 'Untitled'}
+description: ${description || 'No description'}
+shelfmark: ${shelfmark || 'No shelfmark'}
 homepage: ${HOST_URL.external}/
 outputId: ${outputId}
 
-# Additional required fields
-full_shelfmark: "${shelfmark || 'Sin marca'}"
-summary: "${description || 'Sin descripción'}"
+# Required IIIF manifest fields - Simplified Phase 1 Implementation
+full_shelfmark: "${shelfmark || 'No shelfmark'}"
+summary: "${summary || description || 'No summary available'}"
 object_id: "${outputId}"
-object_label: "${title || 'Sin título'}"
+object_label: "${title || 'Untitled'}"
 provider_id: "provider-1"
-provider_name: "Proveedor"
+provider_name: "${providerName}"
 logo_image_id: "logo"
-language: "es"
+language: "${language}"
 thumbnail_image_id: "thumbnail"
-html_terms: "<span>Términos de uso</span>"
+html_terms: "<span>Terms of use</span>"
 range: "range-1"
 
 metadata:
-  Title: "${title || 'Sin título'}"
-  Shelfmark: "${shelfmark || 'Sin marca'}"
-  Description: "${description || 'Sin descripción'}"
+  Title: "${title || 'Untitled'}"
+  Shelfmark: "${shelfmark || 'No shelfmark'}"
+  Description: "${description || 'No description'}"
 
 part_of:
   fossils: "collection-1"
