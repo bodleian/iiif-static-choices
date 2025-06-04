@@ -227,6 +227,23 @@ function createViewerPage(outputId) {
   const viewerDir = path.join(PATHS.viewers, outputId);
   ensureDirectoryExists(viewerDir);
 
+  // Create mirador symbolic link for this viewer
+  const miradorLinkPath = path.join(viewerDir, 'mirador');
+  const miradorTargetPath = '/app/mirador';
+
+  try {
+    // Remove existing link if it exists
+    if (fs.existsSync(miradorLinkPath)) {
+      fs.unlinkSync(miradorLinkPath);
+    }
+    // Create symbolic link to mirador
+    fs.symlinkSync(miradorTargetPath, miradorLinkPath, 'dir');
+    console.log(`Created mirador symbolic link for viewer ${outputId}: ${miradorLinkPath} -> ${miradorTargetPath}`);
+  } catch (err) {
+    console.error(`Error creating mirador symbolic link for viewer ${outputId}:`, err);
+    // Continue anyway, as this might still work with alternative paths
+  }
+
   try {
     // Read template and replace manifest reference
     let viewerContent = fs.readFileSync(PATHS.indexTemplate, 'utf8');
