@@ -543,3 +543,162 @@ input.form-control {
 .container-fluid {
     padding-left: 0 !important;
 }
+
+/* Modal help page color scheme styling */
+.modal-content {
+    background-color: var(--bg-container) !important;
+    border: 1px solid var(--border-subtle) !important;
+    border-radius: 12px !important;
+    font-family: 'EB Garamond', serif !important;
+}
+
+.modal-header {
+    background-color: #4A90E2 !important;
+    border-bottom: none !important;
+    padding: 1.5rem 2rem 1rem 2rem !important;
+    border-radius: 12px 12px 0 0 !important;
+}
+
+.modal-title {
+    color: #fff !important;
+    font-weight: 600 !important;
+    font-size: 1.5rem !important;
+}
+
+.modal-body {
+    background-color: var(--bg-container) !important;
+    color: var(--text-primary) !important;
+    padding: 1.5rem 2rem !important;
+    line-height: 1.6 !important;
+}
+
+.modal-body h6 {
+    color: #4A90E2 !important;
+    font-weight: 600 !important;
+    margin-top: 1.5rem !important;
+    margin-bottom: 0.75rem !important;
+    font-size: 1.1rem !important;
+}
+
+.modal-body h6:first-child {
+    margin-top: 0 !important;
+}
+
+.modal-body p {
+    color: var(--text-primary) !important;
+    margin-bottom: 1rem !important;
+}
+
+.modal-body small {
+    color: var(--text-secondary) !important;
+}
+
+.modal-body code {
+    background-color: var(--bg-primary) !important;
+    color: var(--text-secondary) !important;
+    padding: 0.25rem 0.5rem !important;
+    border-radius: 4px !important;
+    font-size: 0.9rem !important;
+    border: 1px solid var(--border-subtle) !important;
+}
+
+.modal-body .bg-light {
+    background-color: var(--bg-primary) !important;
+    border: 1px solid var(--border-subtle) !important;
+    color: var(--text-primary) !important;
+}
+
+.modal-body .text-success {
+    color: #28a745 !important;
+}
+
+.modal-body .text-primary {
+    color: #4A90E2 !important;
+}
+
+.modal-body .text-warning {
+    color: #ffc107 !important;
+}
+
+.modal-body .text-danger {
+    color: #dc3545 !important;
+}
+
+.modal-body .text-info {
+    color: #4A90E2 !important;
+}
+
+.modal-body .text-white {
+    color: #fff !important;
+}
+
+.modal-body .alert-info {
+    background-color: rgba(74, 144, 226, 0.15) !important;
+    border: 1px solid rgba(74, 144, 226, 0.3) !important;
+    color: #4A90E2 !important;
+    border-radius: 6px !important;
+}
+
+.modal-body .alert-warning {
+    background-color: rgba(255, 193, 7, 0.15) !important;
+    border: 1px solid rgba(255, 193, 7, 0.3) !important;
+    color: #ffc107 !important;
+    border-radius: 6px !important;
+}
+
+.modal-body .list-unstyled {
+    margin-bottom: 1rem !important;
+}
+
+.modal-body .list-unstyled li {
+    margin-bottom: 0.5rem !important;
+    color: var(--text-primary) !important;
+}
+
+.modal-body .bi-check-circle {
+    color: #28a745 !important;
+    margin-right: 0.5rem !important;
+}
+
+.modal-body .bi-info-circle,
+.modal-body .bi-folder,
+.modal-body .bi-server,
+.modal-body .bi-cloud-upload,
+.modal-body .bi-exclamation-triangle {
+    margin-right: 0.5rem !important;
+}
+
+.modal-footer {
+    background-color: var(--bg-container) !important;
+    border-top: 1px solid var(--border-subtle) !important;
+    padding: 1rem 2rem 1.5rem 2rem !important;
+}
+
+.btn-close {
+    background-color: transparent !important;
+    border: none !important;
+    color: #fff !important;
+    opacity: 1 !important;
+    filter: invert(1) !important;
+}
+
+.btn-close:hover {
+    opacity: 0.8 !important;
+    color: #fff !important;
+    filter: invert(1) !important;
+}
+
+.btn-secondary {
+    background-color: #4A90E2 !important;
+    border: 1px solid #4A90E2 !important;
+    color: #fff !important;
+    font-family: 'EB Garamond', serif !important;
+    font-weight: 500 !important;
+    border-radius: 6px !important;
+}
+
+.btn-secondary:hover {
+    background-color: #3A7BC8 !important;
+    border-color: #3A7BC8 !important;
+    color: #fff !important;
+}

@@ -143,15 +143,122 @@
                 <p>If you want to deploy this viewer on your own server, you can export all necessary files in a ZIP package.</p>
                 
                 <div class="mb-3">
-                    <label for="target-url" class="form-label">Target URL</label>
-                    <input type="text" id="target-url" class="form-control" placeholder="https://example.com/viewer/">
-                    <small class="form-text text-muted">Enter the base URL where the viewer will be located on your server.</small>
+                    <label for="target-url" class="form-label">
+                        Target Base URL 
+                        <button type="button" class="btn btn-sm btn-outline-secondary ms-2" data-bs-toggle="modal" data-bs-target="#exportHelpModal">
+                            <i class="bi bi-question-circle"></i> Help
+                        </button>
+                    </label>
+                    <input type="text" id="target-url" class="form-control" placeholder="https://your.server.com/">
+                    <small class="form-text text-muted">
+                        Enter the base URL where the viewer will be deployed on your server.
+                    </small>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label"><i class="bi bi-folder-fill text-warning me-2"></i>Export Structure</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="exportType" id="selfContained" value="self-contained" checked>
+                        <label class="form-check-label" for="selfContained">
+                            Self-contained (flat structure)
+                        </label>
+                        <small class="form-text text-muted d-block">All files at root level - simple deployment</small>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="exportType" id="organized" value="organized">
+                        <label class="form-check-label" for="organized">
+                            Organized (nested structure)
+                        </label>
+                        <small class="form-text text-muted d-block">Viewer in subfolder - better for multiple viewers</small>
+                    </div>
                 </div>
                 
                 <button id="export-button" class="btn btn-primary">
                     Export viewer
                 </button>
                 <div id="export-status" class="mt-2"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Export Help Modal -->
+    <div class="modal fade" id="exportHelpModal" tabindex="-1" aria-labelledby="exportHelpModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exportHelpModalLabel">Export deployment guide</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h6><i class="bi bi-info-circle text-primary"></i> Understanding target base URL</h6>
+                    <p>The <strong>target base URL</strong> is the foundation where your viewer will be accessible. All viewer files will be served relative to this URL.</p>
+                    
+                    <div class="alert alert-info">
+                        <strong>Example:</strong> If you enter <code>https://your.server.com/</code>, your exported viewer will be accessible at the URLs shown below.
+                    </div>
+
+                    <h6><i class="bi bi-folder text-primary"></i> Export structure options</h6>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6 class="text-white">Self-contained structure</h6>
+                            <p><small class="text-muted">All files at root level - simple deployment</small></p>
+                            <div class="bg-light p-3 rounded">
+                                <code>
+                                    https://your.server.com/<br>
+                                    ├── <strong>index.html</strong> ← Viewer here<br>
+                                    ├── iiif/<br>
+                                    │   ├── manifest/<br>
+                                    │   └── image/<br>
+                                    └── mirador/<br>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;└── dist/
+                                </code>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-white">Organized structure</h6>
+                            <p><small class="text-muted">Viewer in subfolder - better for multiple viewers</small></p>
+                            <div class="bg-light p-3 rounded">
+                                <code>
+                                    https://your.server.com/<br>
+                                    ├── viewer-name/<br>
+                                    │   └── <strong>index.html</strong> ← Viewer here<br>
+                                    ├── iiif/<br>
+                                    │   ├── manifest/<br>
+                                    │   └── image/<br>
+                                    └── mirador/<br>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;└── dist/
+                                </code>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h6 class="mt-4"><i class="bi bi-server text-primary"></i> Server requirements</h6>
+                    <p>Your web server must be able to serve all exported files from the target base URL location. The system will generate URLs like:</p>
+                    
+                    <ul class="list-unstyled">
+                        <li><code>https://your.server.com/iiif/manifest/viewer-name.json</code></li>
+                        <li><code>https://your.server.com/iiif/image/viewer-name-albedo/info.json</code></li>
+                        <li><code>https://your.server.com/mirador/dist/mirador-with-plugins.js</code></li>
+                    </ul>
+
+                    <h6 class="mt-4"><i class="bi bi-cloud-upload text-primary"></i> Deployment steps</h6>
+                    <ol>
+                        <li><strong>Choose Your Export Structure</strong> based on your deployment needs</li>
+                        <li><strong>Enter The Target Base URL</strong> where you want the viewer accessible</li>
+                        <li><strong>Download The ZIP File</strong> generated by the export</li>
+                        <li><strong>Extract All Contents</strong> to your web server directory matching the target base URL path</li>
+                        <li><strong>Verify Your Server</strong> can serve static files from that location</li>
+                        <li><strong>Test The Viewer</strong> by accessing the index.html location in your browser</li>
+                    </ol>
+
+                    <div class="alert alert-warning">
+                        <i class="bi bi-exclamation-triangle"></i> <strong>Important:</strong> Make sure your web server can serve static files and handle CORS requests if the viewer will be embedded elsewhere.
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
             </div>
         </div>
     </div>
@@ -236,6 +343,7 @@
             document.addEventListener('click', function(e) {
                 if (e.target && e.target.id === 'export-button') {
                     const targetUrl = document.getElementById('target-url').value.trim();
+                    const exportType = document.querySelector('input[name="exportType"]:checked').value;
                     const exportStatus = document.getElementById('export-status');
                     
                     if (!targetUrl) {
@@ -257,7 +365,8 @@
                         },
                         body: JSON.stringify({
                             manifestId: currentManifestId,
-                            targetUrl: targetUrl
+                            targetUrl: targetUrl,
+                            exportType: exportType
                         })
                     })
                     .then(response => {

@@ -383,7 +383,7 @@ function copyDirectoryRecursiveSync(src, dest, filter = null) {
 
 // Route for exporting the viewer
 app.post('/export', bodyParser.json(), (req, res) => {
-  const { manifestId, targetUrl } = req.body;
+  const { manifestId, targetUrl, exportType = 'self-contained' } = req.body;
   
   if (!manifestId || !targetUrl) {
     return res.status(400).json({
@@ -393,12 +393,28 @@ app.post('/export', bodyParser.json(), (req, res) => {
   }
 
   try {
-    // Create export directory structure
+    // Create export directory structure based on export type
     const exportDir = path.join(PATHS.exports, manifestId);
-    const iiifDir = path.join(exportDir, 'iiif');
-    const manifestDir = path.join(iiifDir, 'manifest');
-    const imageDir = path.join(iiifDir, 'image');
-    const miradorDir = path.join(exportDir, 'mirador');
+    let iiifDir, manifestDir, imageDir, miradorDir, indexPath;
+    
+    if (exportType === 'organized') {
+      // Organized structure: viewer-name/index.html, mirador/, iiif/ at root level
+      const viewerDir = path.join(exportDir, manifestId);
+      iiifDir = path.join(exportDir, 'iiif');
+      manifestDir = path.join(iiifDir, 'manifest');
+      imageDir = path.join(iiifDir, 'image');
+      miradorDir = path.join(exportDir, 'mirador');
+      indexPath = path.join(viewerDir, 'index.html');
+      
+      ensureDirectoryExists(viewerDir);
+    } else {
+      // Self-contained structure: everything at root level
+      iiifDir = path.join(exportDir, 'iiif');
+      manifestDir = path.join(iiifDir, 'manifest');
+      imageDir = path.join(iiifDir, 'image');
+      miradorDir = path.join(exportDir, 'mirador');
+      indexPath = path.join(exportDir, 'index.html');
+    }
     
     ensureDirectoryExists(manifestDir);
     ensureDirectoryExists(imageDir);
@@ -492,13 +508,24 @@ app.post('/export', bodyParser.json(), (req, res) => {
     // Copy Mirador viewer files
     copyDirectoryRecursiveSync('/app/mirador/dist', path.join(miradorDir, 'dist'));
     
-    // Create customized index.html
+    // Create customized index.html with adjusted paths based on export type
     const indexTemplate = fs.readFileSync(PATHS.indexTemplate, 'utf8');
-    const customIndex = indexTemplate
-      .replace(new RegExp(HOST_URL.external, 'g'), targetUrl.replace(/\/$/, ''))
-      .replace(/manifestId:.*?'(.*?)'/g, `manifestId: '${targetUrl.replace(/\/$/, '')}/iiif/manifest/${manifestId}.json'`);
+    let customIndex;
     
-    fs.writeFileSync(path.join(exportDir, 'index.html'), customIndex);
+    if (exportType === 'organized') {
+      // Organized structure: adjust paths to go up one level (../mirador, ../iiif)
+      customIndex = indexTemplate
+        .replace(new RegExp(HOST_URL.external, 'g'), targetUrl.replace(/\/$/, ''))
+        .replace(/manifestId:.*?'(.*?)'/g, `manifestId: '${targetUrl.replace(/\/$/, '')}/iiif/manifest/${manifestId}.json'`)
+        .replace(/from "\.\/mirador\//g, 'from "../mirador/');
+    } else {
+      // Self-contained structure: keep original relative paths (./mirador, ./iiif)
+      customIndex = indexTemplate
+        .replace(new RegExp(HOST_URL.external, 'g'), targetUrl.replace(/\/$/, ''))
+        .replace(/manifestId:.*?'(.*?)'/g, `manifestId: '${targetUrl.replace(/\/$/, '')}/iiif/manifest/${manifestId}.json'`);
+    }
+    
+    fs.writeFileSync(indexPath, customIndex);
     
     // Create ZIP file
     const zipPath = path.join(PATHS.exports, `${manifestId}.zip`);
