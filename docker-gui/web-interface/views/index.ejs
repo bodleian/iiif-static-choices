@@ -324,13 +324,21 @@
                 const formData = new FormData(this);
                 const statusDiv = document.getElementById('status');
                 
-                statusDiv.innerHTML = '<div class="alert alert-info"><i class="bi bi-hourglass-split slow-spin"></i> Generating viewer, please wait...</div>';
+                statusDiv.innerHTML = '<div class="alert alert-info"><i class="bi bi-hourglass-split slow-spin"></i> Generating tiles and manifest... This process typically takes 5-15 minutes depending on image size. Please be patient.</div>';
+                
+                // Configure AbortController for custom timeout (20 minutes for tile generation)
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 20 * 60 * 1000); // 20 minutes
                 
                 fetch('/upload', {
                     method: 'POST',
-                    body: formData
+                    body: formData,
+                    signal: controller.signal
                 })
-                .then(response => response.json())
+                .then(response => {
+                    clearTimeout(timeoutId); // Clear timeout on successful response
+                    return response.json();
+                })
                 .then(data => {
                     if (data.success) {
                         // Update final step
@@ -368,13 +376,20 @@
                     }
                 })
                 .catch(error => {
+                    clearTimeout(timeoutId); // Clear timeout on error
                     // Revert to previous step if error
                     document.querySelectorAll('.step')[2].classList.remove('active');
                     document.querySelectorAll('.step')[1].classList.remove('completed');
                     document.querySelectorAll('.step')[1].classList.add('active');
                     
                     console.error('Error:', error);
-                    statusDiv.innerHTML = `<div class="alert alert-danger"><i class="bi bi-exclamation-triangle-fill"></i> Error: ${error.message}</div>`;
+                    
+                    // Provide different messages for timeout vs other errors
+                    if (error.name === 'AbortError') {
+                        statusDiv.innerHTML = '<div class="alert alert-warning"><i class="bi bi-clock-fill"></i> The generation process is taking longer than expected. The process may still be running in the background. Please check the server logs or try again.</div>';
+                    } else {
+                        statusDiv.innerHTML = `<div class="alert alert-danger"><i class="bi bi-exclamation-triangle-fill"></i> Error: ${error.message}</div>`;
+                    }
                 });
             });
             
@@ -396,6 +411,10 @@
                     
                     exportStatus.innerHTML = '<div class="alert alert-info"><i class="bi bi-hourglass-split slow-spin"></i> Generating export package, please wait...</div>';
                     
+                    // Configure timeout for export process (10 minutes)
+                    const exportController = new AbortController();
+                    const exportTimeoutId = setTimeout(() => exportController.abort(), 10 * 60 * 1000);
+                    
                     // Make the export request
                     fetch('/export', {
                         method: 'POST',
@@ -406,9 +425,11 @@
                             manifestId: currentManifestId,
                             targetUrl: targetUrl,
                             exportType: exportType
-                        })
+                        }),
+                        signal: exportController.signal
                     })
                     .then(response => {
+                        clearTimeout(exportTimeoutId);
                         if (response.ok) {
                             // Download the ZIP file
                             const contentDisposition = response.headers.get('content-disposition');
@@ -439,8 +460,13 @@
                         }
                     })
                     .catch(error => {
+                        clearTimeout(exportTimeoutId);
                         console.error('Error:', error);
-                        exportStatus.innerHTML = `<div class="alert alert-danger"><i class="bi bi-exclamation-triangle-fill"></i> Error: ${error.message}</div>`;
+                        if (error.name === 'AbortError') {
+                            exportStatus.innerHTML = '<div class="alert alert-warning"><i class="bi bi-clock-fill"></i> Export is taking longer than expected. The process may still be running in the background.</div>';
+                        } else {
+                            exportStatus.innerHTML = `<div class="alert alert-danger"><i class="bi bi-exclamation-triangle-fill"></i> Error: ${error.message}</div>`;
+                        }
                     });
                 }
             });
