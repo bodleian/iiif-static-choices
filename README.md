@@ -264,7 +264,6 @@ The tile generation part of this project is based on and translated from the wor
 
 ## Todo
 
-- Add thumbnail generation for choices layers in Mirador
 - Add logo generation
 - Add multi-page manifests 
 - Add unit tests to prevent development breaking
