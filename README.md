@@ -40,7 +40,8 @@ The easiest way to use IIIF Static Choices is with Docker, which includes a web 
 
 2. Start the container:
    ```bash
-   docker-compose -f docker-compose.main.yml up -d
+   docker compose -f docker-compose.main.yml up -d
+   # Note: On older Docker versions, use 'docker-compose' instead
    ```
 
 3. Access the web interface at http://localhost:8080
@@ -98,7 +99,7 @@ poetry install --no-root
 ### Starting the Container
 
 ```bash
-docker-compose -f docker-compose.main.yml up -d
+docker compose -f docker-compose.main.yml up -d
 ```
 
 This builds and starts a container with:
@@ -162,15 +163,15 @@ If you encounter issues:
 
 2. Restart the container:
    ```bash
-   docker-compose -f docker-compose.main.yml restart
+   docker compose -f docker-compose.main.yml restart
    ```
 3. Stop the container:
    ```bash
-   docker-compose -f docker-compose.main.yml down
+   docker compose -f docker-compose.main.yml down
    ```
 3. Rebuild the container:
    ```bash
-   docker-compose -f docker-compose.main.yml up -d --build
+   docker compose -f docker-compose.main.yml up -d --build
    ```
 
 4. Common issues:
