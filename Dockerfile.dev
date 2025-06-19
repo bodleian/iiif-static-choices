@@ -28,7 +28,7 @@ WORKDIR /app
 COPY . /app/
 
 # Copy IIIF server for Docker app to data directory
-COPY iiif-server-for-docker-app.py /app/data/server.py
+COPY docker-gui/iiif-server-for-docker-app.py /app/data/server.py
 
 # Install Python dependencies with Poetry
 RUN cd /app && \
