@@ -4,12 +4,12 @@
 
 ### Development Mode (Hot-reload for Node.js)
 ```bash
-docker-compose -f docker-compose.dev.yml up --build
+docker compose -f docker-compose.dev.yml up --build
 ```
 
 ### Production Mode
 ```bash
-docker-compose -f docker-compose.main.yml up --build
+docker compose -f docker-compose.main.yml up --build
 ```
 
 ## Key Differences
@@ -127,26 +127,7 @@ docker images --format "table {{.Repository}}\t{{.Tag}}\t{{.Size}}"
 docker system prune -a
 ```
 
-## Using Your Own Images
-
-1. **Prepare images**:
-   - Albedo: Regular color/texture image (PNG, JPG)
-   - Normal Map: RGB surface relief information
-   - Same resolution (recommended: 2048×2048+)
-
-2. **Create config file** (see `image/ammonite-config.yml`)
-
-3. **Use web interface or manual commands**
-
-## Export for External Servers
-
-1. Generate viewer in web interface
-2. Enter target URL (e.g., `https://example.com/viewers/`)
-3. Click "Export Viewer" and download ZIP
-4. Extract on your server preserving directory structure
-
 ## Common Issues
 
-- **Missing dependencies**: Container should have all packages installed
 - **Memory issues**: Increase Docker memory allocation for large images
 - **Port conflicts**: Ensure ports 8000/8080 are available
