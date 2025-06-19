@@ -30,14 +30,14 @@ docker compose -f docker-compose.main.yml up --build
 
 ```bash
 # Restart development environment
-docker-compose -f docker-compose.dev.yml restart
+docker compose -f docker-compose.dev.yml restart
 
 # Clean rebuild
-docker-compose -f docker-compose.dev.yml down
-docker-compose -f docker-compose.dev.yml up --build
+docker compose -f docker-compose.dev.yml down
+docker compose -f docker-compose.dev.yml up --build
 
 # Check logs
-docker-compose -f docker-compose.dev.yml logs -f
+docker compose -f docker-compose.dev.yml logs -f
 ```
 
 ## Access
