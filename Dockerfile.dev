@@ -27,9 +27,6 @@ WORKDIR /app
 # Copy project files (will be overridden by volumes in development)
 COPY . /app/
 
-# Copy IIIF server for Docker app to data directory
-COPY docker-gui/iiif-server-for-docker-app.py /app/data/server.py
-
 # Install Python dependencies with Poetry
 RUN cd /app && \
     poetry config virtualenvs.create false && \
@@ -55,6 +52,8 @@ VOLUME ["/app/data"]
 CMD ["bash", "-c", "\
     echo 'Starting IIIF Static Choices in DEVELOPMENT mode...' && \
     mkdir -p /app/data/iiif && \
+    cp /app/docker-gui/iiif-server-for-docker-app.py /app/data/server.py && \
+    echo 'IIIF server copied to data directory' && \
     ln -sf /app/iiif/manifest /app/data/iiif/manifest && \
     ln -sf /app/iiif/image /app/data/iiif/image && \
     ln -sf /app/data/viewers /app/viewers && \
@@ -68,5 +67,5 @@ CMD ["bash", "-c", "\
     sleep 5 && \
     echo 'Starting Python IIIF server...' && \
     cd /app && \
-    python server.py 8000 \
+    python /app/data/server.py 8000 \
     "]

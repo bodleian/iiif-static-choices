@@ -29,7 +29,7 @@ services:
       - SERVER_URL=${SERVER_URL:-http://localhost:8000}
     restart: unless-stopped
     # Command modified to create symbolic links (adapted for development)
-    command: bash -c "mkdir -p /app/data/iiif && ln -sf /app/iiif/manifest /app/data/iiif/manifest && ln -sf /app/iiif/image /app/data/iiif/image && ln -sf /app/data/viewers /app/viewers && ln -sf /app/data/public /app/public && ln -sf /app/mirador /app/data/mirador && cd /app/docker-gui/web-interface && npm run dev & sleep 5 && cd /app && python /app/data/server.py 8000"
+    command: bash -c "mkdir -p /app/data/iiif && cp /app/docker-gui/iiif-server-for-docker-app.py /app/data/server.py && ln -sf /app/iiif/manifest /app/data/iiif/manifest && ln -sf /app/iiif/image /app/data/iiif/image && ln -sf /app/data/viewers /app/viewers && ln -sf /app/data/public /app/public && ln -sf /app/mirador /app/data/mirador && cd /app/docker-gui/web-interface && npm run dev & sleep 5 && cd /app && python /app/data/server.py 8000"
     deploy:
       resources:
         limits:
