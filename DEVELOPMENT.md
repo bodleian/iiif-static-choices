@@ -127,6 +127,31 @@ docker images --format "table {{.Repository}}\t{{.Tag}}\t{{.Size}}"
 docker system prune -a
 ```
 
+## Fresh Testing Workflow
+
+### Complete Clean + Test
+```bash
+# Clean everything
+docker system prune -af
+sudo rm -rf data/*
+sudo rm -rf iiif/*
+
+# Test dev environment
+docker compose -f docker-compose.dev.yml build --no-cache
+docker compose -f docker-compose.dev.yml up
+
+# Test production environment  
+docker compose -f docker-compose.main.yml build --no-cache
+docker compose -f docker-compose.main.yml up
+```
+
+### Quick Clean Restart
+```bash
+docker compose -f docker-compose.dev.yml down
+docker compose -f docker-compose.dev.yml build --no-cache
+docker compose -f docker-compose.dev.yml up
+```
+
 ## Common Issues
 
 - **Memory issues**: Increase Docker memory allocation for large images
