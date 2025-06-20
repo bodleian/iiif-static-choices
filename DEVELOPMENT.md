@@ -108,8 +108,8 @@ docker run --rm -v "$(pwd)/data:/data" -v "$(pwd)/iiif:/iiif" alpine sh -c 'rm -
 #### Alternative with Sudo (if Docker unavailable)
 ```bash
 # Requires sudo privileges
-sudo rm -rf data/uploads/* data/exports/* iiif/image/* iiif/manifest/*
-sudo rm -rf data/viewers/* data/public/*
+sudo rm -rf data/*
+sudo rm -rf iiif/*
 ```
 
 #### Why Docker for Cleanup?
