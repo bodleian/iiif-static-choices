@@ -19,6 +19,15 @@ IIIF Static Choices is a tool that allows generating interactive 2.5D viewers fr
 
 ## Requirements
 
+### Image Format Requirements
+
+- **Supported formats**: PNG (preferred) or JPG
+- **Bit depth**: 8 bits per channel
+- **Not supported**: TIF or other formats
+- **Both images must have identical dimensions**
+
+### Software Requirements
+
 *   Docker
 *   Docker Compose
 
