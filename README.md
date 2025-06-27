@@ -45,11 +45,14 @@ For this quick guide we'll be using the existing example images and manifest-con
     ```bash
     poetry run python iiif_generator.py tiles -t 256 -v 3.0
     ```
+    **Note**: for Windows/WSL users: Add `-i http://localhost:8000/iiif/ -d image` to the command to avoid connection issues.
+
 2. Run the manifest generator as follows, this will generate a v3 manifest in the `iiif/manifest` folder:
 
     ```bash
     poetry run python iiif_generator.py manifest -f ammonite-config.yml -o pyritised-ammonite.json 
     ```
+    **Note**: for Windows/WSL users: Add `-s http://localhost:8000 -d image` to the command to avoid connection issues.
 
 3. Run the basic server application as follows:
 
@@ -71,7 +74,7 @@ To use your own images and manifest-config.yml do the following:
 What should it look like?
 ===
 
-If you've done the above set up correctly and the server is running, you can go to your browser and enter the address: http://0.0.0.0:8000/ and you will see the following.  Click the buttons like the cursor does in the animated gif to play around in 2.5D in Mirador.
+If you've done the above set up correctly and the server is running, you can go to your browser and enter the address: http://localhost:8000/ and you will see the following.  Click the buttons like the cursor does in the animated gif to play around in 2.5D in Mirador.
 
 ![Animated picture showing a pyritised ammonite and someone interacting with it using the ARCHiOx Mirador plug-in](examples/fossil.gif)
 
