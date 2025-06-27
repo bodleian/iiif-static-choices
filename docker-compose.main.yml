@@ -1,0 +1,16 @@
+services:
+  iiif-static-choices:
+    build:
+      context: .
+      dockerfile: Dockerfile.main
+    ports:
+      - "8000:8000"  # Port for IIIF viewer
+      - "8080:8080"  # Port for web interface
+    volumes:
+      - ./data:/app/data
+    environment:
+      - NODE_ENV=production
+      - SERVER_URL=${SERVER_URL:-http://localhost:8000}
+    restart: unless-stopped
+    # Modified command to create additional symbolic links including mirador
+    command: bash -c "mkdir -p /app/data/iiif && cp /app/docker-gui/iiif-server-for-docker-app.py /app/data/server.py && ln -sf /app/iiif/manifest /app/data/iiif/manifest && ln -sf /app/iiif/image /app/data/iiif/image && ln -sf /app/data/viewers /app/viewers && ln -sf /app/data/public /app/public && ln -sf /app/mirador /app/data/mirador && cd /app/docker-gui/web-interface && npm start & sleep 5 && cd /app && python /app/data/server.py 8000"

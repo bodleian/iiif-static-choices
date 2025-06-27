@@ -1,0 +1,50 @@
+# Exclude generated content from data/ but keep structure
+data/uploads/*
+data/exports/*
+data/viewers/*
+data/public/*
+data/iiif/*
+data/cartoon-raphaelsection-1/*
+data/mirador
+
+
+# Exclude example directories and generated data
+examples/
+image/
+iiif/image/*
+iiif/manifest/*
+
+# Exclude version control
+.git/
+.gitignore
+
+# Exclude node dependencies
+**/node_modules/
+npm-debug.log*
+
+# Exclude temporary files
+**/.env
+**/.env.local
+**/.env.*.local
+**/temp/
+**/tmp/
+
+# Exclude development files
+**/__pycache__/
+**/*.pyc
+**/*.pyo
+**/*.pyd
+.Python
+**/.venv/
+**/.pytest_cache/
+
+# Exclude system files
+.DS_Store
+Thumbs.db
+
+# Exclude testing documentation
+docker-gui/doc/scripts/
+
+# Exclude backup files
+**/*.backup
+**/*.bak
