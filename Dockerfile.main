@@ -44,3 +44,10 @@ EXPOSE 8000 8080
 
 # Volume for persistent data
 VOLUME ["/app/data"]
+
+# Copy and setup entrypoint script
+COPY docker-entrypoint.sh /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh
+
+# Set the entrypoint
+ENTRYPOINT ["/docker-entrypoint.sh"]
