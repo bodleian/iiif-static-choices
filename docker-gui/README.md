@@ -43,8 +43,10 @@ IIIF Static Choices is a tool that allows generating interactive 2.5D viewers fr
 
 2.  Build and run the Docker container:
     ```bash
-    docker-compose -f docker-compose.main.yml up -d
+    docker compose -f docker-compose.main.yml up -d
     ```
+    > **Note**: If this command doesn't work, try the legacy method: `docker-compose -f docker-compose.main.yml up -d`
+
 
 ### Usage
 
@@ -66,7 +68,7 @@ docker-gui/
     └── views/             # EJS templates (index, help)
 ```
 
-**Note**: The main Docker configuration files (`Dockerfile.main` and `docker-compose.main.yml`) are located in the repository root.
+ > **Note**: The main Docker configuration files (`Dockerfile.main` and `docker-compose.main.yml`) are located in the repository root.
 
 ## Data Persistence and File Structure
 
@@ -113,8 +115,8 @@ To modify the interface, edit the files in `docker-gui/web-interface/views/`.
 
 After making changes, rebuild the container:
 ```bash
-docker-compose -f docker-compose.main.yml down
-docker-compose -f docker-compose.main.yml up --build -d
+docker compose -f docker-compose.main.yml down
+docker compose -f docker-compose.main.yml up --build -d
 ```
 
 ## Troubleshooting
@@ -125,10 +127,10 @@ Verify that Docker is installed and running correctly. You can use these command
 
 ```bash
 # View container logs
-docker-compose -f docker-compose.main.yml logs
+docker compose -f docker-compose.main.yml logs
 
 # Check container status
-docker-compose -f docker-compose.main.yml ps
+docker compose -f docker-compose.main.yml ps
 ```
 
 ### Naming issues or resource conflicts
@@ -167,4 +169,4 @@ docker exec -w /app iiif-static-choices-iiif-static-choices-1 python iiif_genera
 docker exec -w /app iiif-static-choices-iiif-static-choices-1 bash -c 'cp image/ammonite-config.yml . && python iiif_generator.py manifest -f ammonite-config.yml -o iiif/manifest/pyritised-ammonite.json -d .'
 ```
 
-**Note**: These commands are useful for debugging or when you need more control over the generation process. For normal usage, the web interface handles all these steps automatically.
+ > **Note**: These commands are useful for debugging or when you need more control over the generation process. For normal usage, the web interface handles all these steps automatically.
