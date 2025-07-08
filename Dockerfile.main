@@ -1,0 +1,53 @@
+# Base image
+FROM python:3.9-slim
+
+# Environment variables
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+ENV PATH="/root/.local/bin:$PATH"
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    git \
+    curl \
+    nodejs \
+    npm \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Poetry
+RUN curl -sSL https://install.python-poetry.org | python3 -
+
+# Set working directory
+WORKDIR /app
+
+# Copy project files
+COPY . /app/
+
+# Install dependencies with Poetry and ensure all necessary dependencies are installed
+RUN cd /app && \
+    poetry config virtualenvs.create false && \
+    poetry install --no-interaction --no-ansi --no-root && \
+    pip install pyyaml imageio jinja2 pillow numpy
+
+# Install web interface dependencies
+WORKDIR /app/docker-gui/web-interface
+RUN npm install
+
+# Prepare directories for tiles and manifests
+WORKDIR /app
+RUN mkdir -p /app/iiif/image /app/iiif/manifest && chmod -R 777 /app/iiif && \
+    mkdir -p /app/data/uploads /app/data/exports /app/data/viewers /app/data/public /app/data/iiif && \
+    chmod -R 777 /app/data
+
+# Expose ports
+EXPOSE 8000 8080
+
+# Volume for persistent data
+VOLUME ["/app/data"]
+
+# Copy and setup entrypoint script
+COPY docker-entrypoint.sh /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh
+
+# Set the entrypoint
+ENTRYPOINT ["/docker-entrypoint.sh"]

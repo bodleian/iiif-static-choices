@@ -1,0 +1,131 @@
+<%
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at https://mozilla.org/MPL/2.0/.
+
+//  Copyright © 2025 Factum Foundation for Digital Technology in Preservation / Jorge Cano
+%>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help - IIIF Static Choices 2.5D</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/styles.css" rel="stylesheet">
+    <style>
+        .main-title {
+            color: var(--text-primary);
+            font-weight: 700;
+            font-size: 2.5rem;
+            margin-top: 0.2rem;
+            margin-bottom: 0.1rem;
+            letter-spacing: -1px;
+            text-align: left;
+        }
+        .subtitle-link {
+            color: var(--accent-color);
+            text-decoration: none;
+            transition: text-decoration 0.2s, color 0.2s;
+        }
+        .subtitle-link:hover {
+            text-decoration: underline;
+        }
+        .custom-navbar-divider {
+            border-top: 1px solid var(--border-subtle);
+            margin-top: 1.2rem;
+            margin-bottom: 0.7rem;
+        }
+        .navbar-nav {
+            gap: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="header-container">
+        <h1 class="main-title" style="font-style: normal; font-weight: 700;">2.5D Relighting Viewer Generator</h1>
+        <p class="lead" style="margin-bottom: 0.5rem;">
+            This tool has been designed to facilitate the creation of viewers with <a href="https://github.com/bodleian/archiox-mirador-plugin" target="_blank" class="subtitle-link">ArchiOX Relight Plugin</a> technology.
+        </p>
+        <div class="custom-navbar-divider"></div>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4" style="margin-top: 0;">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="/">IIIF Static Choices</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/help">Help</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="https://github.com/bodleian/iiif-static-choices" target="_blank">GitHub</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <div class="container">
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header help-header">
+                        <h3 class="card-title mb-0">Steps to create the viewer</h3>
+                    </div>
+                    <div class="card-body">
+                        <ol class="list-group list-group-numbered">
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div class="ms-2 me-auto">
+                                    <div class="fw-bold">Prepare the images</div>
+                                    Make sure you have both the albedo and the normal map of the object.
+                                </div>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div class="ms-2 me-auto">
+                                    <div class="fw-bold">Upload both images</div>
+                                    Drag or select the files in the web interface.
+                                </div>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div class="ms-2 me-auto">
+                                    <div class="fw-bold">Complete metadata</div>
+                                    Add title, description, and other object information.
+                                </div>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div class="ms-2 me-auto">
+                                    <div class="fw-bold">Generate the viewer</div>
+                                    Click on the "Generate" button and wait for the images to be processed.
+                                </div>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div class="ms-2 me-auto">
+                                    <div class="fw-bold">Share the viewer</div>
+                                    Use the generated link to share your 2.5D model.
+                                </div>
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <a href="/" class="btn btn-primary">Return to generator</a>
+            </div>
+        </div>
+        
+        <div class="footer mt-5">
+            <p class="mb-1">Developed under the <a href="https://digital.bodleian.ox.ac.uk/collections/archiox/" target="_blank" rel="noopener" style="color: var(--accent-color); text-decoration: none;">ARCHIOx</a> project, a collaboration between the <a href="https://www.bodleian.ox.ac.uk/home" target="_blank" rel="noopener" style="color: var(--accent-color); text-decoration: none;">Bodleian Libraries</a> and <a href="https://factumfoundation.org/" target="_blank" rel="noopener" style="color: var(--accent-color); text-decoration: none;">Factum Foundation</a>.</p>
+            <p class="text-muted" style="font-size:0.95em; margin-top: -0.25rem;">Credits: <a href="https://github.com/BeebBenjamin" target="_blank" rel="noopener" style="color: var(--accent-color); text-decoration: none;">Richard Allen</a> (IIIF Core &amp; Manifest Generation) &amp; <a href="https://github.com/jcanofuentes" target="_blank" rel="noopener" style="color: var(--accent-color); text-decoration: none;">Jorge Cano</a> (GUI/Web Interface &amp; Docker Implementation)</p>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

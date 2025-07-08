@@ -1,0 +1,574 @@
+<%
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at https://mozilla.org/MPL/2.0/.
+
+//  Copyright © 2025 Factum Foundation for Digital Technology in Preservation / Jorge Cano
+%>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IIIF Static Choices - 2.5D Viewer</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link href="/css/styles.css" rel="stylesheet">
+    <style>
+        .subtitle-link {
+            color: var(--accent-color);
+            text-decoration: none;
+            transition: text-decoration 0.2s, color 0.2s;
+        }
+        .subtitle-link:hover {
+            text-decoration: underline;
+        }
+        .custom-navbar-divider {
+            border-top: 1px solid var(--border-subtle);
+            margin-top: 1.2rem;
+            margin-bottom: 0.7rem;
+        }
+        .navbar-nav {
+            gap: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="header-container">
+        <h1 class="main-title" style="font-style: normal; font-weight: 700;">2.5D Relighting Viewer Generator</h1>
+        <p class="lead" style="margin-bottom: 0.5rem;">
+            This tool has been designed to facilitate the creation of viewers with <a href="https://github.com/bodleian/archiox-mirador-plugin" target="_blank" class="subtitle-link">ArchiOX Relight Plugin</a> technology.
+        </p>
+        <div class="custom-navbar-divider"></div>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4" style="margin-top: 0;">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="/">IIIF Static Choices</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="#navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/help">Help</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="https://github.com/bodleian/iiif-static-choices" target="_blank">GitHub</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <div class="container">
+        <div class="step-indicator">
+            <div class="step active">
+                <div class="step-number">1</div>
+                <div class="step-title">Upload images</div>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-title">Configure</div>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-title">Generate</div>
+            </div>
+            <div class="step">
+                <div class="step-number">4</div>
+                <div class="step-title">View</div>
+            </div>
+        </div>
+                
+        <form id="upload-form" enctype="multipart/form-data">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <h3>Albedo Image</h3>
+                    <div id="albedo-drop" class="drag-drop-area">
+                        <i class="bi bi-cloud-upload fs-1 mb-2"></i><br>
+                        Drag the albedo image here or click to select
+                        <div id="albedo-preview" class="preview-container"></div>
+                    </div>
+                    <input type="file" id="albedo" name="albedo" class="form-control" accept="image/*" style="display: none;">
+                </div>
+                
+                <div class="col-md-6 mb-3">
+                    <h3>Normal Map</h3>
+                    <div id="normals-drop" class="drag-drop-area">
+                        <i class="bi bi-cloud-upload fs-1 mb-2"></i><br>
+                        Drag the normal map here or click to select
+                        <div id="normals-preview" class="preview-container"></div>
+                    </div>
+                    <input type="file" id="normals" name="normals" class="form-control" accept="image/*" style="display: none;">
+                </div>
+            </div>
+            
+            <div class="mb-3">
+                <label for="title" class="form-label">Title</label>
+                <input type="text" id="title" name="title" class="form-control" required>
+            </div>
+            
+            <div class="mb-3">
+                <label for="description" class="form-label">Description</label>
+                <textarea id="description" name="description" class="form-control" rows="3"></textarea>
+            </div>
+            
+            <div class="mb-3">
+                <label for="summary" class="form-label">Summary</label>
+                <textarea id="summary" name="summary" class="form-control" rows="2" placeholder="Brief summary of the object"></textarea>
+                <small class="text-muted">Main summary text that will appear in the IIIF manifest</small>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="shelfmark" class="form-label">Shelfmark</label>
+                    <input type="text" id="shelfmark" name="shelfmark" class="form-control" placeholder="e.g., MS 123/45">
+                </div>
+                
+                <div class="col-md-6 mb-3">
+                    <label for="language" class="form-label">Language</label>
+                    <select id="language" name="language" class="form-control">
+                        <option value="en">English (en)</option>
+                        <option value="es">Spanish (es)</option>
+                        <option value="fr">French (fr)</option>
+                        <option value="de">German (de)</option>
+                        <option value="it">Italian (it)</option>
+                        <option value="pt">Portuguese (pt)</option>
+                        <option value="nl">Dutch (nl)</option>
+                        <option value="ru">Russian (ru)</option>
+                        <option value="zh">Chinese (zh)</option>
+                        <option value="ja">Japanese (ja)</option>
+                        <option value="ar">Arabic (ar)</option>
+                    </select>
+                    <small class="text-muted">ISO language code for metadata</small>
+                </div>
+            </div>
+            
+            <div class="mb-3">
+                <label for="providerName" class="form-label">Provider name</label>
+                <input type="text" id="providerName" name="providerName" class="form-control" placeholder="e.g., Bodleian Libraries, University of Oxford">
+                <small class="text-muted">Name of the institution providing this object</small>
+            </div>
+            
+            <div class="mb-3">
+                <label for="outputId" class="form-label">Manifest ID</label>
+                <input type="text" id="outputId" name="outputId" class="form-control" value="relighting-viewer">
+                <small class="text-muted">This will be the filename of the generated manifest</small>
+            </div>
+            
+            <button type="submit" class="btn btn-primary">
+                Generate viewer
+            </button>
+        </form>
+        
+        <div id="status" class="mt-4"></div>
+        
+        <div id="viewer-container" class="mt-4" style="display: none;">
+            <div class="mb-3">
+                <a id="viewer-link" href="#" target="_blank" class="btn btn-success">
+                    Open viewer
+                </a>
+            </div>
+            <!-- Export viewer section -->
+            <div class="export-container">
+                <h4><i class="bi bi-box-seam"></i> Export viewer</h4>
+                <p>If you want to deploy this viewer on your own server, you can export all necessary files in a ZIP package.</p>
+                
+                <div class="mb-3">
+                    <label for="target-url" class="form-label">
+                        Target base URL 
+                        <button type="button" class="btn btn-sm btn-outline-secondary ms-2" data-bs-toggle="modal" data-bs-target="#exportHelpModal">
+                            <i class="bi bi-question-circle"></i> Help
+                        </button>
+                    </label>
+                    <input type="text" id="target-url" class="form-control" placeholder="https://your.server.com/">
+                    <small class="form-text text-muted">
+                        Enter the base URL where the viewer will be deployed on your server.
+                    </small>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">Export structure</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="exportType" id="selfContained" value="self-contained" checked>
+                        <label class="form-check-label" for="selfContained">
+                            Self-contained (flat structure)
+                        </label>
+                        <small class="form-text text-muted d-block">All files at root level - simple deployment</small>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="exportType" id="organized" value="organized">
+                        <label class="form-check-label" for="organized">
+                            Organized (nested structure)
+                        </label>
+                        <small class="form-text text-muted d-block">Viewer in subfolder - better for multiple viewers</small>
+                    </div>
+                </div>
+                
+                <button id="export-button" class="btn btn-primary">
+                    Export viewer
+                </button>
+                <div id="export-status" class="mt-2"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Export Help Modal -->
+    <div class="modal fade" id="exportHelpModal" tabindex="-1" aria-labelledby="exportHelpModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exportHelpModalLabel">Export deployment guide</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h6><i class="bi bi-info-circle text-primary"></i> Understanding target base URL</h6>
+                    <p>The <strong>target base URL</strong> is the foundation where your viewer will be accessible. All viewer files will be served relative to this URL.</p>
+                    
+                    <div class="alert alert-info">
+                        <strong>Example:</strong> If you enter <code>https://your.server.com/</code>, your exported viewer will be accessible at the URLs shown below.
+                    </div>
+
+                    <h6><i class="bi bi-folder text-primary"></i> Export structure options</h6>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6 class="text-white">Self-contained structure</h6>
+                            <p><small class="text-muted">All files at root level - simple deployment</small></p>
+                            <div class="bg-light p-3 rounded">
+                                <code>
+                                    https://your.server.com/<br>
+                                    ├── <strong>index.html</strong> ← Viewer here<br>
+                                    ├── iiif/<br>
+                                    │   ├── manifest/<br>
+                                    │   └── image/<br>
+                                    └── mirador/<br>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;└── dist/
+                                </code>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-white">Organized structure</h6>
+                            <p><small class="text-muted">Viewer in subfolder - better for multiple viewers</small></p>
+                            <div class="bg-light p-3 rounded">
+                                <code>
+                                    https://your.server.com/<br>
+                                    ├── viewer-name/<br>
+                                    │   └── <strong>index.html</strong> ← Viewer here<br>
+                                    ├── iiif/<br>
+                                    │   ├── manifest/<br>
+                                    │   └── image/<br>
+                                    └── mirador/<br>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;└── dist/
+                                </code>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h6 class="mt-4"><i class="bi bi-server text-primary"></i> Server requirements</h6>
+                    <p>Your web server must be able to serve all exported files from the target base URL location. The system will generate URLs like:</p>
+                    
+                    <ul class="list-unstyled">
+                        <li><code>https://your.server.com/iiif/manifest/viewer-name.json</code></li>
+                        <li><code>https://your.server.com/iiif/image/viewer-name-albedo/info.json</code></li>
+                        <li><code>https://your.server.com/mirador/dist/mirador-with-plugins.js</code></li>
+                    </ul>
+
+                    <h6 class="mt-4"><i class="bi bi-cloud-upload text-primary"></i> Deployment steps</h6>
+                    <ol>
+                        <li><strong>Choose Your Export Structure</strong> based on your deployment needs</li>
+                        <li><strong>Enter The Target Base URL</strong> where you want the viewer accessible</li>
+                        <li><strong>Download The ZIP File</strong> generated by the export</li>
+                        <li><strong>Extract All Contents</strong> to your web server directory matching the target base URL path</li>
+                        <li><strong>Verify Your Server</strong> can serve static files from that location</li>
+                        <li><strong>Test The Viewer</strong> by accessing the index.html location in your browser</li>
+                    </ol>
+
+                    <div class="alert alert-warning">
+                        <i class="bi bi-exclamation-triangle"></i> <strong>Important:</strong> Make sure your web server can serve static files and handle CORS requests if the viewer will be embedded elsewhere.
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer mt-5">
+        <p class="mb-1">Developed under the <a href="https://digital.bodleian.ox.ac.uk/collections/archiox/" target="_blank" rel="noopener" style="color: var(--accent-color); text-decoration: none;">ARCHIOx</a> project, a collaboration between the <a href="https://www.bodleian.ox.ac.uk/home" target="_blank" rel="noopener" style="color: var(--accent-color); text-decoration: none;">Bodleian Libraries</a> and <a href="https://factumfoundation.org/" target="_blank" rel="noopener" style="color: var(--accent-color); text-decoration: none;">Factum Foundation</a>.</p>
+        <p class="text-muted" style="font-size:0.95em; margin-top: -0.25rem;">Credits: <a href="https://github.com/BeebBenjamin" target="_blank" rel="noopener" style="color: var(--accent-color); text-decoration: none;">Richard Allen</a> (IIIF Core &amp; Manifest Generation) &amp; <a href="https://github.com/jcanofuentes" target="_blank" rel="noopener" style="color: var(--accent-color); text-decoration: none;">Jorge Cano</a> (GUI/Web Interface &amp; Docker Implementation)</p>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Drag and drop functionality
+            setupDragDrop('albedo');
+            setupDragDrop('normals');
+            
+            // Variable to store the generated manifest ID
+            let currentManifestId = '';
+            
+            // Handle form submission
+            document.getElementById('upload-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Update step indicators
+                document.querySelectorAll('.step')[0].classList.remove('active');
+                document.querySelectorAll('.step')[0].classList.add('completed');
+                document.querySelectorAll('.step')[1].classList.remove('active');
+                document.querySelectorAll('.step')[1].classList.add('completed');
+                document.querySelectorAll('.step')[2].classList.add('active');
+                
+                const formData = new FormData(this);
+                const statusDiv = document.getElementById('status');
+                
+                statusDiv.innerHTML = '<div class="alert alert-info"><i class="bi bi-hourglass-split slow-spin"></i> Generating tiles and manifest... This process typically takes 5-15 minutes depending on image size. Please be patient.</div>';
+                
+                // Configure AbortController for custom timeout (20 minutes for tile generation)
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 20 * 60 * 1000); // 20 minutes
+                
+                fetch('/upload', {
+                    method: 'POST',
+                    body: formData,
+                    signal: controller.signal
+                })
+                .then(response => {
+                    clearTimeout(timeoutId); // Clear timeout on successful response
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        // Update final step
+                        document.querySelectorAll('.step')[2].classList.remove('active');
+                        document.querySelectorAll('.step')[2].classList.add('completed');
+                        document.querySelectorAll('.step')[3].classList.add('active');
+                        
+                        statusDiv.innerHTML = '<div class="alert alert-success"><i class="bi bi-check-circle-fill"></i> The viewer has been generated successfully!</div>';
+                        
+                        // Disable Generate viewer button to avoid confusion
+                        const generateButton = document.querySelector('button[type="submit"]');
+                        generateButton.disabled = true;
+                        generateButton.textContent = 'Viewer generated';
+                        generateButton.classList.add('btn-secondary');
+                        generateButton.classList.remove('btn-primary');
+                        
+                        // Save the manifest ID
+                        currentManifestId = data.manifestId || document.getElementById('outputId').value;
+                        
+                        // Show the viewer container
+                        const viewerContainer = document.getElementById('viewer-container');
+                        viewerContainer.style.display = 'block';
+                        
+                        // Configure the viewer URL
+                        const viewerLink = document.getElementById('viewer-link');
+                        
+                        viewerLink.href = data.viewerUrl;
+                    } else {
+                        // Revert to previous step if error
+                        document.querySelectorAll('.step')[2].classList.remove('active');
+                        document.querySelectorAll('.step')[1].classList.remove('completed');
+                        document.querySelectorAll('.step')[1].classList.add('active');
+                        
+                        statusDiv.innerHTML = `<div class="alert alert-danger"><i class="bi bi-exclamation-triangle-fill"></i> Error: ${data.message || 'Could not generate the viewer'}</div>`;
+                    }
+                })
+                .catch(error => {
+                    clearTimeout(timeoutId); // Clear timeout on error
+                    // Revert to previous step if error
+                    document.querySelectorAll('.step')[2].classList.remove('active');
+                    document.querySelectorAll('.step')[1].classList.remove('completed');
+                    document.querySelectorAll('.step')[1].classList.add('active');
+                    
+                    console.error('Error:', error);
+                    
+                    // Provide different messages for timeout vs other errors
+                    if (error.name === 'AbortError') {
+                        statusDiv.innerHTML = '<div class="alert alert-warning"><i class="bi bi-clock-fill"></i> The generation process is taking longer than expected. The process may still be running in the background. Please check the server logs or try again.</div>';
+                    } else {
+                        statusDiv.innerHTML = `<div class="alert alert-danger"><i class="bi bi-exclamation-triangle-fill"></i> Error: ${error.message}</div>`;
+                    }
+                });
+            });
+            
+            // Handle viewer export
+            document.addEventListener('click', function(e) {
+                if (e.target && e.target.id === 'export-button') {
+                    const targetUrl = document.getElementById('target-url').value.trim();
+                    const exportType = document.querySelector('input[name="exportType"]:checked').value;
+                    const exportStatus = document.getElementById('export-status');
+                    
+                    if (!targetUrl) {
+                        exportStatus.innerHTML = '<div class="alert alert-warning"><i class="bi bi-exclamation-triangle-fill"></i> Please enter a valid target URL.</div>';
+                        return;
+                    }
+                    
+                    if (!currentManifestId) {
+                        currentManifestId = document.getElementById('outputId').value;
+                    }
+                    
+                    exportStatus.innerHTML = '<div class="alert alert-info"><i class="bi bi-hourglass-split slow-spin"></i> Generating export package, please wait...</div>';
+                    
+                    // Configure timeout for export process (10 minutes)
+                    const exportController = new AbortController();
+                    const exportTimeoutId = setTimeout(() => exportController.abort(), 10 * 60 * 1000);
+                    
+                    // Make the export request
+                    fetch('/export', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            manifestId: currentManifestId,
+                            targetUrl: targetUrl,
+                            exportType: exportType
+                        }),
+                        signal: exportController.signal
+                    })
+                    .then(response => {
+                        clearTimeout(exportTimeoutId);
+                        if (response.ok) {
+                            // Download the ZIP file
+                            const contentDisposition = response.headers.get('content-disposition');
+                            let filename = 'exported-viewer.zip';
+                            if (contentDisposition) {
+                                const filenameMatch = contentDisposition.match(/filename="?([^"]*)"?/);
+                                if (filenameMatch && filenameMatch[1]) {
+                                    filename = filenameMatch[1];
+                                }
+                            }
+                            
+                            return response.blob().then(blob => {
+                                const url = window.URL.createObjectURL(blob);
+                                const a = document.createElement('a');
+                                a.style.display = 'none';
+                                a.href = url;
+                                a.download = filename;
+                                document.body.appendChild(a);
+                                a.click();
+                                window.URL.revokeObjectURL(url);
+                                
+                                exportStatus.innerHTML = '<div class="alert alert-success"><i class="bi bi-check-circle-fill"></i> Export completed! The ZIP file has been downloaded.</div>';
+                            });
+                        } else {
+                            return response.json().then(data => {
+                                throw new Error(data.message || 'Export error');
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        clearTimeout(exportTimeoutId);
+                        console.error('Error:', error);
+                        if (error.name === 'AbortError') {
+                            exportStatus.innerHTML = '<div class="alert alert-warning"><i class="bi bi-clock-fill"></i> Export is taking longer than expected. The process may still be running in the background.</div>';
+                        } else {
+                            exportStatus.innerHTML = `<div class="alert alert-danger"><i class="bi bi-exclamation-triangle-fill"></i> Error: ${error.message}</div>`;
+                        }
+                    });
+                }
+            });
+        });
+        
+        function setupDragDrop(fieldName) {
+            const dropArea = document.getElementById(`${fieldName}-drop`);
+            const fileInput = document.getElementById(fieldName);
+            const previewContainer = document.getElementById(`${fieldName}-preview`);
+            
+            // Open file selector when clicking on drag and drop area
+            dropArea.addEventListener('click', () => {
+                fileInput.click();
+            });
+            
+            // Handle drag events
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                dropArea.addEventListener(eventName, preventDefaults, false);
+            });
+            
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            
+            ['dragenter', 'dragover'].forEach(eventName => {
+                dropArea.addEventListener(eventName, () => {
+                    dropArea.classList.add('drag-over');
+                }, false);
+            });
+            
+            ['dragleave', 'drop'].forEach(eventName => {
+                dropArea.addEventListener(eventName, () => {
+                    dropArea.classList.remove('drag-over');
+                }, false);
+            });
+            
+            // Handle file drop
+            dropArea.addEventListener('drop', e => {
+                const dt = e.dataTransfer;
+                const files = dt.files;
+                
+                if (files.length > 0) {
+                    fileInput.files = files;
+                    handleFiles(files);
+                    
+                    // Activate step 2 if both files are loaded
+                    if (document.getElementById('albedo').files.length > 0 &&
+                        document.getElementById('normals').files.length > 0) {
+                        document.querySelectorAll('.step')[0].classList.remove('active');
+                        document.querySelectorAll('.step')[0].classList.add('completed');
+                        document.querySelectorAll('.step')[1].classList.add('active');
+                    }
+                }
+            });
+            
+            // Handle file input change
+            fileInput.addEventListener('change', () => {
+                if (fileInput.files.length > 0) {
+                    handleFiles(fileInput.files);
+                    
+                    // Activate step 2 if both files are loaded
+                    if (document.getElementById('albedo').files.length > 0 &&
+                        document.getElementById('normals').files.length > 0) {
+                        document.querySelectorAll('.step')[0].classList.remove('active');
+                        document.querySelectorAll('.step')[0].classList.add('completed');
+                        document.querySelectorAll('.step')[1].classList.add('active');
+                    }
+                }
+            });
+            
+            // Function to handle files
+            function handleFiles(files) {
+                if (files.length > 0) {
+                    const file = files[0];
+                    
+                    // Verify it's an image
+                    if (!file.type.match('image.*')) {
+                        previewContainer.innerHTML = '<p class="error-message">Please select an image file.</p>';
+                        return;
+                    }
+                    
+                    // Show preview
+                    const reader = new FileReader();
+                    reader.onload = e => {
+                        previewContainer.innerHTML = `
+                            <img src="${e.target.result}" alt="${file.name}" class="preview-image">
+                            <p>${file.name} (${formatFileSize(file.size)})</p>
+                        `;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            }
+            
+            function formatFileSize(bytes) {
+                if (bytes === 0) return '0 Bytes';
+                const k = 1024;
+                const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+            }
+        }
+    </script>
+</body>
+</html>

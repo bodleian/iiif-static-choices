@@ -1,0 +1,784 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * Copyright © 2025 Factum Foundation for Digital Technology in Preservation / Jorge Cano
+ */
+
+/* Import EB Garamond font */
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
+
+/* Dark theme color variables */
+:root {
+    --bg-primary: #121212;
+    --bg-container: #1E1E1E;
+    --bg-input: #191919;
+    --text-primary: #EAEAEA;
+    --text-secondary: #A0A0A0;
+    --accent-color: #4A90E2;
+    --success-color: #28a745;
+    --border-subtle: #2A2A2A;
+    --hover-bg: #252525;
+    --step-completed-bg: #23272b;
+    --step-completed-border: #444950;
+}
+
+/* Base styles */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'EB Garamond', serif;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px;
+    background-color: var(--bg-container);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    border-radius: 12px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.header-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 8px 0 0 0;
+    box-sizing: border-box;
+}
+
+/* Typography hierarchy */
+h1 {
+    color: var(--text-primary);
+    font-weight: 700;
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    padding-bottom: 0;
+    border: none;
+}
+
+h3 {
+    color: var(--text-primary);
+    font-weight: 600;
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+}
+
+h4 {
+    color: var(--accent-color);
+    font-weight: 600;
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+}
+
+/* Navigation redesign */
+.navbar {
+    background-color: transparent !important;
+    border: none;
+    padding: 0;
+    margin-bottom: 0.7rem !important;
+}
+
+.navbar-brand {
+    color: var(--text-secondary) !important;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.navbar-brand:hover {
+    color: var(--text-primary) !important;
+}
+
+.nav-link {
+    color: var(--text-secondary) !important;
+    font-size: 0.95rem;
+    font-weight: 400;
+    transition: color 0.3s ease;
+    padding: 0.5rem 1rem !important;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    color: var(--text-primary) !important;
+}
+
+/* Step indicator redesign */
+.step-indicator {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 3rem;
+    position: relative;
+    padding: 0 2rem;
+}
+
+.step-indicator::before {
+    content: '';
+    position: absolute;
+    top: 20px;
+    left: 2rem;
+    right: 2rem;
+    height: 1px;
+    background-color: var(--text-secondary);
+    z-index: 1;
+}
+
+.step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 2;
+    background-color: var(--bg-container);
+    padding: 0 1rem;
+}
+
+.step-number {
+    width: 32px;
+    height: 32px;
+    background-color: var(--bg-primary);
+    border: 2px solid var(--text-secondary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.step-title {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    font-weight: 400;
+    transition: color 0.3s ease;
+}
+
+.step.active .step-number {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+    color: white;
+}
+
+.step.active .step-title {
+    color: var(--accent-color);
+    font-weight: 500;
+}
+
+.step.completed .step-number {
+    background-color: var(--step-completed-bg);
+    border-color: var(--step-completed-border);
+    color: var(--step-completed-border);
+}
+
+.step.completed .step-title {
+    color: var(--step-completed-border);
+    font-weight: 500;
+}
+
+/* File upload areas */
+.drag-drop-area {
+    border: 2px dashed var(--text-secondary);
+    border-radius: 8px;
+    padding: 2.5rem;
+    text-align: center;
+    cursor: pointer;
+    margin-bottom: 1.5rem;
+    background-color: var(--bg-input);
+    transition: all 0.3s ease;
+    color: var(--text-secondary);
+    font-size: 1rem;
+}
+
+.drag-drop-area:hover {
+    border-color: var(--accent-color);
+    background-color: var(--hover-bg);
+    color: var(--text-primary);
+}
+
+.drag-drop-area i {
+    color: inherit;
+    margin-bottom: 1rem;
+    opacity: 0.7;
+}
+
+.drag-over {
+    border-color: var(--accent-color);
+    background-color: var(--hover-bg);
+    color: var(--accent-color);
+}
+
+/* Form styling */
+.form-label {
+    color: var(--text-primary);
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+}
+
+.form-control {
+    background-color: var(--bg-primary);
+    border: none;
+    border-bottom: 2px solid var(--text-secondary);
+    border-radius: 0;
+    color: var(--text-primary);
+    font-family: 'EB Garamond', serif;
+    font-size: 1rem;
+    padding: 0.75rem 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.form-control:focus {
+    background-color: var(--bg-primary);
+    border-color: var(--accent-color);
+    box-shadow: none;
+    color: var(--text-primary);
+}
+
+.form-control::placeholder {
+    color: var(--text-secondary);
+    opacity: 0.7;
+}
+
+textarea.form-control {
+    border: 2px solid var(--text-secondary);
+    border-radius: 4px;
+    background-color: var(--bg-primary);
+    min-height: 100px;
+    padding: 0.75rem;
+}
+
+textarea.form-control:focus {
+    border-color: var(--accent-color);
+}
+
+.text-muted,
+.form-text {
+    color: var(--text-secondary) !important;
+    font-size: 0.9rem;
+}
+
+/* Primary button */
+.btn-primary {
+    background-color: var(--accent-color);
+    border: none;
+    color: white;
+    font-weight: 600;
+    font-size: 1.1rem;
+    padding: 0.875rem 2rem;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    font-family: 'EB Garamond', serif;
+}
+
+.btn-primary:hover {
+    background-color: #3A7BC8;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
+}
+
+.btn-primary:focus,
+.btn-primary:active {
+    background-color: #3A7BC8;
+    box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.25);
+}
+
+/* Disabled button state */
+.btn-primary:disabled,
+.btn-secondary:disabled {
+    background-color: var(--text-secondary);
+    border-color: var(--text-secondary);
+    color: var(--bg-primary);
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.btn-primary:disabled:hover,
+.btn-secondary:disabled:hover {
+    background-color: var(--text-secondary);
+    transform: none;
+    box-shadow: none;
+}
+
+/* Secondary buttons */
+.btn-success {
+    background-color: var(--success-color);
+    border: none;
+    font-family: 'EB Garamond', serif;
+    font-weight: 500;
+}
+
+.btn-outline-secondary {
+    border-color: var(--text-secondary);
+    color: var(--text-secondary);
+    background-color: transparent;
+    font-family: 'EB Garamond', serif;
+}
+
+.btn-outline-secondary:hover {
+    background-color: var(--text-secondary);
+    border-color: var(--text-secondary);
+    color: var(--bg-primary);
+}
+
+/* Alert styling */
+.alert {
+    border: none;
+    border-radius: 6px;
+    font-family: 'EB Garamond', serif;
+}
+
+.alert-info {
+    background-color: rgba(74, 144, 226, 0.15);
+    color: var(--accent-color);
+    border-left: 2px solid var(--accent-color);
+}
+
+.alert-success {
+    background-color: rgba(40, 167, 69, 0.15);
+    color: var(--success-color);
+    border-left: 4px solid var(--success-color);
+}
+
+.alert-danger {
+    background-color: rgba(220, 53, 69, 0.15);
+    color: #dc3545;
+    border-left: 4px solid #dc3545;
+}
+
+.alert-warning {
+    background-color: rgba(255, 193, 7, 0.15);
+    color: #ffc107;
+    border-left: 4px solid #ffc107;
+}
+
+/* Preview container */
+.preview-container {
+    text-align: center;
+    margin-top: 1rem;
+}
+
+.preview-image {
+    max-width: 100%;
+    max-height: 200px;
+    margin-bottom: 0.5rem;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.preview-container p {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+.error-message {
+    color: #dc3545;
+    font-weight: 500;
+}
+
+/* Configuration sections */
+.configuration-section {
+    background-color: var(--bg-input);
+    border-radius: 8px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    border: 1px solid var(--border-subtle);
+}
+
+.section-title {
+    color: var(--accent-color);
+    font-weight: 600;
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border-subtle);
+    padding-bottom: 0.75rem;
+}
+
+/* Select dropdown styling */
+select.form-control {
+    background-color: var(--bg-primary);
+    border: 2px solid var(--text-secondary);
+    border-radius: 4px;
+    color: var(--text-primary);
+    font-family: 'EB Garamond', serif;
+    font-size: 1rem;
+    padding: 0.75rem;
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+}
+
+select.form-control:focus {
+    border-color: var(--accent-color);
+    box-shadow: none;
+    outline: none;
+}
+
+select.form-control option {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    padding: 0.5rem;
+}
+
+/* Enhanced form layout */
+.row .col-md-6 .mb-3:last-child {
+    margin-bottom: 0;
+}
+
+/* Responsive adjustments for configuration sections */
+@media (max-width: 768px) {
+    .configuration-section {
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .section-title {
+        font-size: 1.1rem;
+        margin-bottom: 1rem;
+    }
+}
+
+/* Input group styling */
+.input-group .form-control {
+    border-bottom: 2px solid var(--text-secondary);
+    border-right: none;
+}
+
+.input-group .btn {
+    border-bottom: 2px solid var(--text-secondary);
+}
+
+/* Export container */
+.export-container {
+    background-color: var(--bg-input);
+    border-radius: 8px;
+    padding: 2rem;
+    margin-top: 2rem;
+    border: 1px solid var(--border-subtle);
+}
+
+.export-container h4 {
+    color: var(--accent-color);
+    margin-bottom: 1rem;
+}
+
+/* Footer */
+.footer {
+    margin-top: 3rem;
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    padding-top: 2rem;
+    border-top: 1px solid var(--border-subtle);
+}
+
+.footer a {
+    color: var(--accent-color);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer a:hover {
+    color: #3A7BC8;
+}
+
+/* Spacing improvements */
+.mb-3 {
+    margin-bottom: 2rem !important;
+}
+
+.mt-4 {
+    margin-top: 2.5rem !important;
+}
+
+.mt-5 {
+    margin-top: 3rem !important;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .container {
+        padding: 2rem;
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+    }
+    
+    h1 {
+        font-size: 2rem;
+    }
+    
+    .step-indicator {
+        padding: 0 1rem;
+    }
+    
+    .step-indicator::before {
+        left: 1rem;
+        right: 1rem;
+    }
+    
+    .step-title {
+        font-size: 0.75rem;
+    }
+    
+    .step-number {
+        width: 28px;
+        height: 28px;
+        font-size: 0.8rem;
+    }
+    
+    .drag-drop-area {
+        padding: 1.5rem;
+        font-size: 0.9rem;
+    }
+    
+    .drag-drop-area i {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .step-indicator {
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+    
+    .step-indicator::before {
+        display: none;
+    }
+    
+    .step {
+        flex-direction: row;
+        padding: 0;
+    }
+    
+    .step-number {
+        margin-right: 0.5rem;
+        margin-bottom: 0;
+    }
+}
+
+/* Help panel dark theme overrides */
+.card {
+    background-color: var(--bg-container) !important;
+    color: var(--text-primary) !important;
+    border: 1px solid var(--border-subtle) !important;
+}
+.card-header.help-header {
+    background-color: var(--accent-color) !important;
+    color: #fff !important;
+    border-bottom: 1px solid var(--border-subtle) !important;
+}
+.card-title {
+    color: #fff !important;
+}
+.card-body {
+    background-color: var(--bg-container) !important;
+    color: var(--text-primary) !important;
+}
+.list-group-item {
+    background-color: var(--bg-container) !important;
+    color: var(--text-primary) !important;
+    border-color: var(--border-subtle) !important;
+}
+
+input.form-control {
+    border: 2px solid var(--border-subtle);
+    border-radius: 4px;
+    background-color: var(--bg-primary);
+}
+
+/* Animación de rotación lenta para el icono de reloj */
+@keyframes slow-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+.slow-spin {
+    animation: slow-spin 3.5s linear infinite;
+    display: inline-block;
+    margin-right: 1.0rem;
+}
+
+.main-title {
+    color: var(--text-primary);
+    font-weight: 700;
+    font-size: 2.5rem;
+    margin-top: 0.2rem;
+    margin-bottom: 0.1rem;
+    letter-spacing: -1px;
+    text-align: left;
+}
+
+.container-fluid {
+    padding-left: 0 !important;
+}
+
+/* Modal help page color scheme styling */
+.modal-content {
+    background-color: var(--bg-container) !important;
+    border: 1px solid var(--border-subtle) !important;
+    border-radius: 12px !important;
+    font-family: 'EB Garamond', serif !important;
+}
+
+.modal-header {
+    background-color: #4A90E2 !important;
+    border-bottom: none !important;
+    padding: 1.5rem 2rem 1rem 2rem !important;
+    border-radius: 12px 12px 0 0 !important;
+}
+
+.modal-title {
+    color: #fff !important;
+    font-weight: 600 !important;
+    font-size: 1.5rem !important;
+}
+
+.modal-body {
+    background-color: var(--bg-container) !important;
+    color: var(--text-primary) !important;
+    padding: 1.5rem 2rem !important;
+    line-height: 1.6 !important;
+}
+
+.modal-body h6 {
+    color: #4A90E2 !important;
+    font-weight: 600 !important;
+    margin-top: 1.5rem !important;
+    margin-bottom: 0.75rem !important;
+    font-size: 1.1rem !important;
+}
+
+.modal-body h6:first-child {
+    margin-top: 0 !important;
+}
+
+.modal-body p {
+    color: var(--text-primary) !important;
+    margin-bottom: 1rem !important;
+}
+
+.modal-body small {
+    color: var(--text-secondary) !important;
+}
+
+.modal-body code {
+    background-color: var(--bg-primary) !important;
+    color: var(--text-secondary) !important;
+    padding: 0.25rem 0.5rem !important;
+    border-radius: 4px !important;
+    font-size: 0.9rem !important;
+    border: 1px solid var(--border-subtle) !important;
+}
+
+.modal-body .bg-light {
+    background-color: var(--bg-primary) !important;
+    border: 1px solid var(--border-subtle) !important;
+    color: var(--text-primary) !important;
+}
+
+.modal-body .text-success {
+    color: #28a745 !important;
+}
+
+.modal-body .text-primary {
+    color: #4A90E2 !important;
+}
+
+.modal-body .text-warning {
+    color: #ffc107 !important;
+}
+
+.modal-body .text-danger {
+    color: #dc3545 !important;
+}
+
+.modal-body .text-info {
+    color: #4A90E2 !important;
+}
+
+.modal-body .text-white {
+    color: #fff !important;
+}
+
+.modal-body .alert-info {
+    background-color: rgba(74, 144, 226, 0.15) !important;
+    border: 1px solid rgba(74, 144, 226, 0.3) !important;
+    color: #4A90E2 !important;
+    border-radius: 6px !important;
+}
+
+.modal-body .alert-warning {
+    background-color: rgba(255, 193, 7, 0.15) !important;
+    border: 1px solid rgba(255, 193, 7, 0.3) !important;
+    color: #ffc107 !important;
+    border-radius: 6px !important;
+}
+
+.modal-body .list-unstyled {
+    margin-bottom: 1rem !important;
+}
+
+.modal-body .list-unstyled li {
+    margin-bottom: 0.5rem !important;
+    color: var(--text-primary) !important;
+}
+
+.modal-body .bi-check-circle {
+    color: #28a745 !important;
+    margin-right: 0.5rem !important;
+}
+
+.modal-body .bi-info-circle,
+.modal-body .bi-folder,
+.modal-body .bi-server,
+.modal-body .bi-cloud-upload,
+.modal-body .bi-exclamation-triangle {
+    margin-right: 0.5rem !important;
+}
+
+.modal-footer {
+    background-color: var(--bg-container) !important;
+    border-top: 1px solid var(--border-subtle) !important;
+    padding: 1rem 2rem 1.5rem 2rem !important;
+}
+
+.btn-close {
+    background-color: transparent !important;
+    border: none !important;
+    color: #fff !important;
+    opacity: 1 !important;
+    filter: invert(1) !important;
+}
+
+.btn-close:hover {
+    opacity: 0.8 !important;
+    color: #fff !important;
+    filter: invert(1) !important;
+}
+
+.btn-secondary {
+    background-color: #4A90E2 !important;
+    border: 1px solid #4A90E2 !important;
+    color: #fff !important;
+    font-family: 'EB Garamond', serif !important;
+    font-weight: 500 !important;
+    border-radius: 6px !important;
+}
+
+.btn-secondary:hover {
+    background-color: #3A7BC8 !important;
+    border-color: #3A7BC8 !important;
+    color: #fff !important;
+}
