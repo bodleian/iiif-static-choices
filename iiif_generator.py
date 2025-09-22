@@ -32,12 +32,27 @@ def main(arguments) -> bool:
     """
 
     if arguments.command == "tiles":
+        config_path: str = str(os.path.join(arguments.input_directory, arguments.file_name))
+
+        if not os.path.exists(config_path):
+            log.error("Config file: s% does not exist", config_path)
+            return False
+
+        config: Dict = yaml.full_load(open(config_path))
+
+        images: List = config.get("items").get("images")
+
+        # currently the object looks like this:  [{'image_id': 'ammonite-albedo-1k', 'map_type': 'albedo'}, {'image_id': 'ammonite-normals-1k', 'map_type': 'normal'}]
+        #  need to get the image names from the image_id in each dictionary in the list...
+
+        image_filter = [image.get('image_id') for image in images]
+
         max_file_no: int = -1
 
         # find files
         input_files: List = []
         for image in os.listdir(arguments.input_directory):
-            if image.endswith((".png", ".jpg", "webp")):
+            if image.endswith((".png", ".jpg", "webp")) and image.split('.')[0] in image_filter:
                 input_files.append(os.path.join(arguments.input_directory, image))
 
         if not input_files:
@@ -158,6 +173,14 @@ if __name__ == "__main__":
         type=str,
         default="image",
         help="Directory where the images to tile are situated. Default is: /image"
+    )
+
+    tile.add_argument(
+        "-f",
+        "--file_name",
+        type=str,
+        required=True,
+        help="Filename where the manifest config.yml is stored. A value is required"
     )
 
     manifest.add_argument(
