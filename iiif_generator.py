@@ -39,14 +39,8 @@ def main(arguments) -> bool:
             return False
 
         config: Dict = yaml.full_load(open(config_path))
-
         images: List = config.get("items").get("images")
-
-        # currently the object looks like this:  [{'image_id': 'ammonite-albedo-1k', 'map_type': 'albedo'}, {'image_id': 'ammonite-normals-1k', 'map_type': 'normal'}]
-        #  need to get the image names from the image_id in each dictionary in the list...
-
         image_filter = [image.get('image_id') for image in images]
-
         max_file_no: int = -1
 
         # find files
