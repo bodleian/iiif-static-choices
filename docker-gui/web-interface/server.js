@@ -51,7 +51,7 @@ const PATHS = {
 const getHostUrls = () => {
   const serverUrl = process.env.SERVER_URL;
   const defaultExternal = 'http://localhost:8000';
-  
+
   if (serverUrl) {
     // Remove trailing slash if present
     const cleanUrl = serverUrl.replace(/\/$/, '');
@@ -60,7 +60,7 @@ const getHostUrls = () => {
       external: cleanUrl
     };
   }
-  
+
   return {
     internal: 'http://0.0.0.0:8000',
     external: defaultExternal
@@ -123,19 +123,19 @@ function fixHostUrls(content) {
 
 // Helper function to write a config file based on form data
 function generateConfigFile(outputId, formData) {
-  const { 
-    title, 
-    description, 
+  const {
+    title,
+    description,
     summary,
-    shelfmark, 
+    shelfmark,
     language = 'en',
     providerName = 'Digital Repository'
   } = formData;
-  
+
   // Consistent image IDs derived from outputId
   const albedoId = `${outputId}-albedo`;
   const normalsId = `${outputId}-normals`;
-  
+
   const configContent = `
 title: ${title || 'Untitled'}
 description: ${description || 'No description'}
@@ -177,7 +177,7 @@ items:
 
   const configPath = path.join(PATHS.image, `${outputId}-config.yml`);
   fs.writeFileSync(configPath, configContent);
-  
+
   return {
     configPath,
     albedoId,
@@ -255,7 +255,7 @@ function createViewerPage(outputId) {
     // Read template and replace manifest reference
     let viewerContent = fs.readFileSync(PATHS.indexTemplate, 'utf8');
     viewerContent = viewerContent.replace(
-      /manifestId:.*?,/g, 
+      /manifestId:.*?,/g,
       `manifestId: '${HOST_URL.external}/iiif/manifest/${outputId}.json',`
     );
     viewerContent = fixHostUrls(viewerContent);
@@ -263,7 +263,7 @@ function createViewerPage(outputId) {
     // Save custom viewer page
     const viewerPath = path.join(viewerDir, 'index.html');
     fs.writeFileSync(viewerPath, viewerContent);
-    
+
     // Create redirect HTML file
     ensureDirectoryExists(PATHS.public);
     const publicPath = path.join(PATHS.public, `${outputId}.html`);
@@ -279,7 +279,7 @@ function createViewerPage(outputId) {
   </body>
 </html>`;
     fs.writeFileSync(publicPath, redirectContent);
-    
+
     return {
       viewerPath,
       viewerUrl: `${HOST_URL.external}/viewers/${outputId}/index.html`,
@@ -307,16 +307,16 @@ app.post('/upload', upload.fields([
 
     const albedoPath = req.files.albedo[0].path;
     const normalsPath = req.files.normals[0].path;
-    
+
     // Ensure destination directory exists
     ensureDirectoryExists(PATHS.image);
 
     // Generate IDs based on the outputId
     const outputId = req.body.outputId || 'relighting-viewer';
-    
+
     // Generate config and get image IDs
     const { configPath, albedoId, normalsId } = generateConfigFile(outputId, req.body);
-    
+
     // Copy uploaded images to image directory with proper naming
     fs.copyFileSync(albedoPath, path.join(PATHS.image, `${albedoId}.png`));
     fs.copyFileSync(normalsPath, path.join(PATHS.image, `${normalsId}.png`));
@@ -326,19 +326,18 @@ app.post('/upload', upload.fields([
     try {
       // Generate manifest
       await execCommand(`cd /app && python iiif_generator.py manifest -f ${outputId}-config.yml -o ${outputId}.json`);
-      console.log('Manifest generated. Creating viewer page...');
-      
+      console.log('Manifest generated. Generating tiles...');
+
       // Generate tiles
-      await execCommand('cd /app && python iiif_generator.py tiles -t 256 -v 3.0' -f ${outputId}-config.yml);
-      console.log('Tiles generated. Generating manifest...');
-      
+      await execCommand(`cd /app && python iiif_generator.py tiles -t 256 -v 3.0 -f ${outputId}-config.yml`);
+      console.log('Tiles generated. Generating viewer page...');
       
       // Fix URLs in generated files
       fixUrlsInGeneratedFiles(outputId, [albedoId, normalsId]);
-      
+
       // Create custom viewer page
       const { viewerUrl, manifestUrl } = createViewerPage(outputId);
-      
+
       // Return success response
       res.json({
         success: true,
@@ -368,10 +367,10 @@ function copyDirectoryRecursiveSync(src, dest, filter = null) {
   const exists = fs.existsSync(src);
   const stats = exists && fs.statSync(src);
   const isDirectory = exists && stats.isDirectory();
-  
+
   if (isDirectory) {
     ensureDirectoryExists(dest);
-    
+
     fs.readdirSync(src).forEach(childItemName => {
       copyDirectoryRecursiveSync(
         path.join(src, childItemName),
@@ -384,7 +383,7 @@ function copyDirectoryRecursiveSync(src, dest, filter = null) {
     if (filter && !filter(path.basename(src))) {
       return;
     }
-    
+
     fs.copyFileSync(src, dest);
   }
 }
@@ -392,7 +391,7 @@ function copyDirectoryRecursiveSync(src, dest, filter = null) {
 // Route for exporting the viewer
 app.post('/export', bodyParser.json(), (req, res) => {
   const { manifestId, targetUrl, exportType = 'self-contained' } = req.body;
-  
+
   if (!manifestId || !targetUrl) {
     return res.status(400).json({
       success: false,
@@ -404,7 +403,7 @@ app.post('/export', bodyParser.json(), (req, res) => {
     // Create export directory structure based on export type
     const exportDir = path.join(PATHS.exports, manifestId);
     let iiifDir, manifestDir, imageDir, miradorDir, indexPath;
-    
+
     if (exportType === 'organized') {
       // Organized structure: viewer-name/index.html, mirador/, iiif/ at root level
       const viewerDir = path.join(exportDir, manifestId);
@@ -413,7 +412,7 @@ app.post('/export', bodyParser.json(), (req, res) => {
       imageDir = path.join(iiifDir, 'image');
       miradorDir = path.join(exportDir, 'mirador');
       indexPath = path.join(viewerDir, 'index.html');
-      
+
       ensureDirectoryExists(viewerDir);
     } else {
       // Self-contained structure: everything at root level
@@ -423,7 +422,7 @@ app.post('/export', bodyParser.json(), (req, res) => {
       miradorDir = path.join(exportDir, 'mirador');
       indexPath = path.join(exportDir, 'index.html');
     }
-    
+
     ensureDirectoryExists(manifestDir);
     ensureDirectoryExists(imageDir);
     ensureDirectoryExists(miradorDir);
@@ -431,31 +430,31 @@ app.post('/export', bodyParser.json(), (req, res) => {
     // Copy manifest file
     const manifestSrc = path.join(PATHS.iiifManifest, `${manifestId}.json`);
     const manifestDest = path.join(manifestDir, `${manifestId}.json`);
-    
+
     if (!fs.existsSync(manifestSrc)) {
       return res.status(404).json({
         success: false,
         message: `Manifiesto no encontrado: ${manifestId}.json`
       });
     }
-    
+
     // Extract image IDs from manifest
     let manifestContent = fs.readFileSync(manifestSrc, 'utf8');
     let imageIds = [];
-    
+
     try {
       const manifestData = JSON.parse(manifestContent);
-      
+
       // Navigate through manifest structure to find image IDs
-      if (manifestData.items && 
-          manifestData.items[0] && 
-          manifestData.items[0].items && 
-          manifestData.items[0].items[0] && 
-          manifestData.items[0].items[0].items && 
-          manifestData.items[0].items[0].items[0] && 
-          manifestData.items[0].items[0].items[0].body && 
+      if (manifestData.items &&
+          manifestData.items[0] &&
+          manifestData.items[0].items &&
+          manifestData.items[0].items[0] &&
+          manifestData.items[0].items[0].items &&
+          manifestData.items[0].items[0].items[0] &&
+          manifestData.items[0].items[0].items[0].body &&
           manifestData.items[0].items[0].items[0].body.items) {
-        
+
         const items = manifestData.items[0].items[0].items[0].body.items;
         items.forEach(item => {
           if (item.service && item.service.length > 0) {
@@ -474,30 +473,30 @@ app.post('/export', bodyParser.json(), (req, res) => {
     } catch (error) {
       console.error('Error extracting image IDs:', error);
     }
-    
+
     // Fallback if no image IDs found
     if (imageIds.length === 0) {
       imageIds = [`${manifestId}-albedo`, `${manifestId}-normals`];
     }
-    
+
     console.log(`Image IDs found: ${imageIds.join(', ')}`);
-    
+
     // Replace URLs in manifest
     manifestContent = manifestContent.replace(new RegExp(HOST_URL.external, 'g'), targetUrl.replace(/\/$/, ''));
     fs.writeFileSync(manifestDest, manifestContent);
-    
+
     // Copy image directories
     imageIds.forEach(id => {
       const imageSrcDir = path.join(PATHS.iiifImage, id);
       const imageDestDir = path.join(imageDir, id);
-      
+
       if (!fs.existsSync(imageSrcDir)) {
         console.warn(`Image directory not found: ${imageSrcDir}`);
         return; // Skip to next directory
       }
-      
+
       ensureDirectoryExists(imageDestDir);
-      
+
       // Update and copy info.json
       const infoSrc = path.join(imageSrcDir, 'info.json');
       if (fs.existsSync(infoSrc)) {
@@ -506,20 +505,20 @@ app.post('/export', bodyParser.json(), (req, res) => {
         infoContent = infoContent.replace(new RegExp(HOST_URL.external, 'g'), targetUrl.replace(/\/$/, ''));
         fs.writeFileSync(infoDest, infoContent);
       }
-      
+
       // Copy tiles (recursively)
       copyDirectoryRecursiveSync(imageSrcDir, imageDestDir, (file) => {
         return file !== 'info.json'; // Exclude info.json as we've already handled it
       });
     });
-    
+
     // Copy Mirador viewer files
     copyDirectoryRecursiveSync('/app/mirador/dist', path.join(miradorDir, 'dist'));
-    
+
     // Create customized index.html with adjusted paths based on export type
     const indexTemplate = fs.readFileSync(PATHS.indexTemplate, 'utf8');
     let customIndex;
-    
+
     if (exportType === 'organized') {
       // Organized structure: adjust paths to go up one level (../mirador, ../iiif)
       customIndex = indexTemplate
@@ -532,19 +531,19 @@ app.post('/export', bodyParser.json(), (req, res) => {
         .replace(new RegExp(HOST_URL.external, 'g'), targetUrl.replace(/\/$/, ''))
         .replace(/manifestId:.*?'(.*?)'/g, `manifestId: '${targetUrl.replace(/\/$/, '')}/iiif/manifest/${manifestId}.json'`);
     }
-    
+
     fs.writeFileSync(indexPath, customIndex);
-    
+
     // Create ZIP file
     const zipPath = path.join(PATHS.exports, `${manifestId}.zip`);
     const output = fs.createWriteStream(zipPath);
     const archive = archiver('zip', {
       zlib: { level: 9 } // Maximum compression
     });
-    
+
     output.on('close', () => {
       console.log(`ZIP file created: ${zipPath} (${archive.pointer()} bytes)`);
-      
+
       // Return ZIP file as download
       res.download(zipPath, `${manifestId}.zip`, (err) => {
         if (err) {
@@ -552,7 +551,7 @@ app.post('/export', bodyParser.json(), (req, res) => {
         }
       });
     });
-    
+
     archive.on('error', (err) => {
       console.error(`Error creating ZIP file: ${err}`);
       res.status(500).json({
@@ -561,11 +560,11 @@ app.post('/export', bodyParser.json(), (req, res) => {
         error: err.message
       });
     });
-    
+
     archive.pipe(output);
     archive.directory(exportDir, false);
     archive.finalize();
-    
+
   } catch (err) {
     console.error(`Export process error: ${err}`);
     res.status(500).json({
