@@ -87,33 +87,69 @@ docker exec -w /app iiif-static-choices-iiif-static-choices-1 bash -c 'cp image/
 
 Generated data can accumulate over time, especially during development. Use these commands to clean up space:
 
+> **⚠️ IMPORTANT**: Always stop running containers before cleanup to avoid file lock issues:
+> ```bash
+> docker compose -f docker-compose.dev.yml down
+> ```
+
 #### Complete Cleanup (All Generated Data)
 ```bash
-# Clean all generated content (uploads, exports, tiles, manifests)
-docker run --rm -v "$(pwd)/data:/data" -v "$(pwd)/iiif:/iiif" alpine sh -c 'find /data -mindepth 2 -delete && find /iiif -mindepth 2 -delete'
+# IMPORTANT: First stop any running containers
+docker compose -f docker-compose.dev.yml down
+
+# Clean all generated content using absolute paths
+docker run --rm \
+  -v "/home/fenix/github/iiif-static-choices/data:/data" \
+  -v "/home/fenix/github/iiif-static-choices/iiif:/iiif" \
+  alpine sh -c 'rm -rf /data/public/* /data/exports/* /data/uploads/* /data/viewers/* /iiif/image/* /iiif/manifest/*'
 ```
 
 #### Selective Cleanup
 ```bash
+# Clean only public folder (viewer HTML files)
+docker run --rm -v "/home/fenix/github/iiif-static-choices/data:/data" alpine sh -c 'rm -rf /data/public/*'
+
 # Clean only exports and uploads (keep viewers and manifests)
-docker run --rm -v "$(pwd)/data:/data" alpine sh -c 'rm -rf /data/exports/* /data/uploads/*'
+docker run --rm -v "/home/fenix/github/iiif-static-choices/data:/data" alpine sh -c 'rm -rf /data/exports/* /data/uploads/*'
 
 # Clean only large export files (keep extracted folders)
-docker run --rm -v "$(pwd)/data:/data" alpine sh -c 'find /data/exports -name "*.zip" -delete'
+docker run --rm -v "/home/fenix/github/iiif-static-choices/data:/data" alpine sh -c 'find /data/exports -name "*.zip" -delete'
 
 # Clean specific viewer data
-docker run --rm -v "$(pwd)/data:/data" -v "$(pwd)/iiif:/iiif" alpine sh -c 'rm -rf /data/viewers/VIEWER_ID /iiif/image/VIEWER_ID-* /iiif/manifest/VIEWER_ID.json'
+docker run --rm \
+  -v "/home/fenix/github/iiif-static-choices/data:/data" \
+  -v "/home/fenix/github/iiif-static-choices/iiif:/iiif" \
+  alpine sh -c 'rm -rf /data/viewers/VIEWER_ID /iiif/image/VIEWER_ID-* /iiif/manifest/VIEWER_ID.json'
 ```
 
-#### Alternative with Sudo (if Docker unavailable)
+#### Alternative Methods
+
+##### Using Cleanup Script (Recommended)
 ```bash
-# Requires sudo privileges
-sudo rm -rf data/*
-sudo rm -rf iiif/*
+# Use the provided cleanup script (if available in project root)
+./cleanup_public.sh
+```
+
+##### Manual with Sudo (if Docker commands fail)
+```bash
+# CAUTION: Requires sudo privileges
+# Only use if Docker cleanup commands don't work
+sudo rm -rf data/public/* data/uploads/* data/exports/* data/viewers/*
+sudo rm -rf iiif/image/* iiif/manifest/*
 ```
 
 #### Why Docker for Cleanup?
-Files created by Docker containers have root permissions and cannot be deleted directly by regular users. Using Docker ensures proper cleanup without permission issues.
+Files created by Docker containers have root permissions and cannot be deleted directly by regular users. Using Docker ensures proper cleanup without permission issues. The cleanup commands use Alpine Linux containers to safely remove files with proper permissions.
+
+#### Troubleshooting Cleanup Issues
+
+If cleanup commands fail:
+
+1. **Ensure containers are stopped**: `docker compose -f docker-compose.dev.yml down`
+2. **Check if paths exist**: `ls -la data/` and `ls -la iiif/`
+3. **Verify Docker is running**: `docker ps`
+4. **Use absolute paths** instead of `$(pwd)` if relative paths fail
+5. **As last resort**, use sudo commands (see Alternative Methods above)
 
 #### Monitor Disk Usage
 ```bash
