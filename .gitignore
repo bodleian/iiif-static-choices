@@ -168,3 +168,7 @@ cython_debug/
 tests/multi-viewer-test-results.txt
 tests/perf-test-*.png
 tests/*.txt
+
+# Script outputs
+scripts/performance-test-results.txt
+scripts/*.log

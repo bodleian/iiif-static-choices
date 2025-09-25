@@ -24,12 +24,12 @@
 #     - ammonite-normals.png (29MB)
 #
 # USAGE:
-#   $ cd tests/
-#   $ ./multi-viewer-performance-test.sh
+#   $ cd scripts/
+#   $ ./performance-test.sh
 #
 # OUTPUT:
 #   - Console output showing progress and times
-#   - Results file: multi-viewer-test-results.txt
+#   - Results file: performance-test-results.txt
 #
 # EXPECTED RESULTS:
 #   - Each viewer should take approximately 100-120 seconds
@@ -40,7 +40,7 @@
 
 # Configuration
 BASE_URL="http://localhost:8080"
-RESULTS_FILE="multi-viewer-test-results.txt"
+RESULTS_FILE="performance-test-results.txt"
 SOURCE_ALBEDO="../image/ammonite-albedo.png"  # 33MB albedo texture
 SOURCE_NORMALS="../image/ammonite-normals.png" # 29MB normals map
 
