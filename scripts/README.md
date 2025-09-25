@@ -4,7 +4,7 @@ This directory contains utility scripts and tools for development and maintenanc
 
 ## Scripts
 
-### 🧹 cleanup_public.sh
+### cleanup_public.sh
 **Purpose:** Cleans up generated files and data from Docker volumes
 
 **Usage:**
@@ -24,7 +24,7 @@ This directory contains utility scripts and tools for development and maintenanc
 
 ---
 
-### 🎯 performance-test.sh
+### performance-test.sh
 **Purpose:** Tests multi-viewer generation performance to identify degradation
 
 **Prerequisites:**
