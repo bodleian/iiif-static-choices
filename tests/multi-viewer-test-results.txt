@@ -1,4 +1,0 @@
-IIIF Static Choices - Multi-viewer Performance Test
-Date: Wed Sep 24 18:22:31 CEST 2025
-Testing sequential viewer generation performance
-========================================

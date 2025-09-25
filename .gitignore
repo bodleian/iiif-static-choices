@@ -159,4 +159,12 @@ cython_debug/
 #.idea/
 
 # Data directory - ignore entirely (Docker changes ownership to root)
-/data/*.Zone.Identifier
+/data/
+
+# Windows metadata files
+*.Zone.Identifier
+
+# Test artifacts
+tests/multi-viewer-test-results.txt
+tests/perf-test-*.png
+tests/*.txt
