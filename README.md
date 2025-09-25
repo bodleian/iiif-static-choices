@@ -86,6 +86,18 @@ Todo
 - add in multi-page manifests
 - add some unit tests to prevent development breaking
 
+Development
+===
+
+For developers working on this project, there are utility scripts available in the `scripts/` directory:
+
+- **Performance Testing**: `./scripts/performance-test.sh` - Tests multi-viewer generation performance
+- **Cleanup Utility**: `./scripts/cleanup_public.sh` - Cleans all generated Docker data
+
+For detailed development setup and documentation, see:
+- [docker-gui/DEVELOPMENT.md](docker-gui/DEVELOPMENT.md) - Complete development guide
+- [scripts/README.md](scripts/README.md) - Documentation for all utility scripts
+
 Docker Support
 ===
 

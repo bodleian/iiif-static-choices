@@ -67,6 +67,12 @@ docker exec -w /app iiif-static-choices-iiif-static-choices-1 python iiif_genera
 
 # Manual manifest generation
 docker exec -w /app iiif-static-choices-iiif-static-choices-1 bash -c 'cp image/config.yml . && python iiif_generator.py manifest -f config.yml -o iiif/manifest/output.json -d .'
+
+# Performance testing
+./scripts/performance-test.sh
+
+# Clean all generated data
+./scripts/cleanup_public.sh
 ```
 
 ## Data Persistence
@@ -192,3 +198,48 @@ docker compose -f docker-compose.dev.yml up
 
 - **Memory issues**: Increase Docker memory allocation for large images
 - **Port conflicts**: Ensure ports 8000/8080 are available
+
+## Development Scripts
+
+The project includes utility scripts in the `scripts/` directory for common development tasks:
+
+### Performance Testing
+
+Test multi-viewer generation performance to identify degradation:
+
+```bash
+# Start containers first
+docker compose -f docker-compose.dev.yml up -d
+
+# Run performance test
+cd scripts/
+./performance-test.sh
+```
+
+**What it does:**
+- Generates 5 sequential IIIF viewers
+- Measures generation time for each (~100-120s expected)
+- Outputs results to `performance-test-results.txt`
+- Helps identify memory leaks or performance issues
+
+### Automated Cleanup
+
+Clean all generated data using the cleanup script:
+
+```bash
+./scripts/cleanup_public.sh
+```
+
+**What it cleans:**
+- All viewer HTML files in `/data/public/`
+- Uploaded images in `/data/uploads/`
+- Export packages in `/data/exports/`
+- Generated viewers in `/data/viewers/`
+- IIIF tiles in `/iiif/image/`
+- IIIF manifests in `/iiif/manifest/`
+
+### Script Documentation
+
+For detailed information about all available scripts, see:
+- [`scripts/README.md`](../scripts/README.md) - Complete script documentation
+- Individual scripts contain inline documentation
