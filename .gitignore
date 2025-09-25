@@ -159,4 +159,4 @@ cython_debug/
 #.idea/
 
 # Data directory - ignore entirely (Docker changes ownership to root)
-/data/
+/data/*.Zone.Identifier
