@@ -11,7 +11,7 @@ services:
       - ./docker-gui/web-interface:/app/docker-gui/web-interface
       - ./data:/app/data
       - ./iiif:/app/iiif
-      - ./mirador:/app/mirador
+      - ./data/mirador:/app/data
       - ./openseadragon:/app/openseadragon
       - ./tiler:/app/tiler
       - ./manifest:/app/manifest

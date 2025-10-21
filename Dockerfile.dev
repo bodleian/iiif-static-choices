@@ -57,8 +57,7 @@ CMD ["bash", "-c", "\
     ln -sf /app/iiif/manifest /app/data/iiif/manifest && \
     ln -sf /app/iiif/image /app/data/iiif/image && \
     ln -sf /app/data/viewers /app/viewers && \
-    ln -sf /app/data/public /app/public && \
-    ln -sf /app/mirador /app/data/mirador && \
+    ln -sf /app/data /app/mirador && \
     echo 'Symbolic links created successfully' && \
     cd /app/docker-gui/web-interface && \
     echo 'Starting Node.js server with nodemon...' && \

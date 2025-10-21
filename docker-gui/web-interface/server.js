@@ -236,7 +236,7 @@ function createViewerPage(outputId) {
 
   // Create mirador symbolic link for this viewer
   const miradorLinkPath = path.join(viewerDir, 'mirador');
-  const miradorTargetPath = '/app/mirador';
+  const miradorTargetPath = '/app/data/mirador';
 
   try {
     // Remove existing link if it exists
@@ -402,7 +402,7 @@ app.post('/export', bodyParser.json(), (req, res) => {
   try {
     // Create export directory structure based on export type
     const exportDir = path.join(PATHS.exports, manifestId);
-    let iiifDir, manifestDir, imageDir, miradorDir, indexPath;
+    let iiifDir, manifestDir, imageDir, indexPath;
 
     if (exportType === 'organized') {
       // Organized structure: viewer-name/index.html, mirador/, iiif/ at root level
@@ -410,7 +410,6 @@ app.post('/export', bodyParser.json(), (req, res) => {
       iiifDir = path.join(exportDir, 'iiif');
       manifestDir = path.join(iiifDir, 'manifest');
       imageDir = path.join(iiifDir, 'image');
-      miradorDir = path.join(exportDir, 'mirador');
       indexPath = path.join(viewerDir, 'index.html');
 
       ensureDirectoryExists(viewerDir);
@@ -419,13 +418,11 @@ app.post('/export', bodyParser.json(), (req, res) => {
       iiifDir = path.join(exportDir, 'iiif');
       manifestDir = path.join(iiifDir, 'manifest');
       imageDir = path.join(iiifDir, 'image');
-      miradorDir = path.join(exportDir, 'mirador');
       indexPath = path.join(exportDir, 'index.html');
     }
 
     ensureDirectoryExists(manifestDir);
     ensureDirectoryExists(imageDir);
-    ensureDirectoryExists(miradorDir);
 
     // Copy manifest file
     const manifestSrc = path.join(PATHS.iiifManifest, `${manifestId}.json`);
@@ -511,9 +508,6 @@ app.post('/export', bodyParser.json(), (req, res) => {
         return file !== 'info.json'; // Exclude info.json as we've already handled it
       });
     });
-
-    // Copy Mirador viewer files
-    copyDirectoryRecursiveSync('/app/mirador/dist', path.join(miradorDir, 'dist'));
 
     // Create customized index.html with adjusted paths based on export type
     const indexTemplate = fs.readFileSync(PATHS.indexTemplate, 'utf8');

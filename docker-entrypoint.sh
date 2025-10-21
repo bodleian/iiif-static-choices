@@ -11,7 +11,7 @@ cp /app/docker-gui/iiif-server-for-docker-app.py /app/data/server.py
 ln -sf /app/iiif/manifest /app/data/iiif/manifest
 ln -sf /app/iiif/image /app/data/iiif/image
 ln -sf /app/data/viewers /app/viewers
-ln -sf /app/data/public /app/public
+ln -sf /app/data /app/mirador
 ln -sf /app/mirador /app/data/mirador
 
 # Start web interface in background
