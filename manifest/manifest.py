@@ -221,7 +221,7 @@ class Manifest:
             "viewingDirection": self.viewing_direction
         }
 
-        output_path: str = os.path.join("iiif/manifest", filename)
+        output_path: str = os.path.join("data/iiif/manifest", filename)
 
         try:
             with open(output_path, "w") as json_file:

@@ -4,7 +4,7 @@
 
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 import sys
-
+import os
 
 class CORSRequestHandler(SimpleHTTPRequestHandler):
     """
@@ -25,6 +25,9 @@ class CORSRequestHandler(SimpleHTTPRequestHandler):
     def do_OPTIONS(self):
         self.send_response(200)
         self.end_headers()
+
+# generated files are now in data, this is shared between docker and the pure terminal implementation
+os.chdir('data')
 
 host = sys.argv[1] if len(sys.argv) > 2 else '0.0.0.0'
 port = int(sys.argv[len(sys.argv)-1]) if len(sys.argv) > 1 else 8080

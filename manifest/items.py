@@ -106,14 +106,14 @@ class Items:
         # create a 120px thumbnail
         create_thumbnail(
             os.path.join("./image", image_id + self.preferred_image_format),
-            f'./iiif/image/{image_id}/full/120,/0/default.jpg',
+            f'./data/iiif/image/{image_id}/full/120,/0/default.jpg',
             (120, 120)
         )
 
         # create a 256px thumbnail
         create_thumbnail(
             os.path.join("./image", image_id + self.preferred_image_format),
-            f'./iiif/image/{image_id}/full/256,/0/default.jpg',
+            f'./data/iiif/image/{image_id}/full/256,/0/default.jpg',
             (256, 256)
         )
 

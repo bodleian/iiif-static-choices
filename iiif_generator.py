@@ -92,6 +92,7 @@ def main(arguments) -> bool:
             )
             return False
 
+        # template the index.html with the new
 
 if __name__ == "__main__":
     parent_parser = argparse.ArgumentParser(
@@ -157,7 +158,7 @@ if __name__ == "__main__":
         "-o",
         "--output",
         type=str,
-        default="iiif",
+        default="data/iiif",
         help="Directory where the IIIF images are generated. Default is: /iiif"
     )
 
