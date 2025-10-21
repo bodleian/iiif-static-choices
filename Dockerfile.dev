@@ -42,30 +42,18 @@ WORKDIR /app
 RUN mkdir -p /app/iiif/image /app/iiif/manifest && chmod -R 777 /app/iiif && \
     mkdir -p /app/data/uploads && chmod -R 777 /app/data
 
+# Copy and setup entrypoint script
+COPY docker-entrypoint.sh /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh
+
 # Expose ports
 EXPOSE 8000 8080
 
 # Volume for persistent data
 VOLUME ["/app/data"]
 
-# Development command with nodemon for auto-restart and symbolic links
-CMD ["bash", "-c", "\
-    echo 'Starting IIIF Static Choices in DEVELOPMENT mode...' && \
-    mkdir -p /app/data/iiif && \
-    cp /app/docker-gui/iiif-server-for-docker-app.py /app/data/server.py && \
-    echo 'IIIF server copied to data directory' && \
-    ln -sf /app/iiif/manifest /app/data/iiif/manifest && \
-    ln -sf /app/iiif/image /app/data/iiif/image && \
-    ln -sf /app/data/viewers /app/viewers && \
-    ln -sf /app/data/public /app/public && \
-    ln -sf /app/mirador /app/data/mirador && \
-    echo 'Symbolic links created successfully' && \
-    cd /app/docker-gui/web-interface && \
-    echo 'Starting Node.js server with nodemon...' && \
-    nodemon server.js & \
-    echo 'Node.js server started' && \
-    sleep 5 && \
-    echo 'Starting Python IIIF server...' && \
-    cd /app && \
-    python /app/data/server.py 8000 \
-    "]
+# Set the entrypoint
+ENTRYPOINT ["/docker-entrypoint.sh"]
+
+# Development command (overridden by docker-compose.dev.yml)
+CMD ["bash", "-c", "cd /app/docker-gui/web-interface && nodemon server.js & sleep 5 && cd /app && python /app/data/server.py 8000"]
