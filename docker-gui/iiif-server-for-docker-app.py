@@ -23,27 +23,13 @@ IMAGE_DIR = f"{IIIF_DIR}/image"
 VIEWERS_DIR = f"{DATA_DIR}/viewers"
 PUBLIC_DIR = f"{DATA_DIR}/public"
 
-# Verify symbolic links
-def verify_symlink(link_path, target_path):
-    """Verify that a symbolic link exists and points to the correct target"""
-    if os.path.islink(link_path):
-        actual_target = os.readlink(link_path)
-        if actual_target != target_path:
-            log_message(f"Warning: Symlink {link_path} points to {actual_target}, expected {target_path}")
-        else:
-            log_message(f"Symlink verified: {link_path} -> {target_path}")
+# Verify persistent storage directories
+log_message("Verifying persistent storage directories")
+for dir_path in [MANIFEST_DIR, IMAGE_DIR, VIEWERS_DIR, PUBLIC_DIR]:
+    if os.path.exists(dir_path):
+        log_message(f"Directory verified: {dir_path}")
     else:
-        if os.path.exists(link_path):
-            log_message(f"Warning: {link_path} exists but is not a symlink")
-        else:
-            log_message(f"Warning: Symlink {link_path} does not exist")
-
-# Verify critical symlinks
-log_message("Verifying symbolic links")
-verify_symlink(f"{IIIF_DIR}/manifest", f"{APP_DIR}/iiif/manifest")
-verify_symlink(f"{IIIF_DIR}/image", f"{APP_DIR}/iiif/image")
-verify_symlink(f"{APP_DIR}/viewers", f"{DATA_DIR}/viewers")
-verify_symlink(f"{APP_DIR}/public", f"{DATA_DIR}/public")
+        log_message(f"Warning: Directory missing: {dir_path}")
 
 class CORSRequestHandler(SimpleHTTPRequestHandler):
     """
