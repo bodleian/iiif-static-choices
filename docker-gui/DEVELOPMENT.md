@@ -82,12 +82,15 @@ docker exec -w /app iiif-static-choices-iiif-static-choices-1 bash -c 'cp image/
 - Backup data from `./data` folder
 
 ### File Structure
+All content persists in `/app/data` (mounted volume):
 - **Uploads**: `/app/data/uploads/`
-- **Images**: `/app/image/{id}-albedo.png`, `/app/image/{id}-normals.png`
-- **Config**: `/app/image/{id}-config.yml`
-- **Manifests**: `/app/iiif/manifest/{id}.json`
-- **Tiles**: `/app/iiif/image/{id}-albedo/`, `/app/iiif/image/{id}-normals/`
+- **Images**: `/app/data/image/{id}-albedo.png`, `/app/data/image/{id}-normals.png`
+- **Config**: `/app/data/image/{id}-config.yml`
+- **Manifests**: `/app/data/iiif/manifest/{id}.json`
+- **Tiles**: `/app/data/iiif/image/{id}-albedo/`, `/app/data/iiif/image/{id}-normals/`
 - **Viewers**: `/app/data/viewers/{id}/index.html`
+
+> **Note**: `/app/iiif` and `/app/image` are symlinks to `/app/data/iiif` and `/app/data/image`, ensuring all generated content persists across container restarts.
 
 ### Data Cleanup Commands
 
