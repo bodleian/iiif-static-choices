@@ -8,11 +8,10 @@ mkdir -p /app/data/iiif
 cp /app/docker-gui/iiif-server-for-docker-app.py /app/data/server.py
 
 # Create symbolic links
-ln -sf /app/iiif/manifest /app/data/iiif/manifest
-ln -sf /app/iiif/image /app/data/iiif/image
-ln -sf /app/data/viewers /app/viewers
+ln -sf /app/data/iiif /app/iiif
+ln -sf /app/data /app/viewers
+ln -sf /app/data /app/public
 ln -sf /app/data /app/mirador
-ln -sf /app/mirador /app/data/mirador
 
 # Start web interface in background
 echo "Starting web interface on port 8080..."

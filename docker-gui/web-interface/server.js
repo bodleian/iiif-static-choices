@@ -23,9 +23,9 @@ const port = 8080;
 const PATHS = {
   uploads: '/app/data/uploads',
   image: '/app/image',
-  iiif: '/app/iiif',
-  iiifImage: '/app/iiif/image',
-  iiifManifest: '/app/iiif/manifest',
+  iiif: '/app/data/iiif',
+  iiifImage: '/app/data/iiif/image',
+  iiifManifest: '/app/data/iiif/manifest',
   viewers: '/app/data/viewers',
   public: '/app/data/public',
   exports: '/app/data/exports',

@@ -54,9 +54,9 @@ CMD ["bash", "-c", "\
     mkdir -p /app/data/iiif && \
     cp /app/docker-gui/iiif-server-for-docker-app.py /app/data/server.py && \
     echo 'IIIF server copied to data directory' && \
-    ln -sf /app/iiif/manifest /app/data/iiif/manifest && \
-    ln -sf /app/iiif/image /app/data/iiif/image && \
-    ln -sf /app/data/viewers /app/viewers && \
+    ln -sf /app/data/iiif /app/iiif && \
+    ln -sf /app/data /app/viewers && \
+    ln -sf /app/data /app/public && \
     ln -sf /app/data /app/mirador && \
     echo 'Symbolic links created successfully' && \
     cd /app/docker-gui/web-interface && \
