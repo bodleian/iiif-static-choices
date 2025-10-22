@@ -236,7 +236,8 @@ function createViewerPage(outputId) {
 
   // Create mirador symbolic link for this viewer
   const miradorLinkPath = path.join(viewerDir, 'mirador');
-  const miradorTargetPath = '/app/data/mirador';
+  const miradorTargetDir = path.resolve('../../data/mirador');
+  const miradorRelativePath = path.relative(miradorTargetDir, viewerDir);
 
   try {
     // Remove existing link if it exists
@@ -244,7 +245,8 @@ function createViewerPage(outputId) {
       fs.unlinkSync(miradorLinkPath);
     }
     // Create symbolic link to mirador
-    fs.symlinkSync(miradorTargetPath, miradorLinkPath, 'dir');
+
+    fs.symlinkSync(miradorRelativePath, miradorLinkPath, 'dir');
     console.log(`Created mirador symbolic link for viewer ${outputId}: ${miradorLinkPath} -> ${miradorTargetPath}`);
   } catch (err) {
     console.error(`Error creating mirador symbolic link for viewer ${outputId}:`, err);
@@ -331,7 +333,7 @@ app.post('/upload', upload.fields([
       // Generate tiles
       await execCommand(`cd /app && python iiif_generator.py tiles -t 256 -v 3.0 -f ${outputId}-config.yml`);
       console.log('Tiles generated. Generating viewer page...');
-      
+
       // Fix URLs in generated files
       fixUrlsInGeneratedFiles(outputId, [albedoId, normalsId]);
 

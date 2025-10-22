@@ -14,6 +14,7 @@ import os
 import sys
 import yaml
 
+from jinja2 import Template, TemplateSyntaxError, UndefinedError
 from typing import Dict, List
 from tiler.info_json import VERSION211
 from manifest.manifest import Manifest, ManifestError
@@ -30,15 +31,14 @@ def main(arguments) -> bool:
     :param arguments: argparse.Namespace containing the arguments passed into the iiif_generator program.
     :return: True if successful | False if there is an error.
     """
+    config_path: str = str(os.path.join(arguments.input_directory, arguments.file_name))
+    config: Dict = yaml.full_load(open(config_path))
 
     if arguments.command == "tiles":
-        config_path: str = str(os.path.join(arguments.input_directory, arguments.file_name))
-
         if not os.path.exists(config_path):
             log.error("Config file: s% does not exist", config_path)
             return False
 
-        config: Dict = yaml.full_load(open(config_path))
         images: List = config.get("items").get("images")
         image_filter = [image.get('image_id') for image in images]
         max_file_no: int = -1
@@ -69,9 +69,6 @@ def main(arguments) -> bool:
             return True
 
     if arguments.command == "manifest":
-
-        config_path: str = str(os.path.join(arguments.input_directory, arguments.file_name))
-
         if not os.path.exists(config_path):
             log.error("Config file: s% does not exist", config_path)
             return False
@@ -80,6 +77,49 @@ def main(arguments) -> bool:
 
         if not manifest_success:
             log.error("Manifest generation failed")  # try and improve this, we need to probably raise errors elsewhere
+            return False
+
+        # template the index.html with the new object_id to point to a manifest and
+        # set up symlinks to imported javascript etc
+
+        # create the viewer folder
+        object_id: str = config.get('object_id')
+        output_dir: str = f'data/viewers/{object_id}'
+
+        try:
+            os.makedirs(output_dir, exist_ok=True)
+        except(PermissionError, FileNotFoundError, OSError) as error:
+            log.error('Could not create viewer directory due to the following error: %s', error)
+            return False
+
+        # symlink to mirador
+        try:
+            target_dir = os.path.relpath('../data/mirador', start=f'viewers/{object_id}')
+            os.symlink(target_dir, os.path.join(output_dir, 'mirador'), target_is_directory=True)
+        except FileExistsError as error:
+            log.warning('Symlink already exists in location specified: %s', error)
+        except (FileNotFoundError, PermissionError, OSError) as error:
+            log.error('Could not create Mirador symlink due to the following error: %s', error)
+            return  False
+
+        # template the index.html file using jinja
+        template: str = "index.html"
+        template_contents: str = ""
+
+        try:
+            with open(template, 'r', encoding='utf-8') as src_file:
+                template_contents = src_file.read()
+        except (FileNotFoundError, PermissionError) as error:
+            log.error("Cannot open target template file due to the following error: %s", error)
+            return False
+
+        try:
+            templated_index_html = Template(template_contents)
+            rendered = templated_index_html.render(object_id=object_id)
+            with open(os.path.join(output_dir, template), "w") as f:
+                f.write(rendered)
+        except (TemplateSyntaxError, UndefinedError, FileNotFoundError, PermissionError, OSError) as error:
+            log.error('Could not template index.html due to the following error: %s', error)
             return False
 
         try:
@@ -92,7 +132,6 @@ def main(arguments) -> bool:
             )
             return False
 
-        # template the index.html with the new
 
 if __name__ == "__main__":
     parent_parser = argparse.ArgumentParser(
