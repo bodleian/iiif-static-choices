@@ -74,14 +74,13 @@ To use your own images and manifest-config.yml do the following:
 What should it look like?
 ===
 
-If you've done the above set up correctly and the server is running, you can go to your browser and enter the address: http://localhost:8000/ and you will see the following.  Click the buttons like the cursor does in the animated gif to play around in 2.5D in Mirador.
+If you've done the above setup correctly and the server is running, you can go to your browser and enter the address: http://localhost:8000/viewers/pyritised-ammonite/ (insert your own object_id after viewers) and you will see the following.  Click the buttons like the cursor does in the animated gif to play around in 2.5D in Mirador.
 
 ![Animated picture showing a pyritised ammonite and someone interacting with it using the ARCHiOx Mirador plug-in](examples/fossil.gif)
 
 Todo
 ===
 
-- add in thumbnail generation for the choices layers in Mirador, this could be done during manifest generation  
 - add in logo generation
 - add in multi-page manifests
 - add some unit tests to prevent development breaking
