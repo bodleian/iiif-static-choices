@@ -237,7 +237,7 @@ function createViewerPage(outputId) {
   // Create mirador symbolic link for this viewer
   const miradorLinkPath = path.join(viewerDir, 'mirador');
   const miradorTargetDir = path.resolve('../../data/mirador');
-  const miradorRelativePath = path.relative(miradorTargetDir, viewerDir);
+  const miradorRelativePath = path.relative(viewerDir, miradorTargetDir);
 
   try {
     // Remove existing link if it exists
