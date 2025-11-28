@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mirador Annotations POC</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', sans-serif;
+        }
+        #viewer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+        .poc-info {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: white;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            max-width: 300px;
+            z-index: 10000;
+        }
+        .poc-info h3 {
+            margin: 0 0 10px 0;
+            font-size: 14px;
+            color: #1967d2;
+        }
+        .poc-info p {
+            margin: 5px 0;
+            font-size: 12px;
+            color: #666;
+        }
+        .poc-info .status {
+            padding: 5px 10px;
+            background: #e8f5e9;
+            border-radius: 3px;
+            color: #2e7d32;
+            font-weight: bold;
+            text-align: center;
+        }
+        .poc-info .error {
+            background: #ffebee;
+            color: #c62828;
+        }
+    </style>
+</head>
+<body>
+    <div id="viewer"></div>
+    
+    <div class="poc-info">
+        <h3>📝 Annotations POC</h3>
+        <div id="status" class="status">Initializing...</div>
+        <p id="db-status">Database: Not initialized</p>
+        <p id="anno-count">Annotations: 0</p>
+        <p><small>This is a proof of concept for IIIF annotations with local storage.</small></p>
+    </div>
+
+    <!-- Load Mirador from CDN -->
+    <script src="https://unpkg.com/mirador@latest/dist/mirador.min.js"></script>
+    
+    <script>
+        // Simple IndexedDB storage adapter
+        class LocalAnnotationStorage {
+            constructor() {
+                this.db = null;
+                this.dbName = 'mirador-annotations-poc';
+                this.storeName = 'annotations';
+            }
+
+            async init() {
+                return new Promise((resolve, reject) => {
+                    const request = indexedDB.open(this.dbName, 1);
+                    
+                    request.onerror = () => reject(request.error);
+                    
+                    request.onsuccess = () => {
+                        this.db = request.result;
+                        this.updateStatus('Database initialized', 'success');
+                        resolve(this.db);
+                    };
+                    
+                    request.onupgradeneeded = (event) => {
+                        const db = event.target.result;
+                        if (!db.objectStoreNames.contains(this.storeName)) {
+                            const store = db.createObjectStore(this.storeName, { keyPath: 'id' });
+                            store.createIndex('canvasId', 'target.source', { unique: false });
+                        }
+                    };
+                });
+            }
+
+            async create(annotation) {
+                if (!this.db) await this.init();
+                
+                return new Promise((resolve, reject) => {
+                    const transaction = this.db.transaction([this.storeName], 'readwrite');
+                    const store = transaction.objectStore(this.storeName);
+                    
+                    // Ensure annotation has required fields
+                    const anno = {
+                        id: annotation.id || this.generateId(),
+                        type: 'Annotation',
+                        motivation: annotation.motivation || 'commenting',
+                        body: annotation.body || [],
+                        target: annotation.target,
+                        created: new Date().toISOString(),
+                        modified: new Date().toISOString(),
+                        ...annotation
+                    };
+                    
+                    const request = store.add(anno);
+                    
+                    request.onsuccess = () => {
+                        this.updateCount();
+                        this.updateStatus('Annotation created', 'success');
+                        resolve(anno);
+                    };
+                    
+                    request.onerror = () => reject(request.error);
+                });
+            }
+
+            async read(annotationId) {
+                if (!this.db) await this.init();
+                
+                return new Promise((resolve, reject) => {
+                    const transaction = this.db.transaction([this.storeName], 'readonly');
+                    const store = transaction.objectStore(this.storeName);
+                    const request = store.get(annotationId);
+                    
+                    request.onsuccess = () => resolve(request.result);
+                    request.onerror = () => reject(request.error);
+                });
+            }
+
+            async update(annotation) {
+                if (!this.db) await this.init();
+                
+                return new Promise((resolve, reject) => {
+                    const transaction = this.db.transaction([this.storeName], 'readwrite');
+                    const store = transaction.objectStore(this.storeName);
+                    
+                    annotation.modified = new Date().toISOString();
+                    const request = store.put(annotation);
+                    
+                    request.onsuccess = () => {
+                        this.updateStatus('Annotation updated', 'success');
+                        resolve(annotation);
+                    };
+                    
+                    request.onerror = () => reject(request.error);
+                });
+            }
+
+            async delete(annotationId) {
+                if (!this.db) await this.init();
+                
+                return new Promise((resolve, reject) => {
+                    const transaction = this.db.transaction([this.storeName], 'readwrite');
+                    const store = transaction.objectStore(this.storeName);
+                    const request = store.delete(annotationId);
+                    
+                    request.onsuccess = () => {
+                        this.updateCount();
+                        this.updateStatus('Annotation deleted', 'success');
+                        resolve();
+                    };
+                    
+                    request.onerror = () => reject(request.error);
+                });
+            }
+
+            async all(canvasId) {
+                if (!this.db) await this.init();
+                
+                return new Promise((resolve, reject) => {
+                    const transaction = this.db.transaction([this.storeName], 'readonly');
+                    const store = transaction.objectStore(this.storeName);
+                    const request = store.getAll();
+                    
+                    request.onsuccess = () => {
+                        let results = request.result;
+                        
+                        // Filter by canvas if provided
+                        if (canvasId) {
+                            results = results.filter(anno => 
+                                anno.target && anno.target.source === canvasId
+                            );
+                        }
+                        
+                        resolve(results);
+                    };
+                    
+                    request.onerror = () => reject(request.error);
+                });
+            }
+
+            generateId() {
+                return `annotation-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+            }
+
+            async updateCount() {
+                const count = await this.all();
+                document.getElementById('anno-count').textContent = `Annotations: ${count.length}`;
+            }
+
+            updateStatus(message, type = 'info') {
+                const statusEl = document.getElementById('status');
+                statusEl.textContent = message;
+                statusEl.className = type === 'error' ? 'status error' : 'status';
+                
+                document.getElementById('db-status').textContent = 
+                    `Database: ${this.db ? 'Connected' : 'Not connected'}`;
+            }
+        }
+
+        // Initialize storage
+        const storage = new LocalAnnotationStorage();
+
+        // Annotation adapter for Mirador
+        function createAdapter(canvasId) {
+            return {
+                create: async (annotation) => {
+                    try {
+                        return await storage.create(annotation);
+                    } catch (error) {
+                        console.error('Failed to create annotation:', error);
+                        storage.updateStatus('Failed to create annotation', 'error');
+                        throw error;
+                    }
+                },
+                
+                update: async (annotation) => {
+                    try {
+                        return await storage.update(annotation);
+                    } catch (error) {
+                        console.error('Failed to update annotation:', error);
+                        storage.updateStatus('Failed to update annotation', 'error');
+                        throw error;
+                    }
+                },
+                
+                delete: async (annotationId) => {
+                    try {
+                        await storage.delete(annotationId);
+                    } catch (error) {
+                        console.error('Failed to delete annotation:', error);
+                        storage.updateStatus('Failed to delete annotation', 'error');
+                        throw error;
+                    }
+                },
+                
+                get: async (annotationId) => {
+                    try {
+                        return await storage.read(annotationId);
+                    } catch (error) {
+                        console.error('Failed to get annotation:', error);
+                        throw error;
+                    }
+                },
+                
+                all: async () => {
+                    try {
+                        return await storage.all(canvasId);
+                    } catch (error) {
+                        console.error('Failed to get all annotations:', error);
+                        throw error;
+                    }
+                }
+            };
+        }
+
+        // Initialize Mirador with annotations
+        async function initMirador() {
+            try {
+                // Initialize storage first
+                await storage.init();
+                await storage.updateCount();
+                
+                // Configure Mirador
+                const config = {
+                    id: 'viewer',
+                    
+                    // Use a public IIIF manifest for testing
+                    windows: [{
+                        manifestId: 'https://iiif.bodleian.ox.ac.uk/iiif/manifest/e32a277e-91e2-4a6d-8ba6-cc4bad230410.json',
+                        canvasId: 'https://iiif.bodleian.ox.ac.uk/iiif/canvas/896d02e0-2b92-4026-b0d0-e5f41c1dcb8e.json'
+                    }],
+                    
+                    // Annotation configuration
+                    annotation: {
+                        adapter: createAdapter,
+                        exportLocalStorageAnnotations: false
+                    },
+                    
+                    // Enable annotation creation
+                    window: {
+                        defaultSideBarPanel: 'annotations',
+                        sideBarOpenByDefault: false
+                    },
+                    
+                    // Theme
+                    theme: {
+                        palette: {
+                            primary: {
+                                main: '#1967d2',
+                            },
+                        },
+                    }
+                };
+
+                // Create viewer
+                const viewer = Mirador.viewer(config);
+                
+                storage.updateStatus('Mirador initialized with annotations', 'success');
+                
+                console.log('Mirador viewer initialized with annotation support');
+                console.log('Storage adapter configured');
+                
+            } catch (error) {
+                console.error('Failed to initialize Mirador:', error);
+                storage.updateStatus('Failed to initialize: ' + error.message, 'error');
+            }
+        }
+
+        // Start when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initMirador);
+        } else {
+            initMirador();
+        }
+    </script>
+</body>
+</html>

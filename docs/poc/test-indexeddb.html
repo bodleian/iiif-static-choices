@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IndexedDB POC - Annotation Storage</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+        }
+        .section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 5px;
+        }
+        button {
+            background: #1967d2;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+        button:hover {
+            background: #1557b0;
+        }
+        button.danger {
+            background: #d32f2f;
+        }
+        button.danger:hover {
+            background: #b71c1c;
+        }
+        .result {
+            margin-top: 15px;
+            padding: 15px;
+            background: white;
+            border-left: 4px solid #1967d2;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .success {
+            color: #2e7d32;
+            border-left-color: #2e7d32;
+        }
+        .error {
+            color: #d32f2f;
+            border-left-color: #d32f2f;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: inherit;
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .stat-card {
+            background: white;
+            padding: 15px;
+            border-radius: 5px;
+            border: 1px solid #e0e0e0;
+        }
+        .stat-label {
+            color: #666;
+            font-size: 12px;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #1967d2;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>IndexedDB Proof of Concept</h1>
+        <div class="subtitle">Testing browser storage for IIIF annotations</div>
+
+        <!-- Test 1: Initialize Database -->
+        <div class="section">
+            <h3>1. Initialize Database</h3>
+            <button onclick="initDB()">Initialize DB</button>
+            <div id="init-result" class="result" style="display:none;"></div>
+        </div>
+
+        <!-- Test 2: Create Annotation -->
+        <div class="section">
+            <h3>2. Create Annotation</h3>
+            <label>Annotation Text:</label>
+            <input type="text" id="anno-text" placeholder="Enter annotation text" value="Test annotation">
+            <label>X Coordinate:</label>
+            <input type="number" id="anno-x" value="100">
+            <label>Y Coordinate:</label>
+            <input type="number" id="anno-y" value="200">
+            <button onclick="createAnnotation()">Create Annotation</button>
+            <div id="create-result" class="result" style="display:none;"></div>
+        </div>
+
+        <!-- Test 3: Read Annotations -->
+        <div class="section">
+            <h3>3. Read Annotations</h3>
+            <button onclick="getAllAnnotations()">Get All Annotations</button>
+            <button onclick="getByCanvas()">Get by Canvas</button>
+            <div id="read-result" class="result" style="display:none;"></div>
+        </div>
+
+        <!-- Test 4: Update Annotation -->
+        <div class="section">
+            <h3>4. Update Annotation</h3>
+            <label>Annotation ID:</label>
+            <input type="text" id="update-id" placeholder="Enter annotation ID">
+            <label>New Text:</label>
+            <input type="text" id="update-text" placeholder="Enter new text">
+            <button onclick="updateAnnotation()">Update Annotation</button>
+            <div id="update-result" class="result" style="display:none;"></div>
+        </div>
+
+        <!-- Test 5: Delete Annotation -->
+        <div class="section">
+            <h3>5. Delete Annotation</h3>
+            <label>Annotation ID:</label>
+            <input type="text" id="delete-id" placeholder="Enter annotation ID">
+            <button onclick="deleteAnnotation()">Delete Annotation</button>
+            <button class="danger" onclick="clearAllAnnotations()">Clear All Annotations</button>
+            <div id="delete-result" class="result" style="display:none;"></div>
+        </div>
+
+        <!-- Test 6: Performance Test -->
+        <div class="section">
+            <h3>6. Performance Test</h3>
+            <button onclick="performanceTest()">Create 100 Annotations</button>
+            <button onclick="performanceRead()">Read 100 Annotations</button>
+            <div id="performance-result" class="result" style="display:none;"></div>
+        </div>
+
+        <!-- Statistics -->
+        <div class="section">
+            <h3>Storage Statistics</h3>
+            <button onclick="updateStats()">Refresh Stats</button>
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-label">Total Annotations</div>
+                    <div class="stat-value" id="stat-count">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Estimated Size</div>
+                    <div class="stat-value" id="stat-size">0 KB</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Last Operation</div>
+                    <div class="stat-value" id="stat-time">-</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // IndexedDB wrapper
+        let db;
+        const DB_NAME = 'iiif-annotations-poc';
+        const DB_VERSION = 1;
+        const STORE_NAME = 'annotations';
+
+        // Initialize database
+        async function initDB() {
+            const resultEl = document.getElementById('init-result');
+            resultEl.style.display = 'block';
+            resultEl.className = 'result';
+            resultEl.textContent = 'Initializing database...';
+
+            try {
+                const request = indexedDB.open(DB_NAME, DB_VERSION);
+
+                request.onerror = () => {
+                    throw new Error('Database failed to open');
+                };
+
+                request.onsuccess = (event) => {
+                    db = event.target.result;
+                    resultEl.className = 'result success';
+                    resultEl.textContent = `✓ Database initialized successfully\nDatabase: ${DB_NAME}\nVersion: ${DB_VERSION}`;
+                    updateStats();
+                };
+
+                request.onupgradeneeded = (event) => {
+                    db = event.target.result;
+
+                    // Create object store
+                    if (!db.objectStoreNames.contains(STORE_NAME)) {
+                        const objectStore = db.createObjectStore(STORE_NAME, { keyPath: 'id' });
+                        
+                        // Create indexes
+                        objectStore.createIndex('manifestUrl', 'manifestUrl', { unique: false });
+                        objectStore.createIndex('canvasId', 'canvasId', { unique: false });
+                        objectStore.createIndex('created', 'created', { unique: false });
+                        
+                        console.log('Object store created with indexes');
+                    }
+                };
+            } catch (error) {
+                resultEl.className = 'result error';
+                resultEl.textContent = `✗ Error: ${error.message}`;
+            }
+        }
+
+        // Generate UUID
+        function generateUUID() {
+            return 'anno-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+        }
+
+        // Create annotation
+        async function createAnnotation() {
+            const resultEl = document.getElementById('create-result');
+            resultEl.style.display = 'block';
+
+            if (!db) {
+                resultEl.className = 'result error';
+                resultEl.textContent = '✗ Please initialize database first';
+                return;
+            }
+
+            const text = document.getElementById('anno-text').value;
+            const x = parseInt(document.getElementById('anno-x').value);
+            const y = parseInt(document.getElementById('anno-y').value);
+
+            const annotation = {
+                id: generateUUID(),
+                manifestUrl: 'http://localhost:8000/iiif/manifest/test.json',
+                canvasId: 'http://localhost:8000/iiif/canvas/1',
+                target: { x, y, width: 0, height: 0 },
+                body: {
+                    type: 'TextualBody',
+                    value: text,
+                    format: 'text/plain',
+                    language: 'en'
+                },
+                created: new Date().toISOString(),
+                modified: new Date().toISOString()
+            };
+
+            try {
+                const start = performance.now();
+                const transaction = db.transaction([STORE_NAME], 'readwrite');
+                const objectStore = transaction.objectStore(STORE_NAME);
+                const request = objectStore.add(annotation);
+
+                request.onsuccess = () => {
+                    const elapsed = (performance.now() - start).toFixed(2);
+                    resultEl.className = 'result success';
+                    resultEl.textContent = `✓ Annotation created successfully\nID: ${annotation.id}\nTime: ${elapsed}ms\n\n${JSON.stringify(annotation, null, 2)}`;
+                    updateStats();
+                    document.getElementById('stat-time').textContent = `${elapsed}ms`;
+                };
+
+                request.onerror = () => {
+                    throw new Error('Failed to create annotation');
+                };
+            } catch (error) {
+                resultEl.className = 'result error';
+                resultEl.textContent = `✗ Error: ${error.message}`;
+            }
+        }
+
+        // Get all annotations
+        async function getAllAnnotations() {
+            const resultEl = document.getElementById('read-result');
+            resultEl.style.display = 'block';
+
+            if (!db) {
+                resultEl.className = 'result error';
+                resultEl.textContent = '✗ Please initialize database first';
+                return;
+            }
+
+            try {
+                const start = performance.now();
+                const transaction = db.transaction([STORE_NAME], 'readonly');
+                const objectStore = transaction.objectStore(STORE_NAME);
+                const request = objectStore.getAll();
+
+                request.onsuccess = () => {
+                    const elapsed = (performance.now() - start).toFixed(2);
+                    const annotations = request.result;
+                    resultEl.className = 'result success';
+                    resultEl.textContent = `✓ Retrieved ${annotations.length} annotation(s)\nTime: ${elapsed}ms\n\n${JSON.stringify(annotations, null, 2)}`;
+                    document.getElementById('stat-time').textContent = `${elapsed}ms`;
+                };
+
+                request.onerror = () => {
+                    throw new Error('Failed to retrieve annotations');
+                };
+            } catch (error) {
+                resultEl.className = 'result error';
+                resultEl.textContent = `✗ Error: ${error.message}`;
+            }
+        }
+
+        // Get annotations by canvas
+        async function getByCanvas() {
+            const resultEl = document.getElementById('read-result');
+            resultEl.style.display = 'block';
+
+            if (!db) {
+                resultEl.className = 'result error';
+                resultEl.textContent = '✗ Please initialize database first';
+                return;
+            }
+
+            try {
+                const start = performance.now();
+                const transaction = db.transaction([STORE_NAME], 'readonly');
+                const objectStore = transaction.objectStore(STORE_NAME);
+                const index = objectStore.index('canvasId');
+                const request = index.getAll('http://localhost:8000/iiif/canvas/1');
+
+                request.onsuccess = () => {
+                    const elapsed = (performance.now() - start).toFixed(2);
+                    const annotations = request.result;
+                    resultEl.className = 'result success';
+                    resultEl.textContent = `✓ Retrieved ${annotations.length} annotation(s) for canvas\nTime: ${elapsed}ms\n\n${JSON.stringify(annotations, null, 2)}`;
+                    document.getElementById('stat-time').textContent = `${elapsed}ms`;
+                };
+
+                request.onerror = () => {
+                    throw new Error('Failed to retrieve annotations by canvas');
+                };
+            } catch (error) {
+                resultEl.className = 'result error';
+                resultEl.textContent = `✗ Error: ${error.message}`;
+            }
+        }
+
+        // Update annotation
+        async function updateAnnotation() {
+            const resultEl = document.getElementById('update-result');
+            resultEl.style.display = 'block';
+
+            if (!db) {
+                resultEl.className = 'result error';
+                resultEl.textContent = '✗ Please initialize database first';
+                return;
+            }
+
+            const id = document.getElementById('update-id').value;
+            const newText = document.getElementById('update-text').value;
+
+            if (!id || !newText) {
+                resultEl.className = 'result error';
+                resultEl.textContent = '✗ Please provide both ID and new text';
+                return;
+            }
+
+            try {
+                const start = performance.now();
+                const transaction = db.transaction([STORE_NAME], 'readwrite');
+                const objectStore = transaction.objectStore(STORE_NAME);
+                
+                // First, get the annotation
+                const getRequest = objectStore.get(id);
+
+                getRequest.onsuccess = () => {
+                    const annotation = getRequest.result;
+                    if (!annotation) {
+                        resultEl.className = 'result error';
+                        resultEl.textContent = `✗ Annotation with ID ${id} not found`;
+                        return;
+                    }
+
+                    // Update the annotation
+                    annotation.body.value = newText;
+                    annotation.modified = new Date().toISOString();
+
+                    const updateRequest = objectStore.put(annotation);
+
+                    updateRequest.onsuccess = () => {
+                        const elapsed = (performance.now() - start).toFixed(2);
+                        resultEl.className = 'result success';
+                        resultEl.textContent = `✓ Annotation updated successfully\nTime: ${elapsed}ms\n\n${JSON.stringify(annotation, null, 2)}`;
+                        document.getElementById('stat-time').textContent = `${elapsed}ms`;
+                    };
+                };
+
+                getRequest.onerror = () => {
+                    throw new Error('Failed to retrieve annotation');
+                };
+            } catch (error) {
+                resultEl.className = 'result error';
+                resultEl.textContent = `✗ Error: ${error.message}`;
+            }
+        }
+
+        // Delete annotation
+        async function deleteAnnotation() {
+            const resultEl = document.getElementById('delete-result');
+            resultEl.style.display = 'block';
+
+            if (!db) {
+                resultEl.className = 'result error';
+                resultEl.textContent = '✗ Please initialize database first';
+                return;
+            }
+
+            const id = document.getElementById('delete-id').value;
+
+            if (!id) {
+                resultEl.className = 'result error';
+                resultEl.textContent = '✗ Please provide annotation ID';
+                return;
+            }
+
+            try {
+                const start = performance.now();
+                const transaction = db.transaction([STORE_NAME], 'readwrite');
+                const objectStore = transaction.objectStore(STORE_NAME);
+                const request = objectStore.delete(id);
+
+                request.onsuccess = () => {
+                    const elapsed = (performance.now() - start).toFixed(2);
+                    resultEl.className = 'result success';
+                    resultEl.textContent = `✓ Annotation deleted successfully\nID: ${id}\nTime: ${elapsed}ms`;
+                    updateStats();
+                    document.getElementById('stat-time').textContent = `${elapsed}ms`;
+                };
+
+                request.onerror = () => {
+                    throw new Error('Failed to delete annotation');
+                };
+            } catch (error) {
+                resultEl.className = 'result error';
+                resultEl.textContent = `✗ Error: ${error.message}`;
+            }
+        }
+
+        // Clear all annotations
+        async function clearAllAnnotations() {
+            if (!confirm('Are you sure you want to delete ALL annotations?')) {
+                return;
+            }
+
+            const resultEl = document.getElementById('delete-result');
+            resultEl.style.display = 'block';
+
+            if (!db) {
+                resultEl.className = 'result error';
+                resultEl.textContent = '✗ Please initialize database first';
+                return;
+            }
+
+            try {
+                const start = performance.now();
+                const transaction = db.transaction([STORE_NAME], 'readwrite');
+                const objectStore = transaction.objectStore(STORE_NAME);
+                const request = objectStore.clear();
+
+                request.onsuccess = () => {
+                    const elapsed = (performance.now() - start).toFixed(2);
+                    resultEl.className = 'result success';
+                    resultEl.textContent = `✓ All annotations cleared\nTime: ${elapsed}ms`;
+                    updateStats();
+                    document.getElementById('stat-time').textContent = `${elapsed}ms`;
+                };
+
+                request.onerror = () => {
+                    throw new Error('Failed to clear annotations');
+                };
+            } catch (error) {
+                resultEl.className = 'result error';
+                resultEl.textContent = `✗ Error: ${error.message}`;
+            }
+        }
+
+        // Performance test - create many annotations
+        async function performanceTest() {
+            const resultEl = document.getElementById('performance-result');
+            resultEl.style.display = 'block';
+
+            if (!db) {
+                resultEl.className = 'result error';
+                resultEl.textContent = '✗ Please initialize database first';
+                return;
+            }
+
+            resultEl.className = 'result';
+            resultEl.textContent = 'Creating 100 annotations...';
+
+            try {
+                const start = performance.now();
+                const transaction = db.transaction([STORE_NAME], 'readwrite');
+                const objectStore = transaction.objectStore(STORE_NAME);
+
+                for (let i = 0; i < 100; i++) {
+                    const annotation = {
+                        id: generateUUID(),
+                        manifestUrl: 'http://localhost:8000/iiif/manifest/test.json',
+                        canvasId: 'http://localhost:8000/iiif/canvas/1',
+                        target: { 
+                            x: Math.floor(Math.random() * 1000), 
+                            y: Math.floor(Math.random() * 1000),
+                            width: 0,
+                            height: 0
+                        },
+                        body: {
+                            type: 'TextualBody',
+                            value: `Performance test annotation ${i + 1}`,
+                            format: 'text/plain',
+                            language: 'en'
+                        },
+                        created: new Date().toISOString(),
+                        modified: new Date().toISOString()
+                    };
+                    objectStore.add(annotation);
+                }
+
+                transaction.oncomplete = () => {
+                    const elapsed = (performance.now() - start).toFixed(2);
+                    resultEl.className = 'result success';
+                    resultEl.textContent = `✓ Created 100 annotations\nTotal time: ${elapsed}ms\nAverage: ${(elapsed / 100).toFixed(2)}ms per annotation`;
+                    updateStats();
+                    document.getElementById('stat-time').textContent = `${elapsed}ms`;
+                };
+
+                transaction.onerror = () => {
+                    throw new Error('Performance test failed');
+                };
+            } catch (error) {
+                resultEl.className = 'result error';
+                resultEl.textContent = `✗ Error: ${error.message}`;
+            }
+        }
+
+        // Performance test - read many annotations
+        async function performanceRead() {
+            const resultEl = document.getElementById('performance-result');
+            resultEl.style.display = 'block';
+
+            if (!db) {
+                resultEl.className = 'result error';
+                resultEl.textContent = '✗ Please initialize database first';
+                return;
+            }
+
+            try {
+                const start = performance.now();
+                const transaction = db.transaction([STORE_NAME], 'readonly');
+                const objectStore = transaction.objectStore(STORE_NAME);
+                const request = objectStore.getAll();
+
+                request.onsuccess = () => {
+                    const elapsed = (performance.now() - start).toFixed(2);
+                    const count = request.result.length;
+                    resultEl.className = 'result success';
+                    resultEl.textContent = `✓ Read ${count} annotations\nTotal time: ${elapsed}ms\nAverage: ${(elapsed / Math.max(count, 1)).toFixed(2)}ms per annotation`;
+                    document.getElementById('stat-time').textContent = `${elapsed}ms`;
+                };
+
+                request.onerror = () => {
+                    throw new Error('Performance read test failed');
+                };
+            } catch (error) {
+                resultEl.className = 'result error';
+                resultEl.textContent = `✗ Error: ${error.message}`;
+            }
+        }
+
+        // Update statistics
+        async function updateStats() {
+            if (!db) return;
+
+            const transaction = db.transaction([STORE_NAME], 'readonly');
+            const objectStore = transaction.objectStore(STORE_NAME);
+            const request = objectStore.getAll();
+
+            request.onsuccess = () => {
+                const annotations = request.result;
+                const count = annotations.length;
+                const size = JSON.stringify(annotations).length;
+
+                document.getElementById('stat-count').textContent = count;
+                document.getElementById('stat-size').textContent = `${(size / 1024).toFixed(2)} KB`;
+            };
+        }
+
+        // Auto-initialize on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            initDB();
+        });
+    </script>
+</body>
+</html>
