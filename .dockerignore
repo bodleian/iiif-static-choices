@@ -7,6 +7,8 @@ data/iiif/*
 data/cartoon-raphaelsection-1/*
 data/mirador
 
+# Exclude problematic mirador symlink
+mirador/mirador
 
 # Exclude example directories and generated data
 examples/

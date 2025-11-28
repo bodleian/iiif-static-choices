@@ -35,7 +35,7 @@ RUN cd /app && \
 
 # Install Node.js dependencies for web interface
 WORKDIR /app/docker-gui/web-interface
-RUN npm install
+RUN npm install --legacy-peer-deps
 
 # Prepare directories for tiles and manifests
 WORKDIR /app

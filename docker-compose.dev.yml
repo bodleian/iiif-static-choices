@@ -12,6 +12,7 @@ services:
       - ./data:/app/data
       - ./iiif:/app/iiif
       - ./mirador:/app/mirador
+      - ./index.html:/app/index.html
       - ./openseadragon:/app/openseadragon
       - ./tiler:/app/tiler
       - ./manifest:/app/manifest
