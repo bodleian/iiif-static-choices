@@ -23,7 +23,7 @@ The tile generation part of this project is based on and translated from the wor
 Dependencies
 ===
 
-- Python 3.9
+- Python 3.10
 - Poetry
 
 Installation Instructions
