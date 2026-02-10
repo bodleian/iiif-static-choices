@@ -32,6 +32,7 @@ Installation Instructions
 Install the project after installing Python and Poetry, as follows:
 
 ```bash
+poetry env use python3.10
 poetry install --no-root
 ```
 
