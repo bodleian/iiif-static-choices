@@ -1,5 +1,5 @@
 # Dockerfile.dev - Based on working Dockerfile.main with development optimizations
-FROM python:3.9-slim
+FROM python:3.10-slim
 
 # Environment variables for development
 ENV PYTHONDONTWRITEBYTECODE=1

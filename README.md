@@ -23,7 +23,7 @@ The tile generation part of this project is based on and translated from the wor
 Dependencies
 ===
 
-- Python 3.9
+- Python 3.10
 - Poetry
 
 Installation Instructions
@@ -32,6 +32,7 @@ Installation Instructions
 Install the project after installing Python and Poetry, as follows:
 
 ```bash
+poetry env use python3.10
 poetry install --no-root
 ```
 
