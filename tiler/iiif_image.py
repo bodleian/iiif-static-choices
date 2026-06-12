@@ -8,8 +8,8 @@ Copyright © 2024 Bodleian Libraries
 """
 
 import os
-import imageio
 import numpy
+from PIL import Image
 
 from typing import Optional
 
@@ -40,7 +40,7 @@ class IIIFImage:
         :param image_file: String containing the path to the image file you want to open as an array.
         """
         try:
-            self.image: numpy.ndarray = imageio.v2.imread(image_file)
+            self.image: numpy.ndarray = numpy.array(Image.open(image_file))
         except IOError as error:
             raise error
         self.set_id(os.path.splitext(image_file)[0])

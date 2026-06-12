@@ -6,10 +6,10 @@
 
 Copyright © 2024 Bodleian Libraries
 """
-
-import imageio
 import os
+import numpy
 
+from PIL import Image
 from helpers.images.images import create_thumbnail
 from typing import Dict, List, Tuple
 
@@ -83,8 +83,9 @@ class Items:
         :param image_path: String containing the path to the image to get metrics from.
         :return: Dictionary containing the image width and height.
         """
-        image = imageio.v2.imread(image_path)
+        image = numpy.array(Image.open(image_path))
         image_shape: Tuple = image.shape
+        
         image_data: Dict = {
             "image_width": image_shape[1],
             "image_height": image_shape[0]
