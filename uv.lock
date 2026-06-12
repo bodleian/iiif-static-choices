@@ -3,7 +3,7 @@ revision = 3
 requires-python = ">=3.12"
 
 [options]
-exclude-newer = "2026-06-04T15:23:11.965760096Z"
+exclude-newer = "2026-06-05T09:23:24.143505459Z"
 exclude-newer-span = "P7D"
 
 [[package]]
@@ -18,9 +18,9 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
-    { name = "numpy", specifier = ">=2.4.6" },
-    { name = "pillow", specifier = ">=12.2.0,<13" },
-    { name = "pyyaml", specifier = ">=6.0.1,<7" },
+    { name = "numpy", specifier = "==2.4.6" },
+    { name = "pillow", specifier = "==12.2.0" },
+    { name = "pyyaml", specifier = "==6.0.1" },
 ]
 
 [[package]]
