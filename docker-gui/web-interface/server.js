@@ -341,14 +341,14 @@ app.post('/upload', upload.fields([
       // Return success response
       res.json({
         success: true,
-        message: 'Visor generado correctamente',
+        message: 'Viewer successfully generated',
         viewerUrl,
         manifestUrl
       });
     } catch (error) {
       return res.status(500).json({
         success: false,
-        message: 'Error procesando imágenes',
+        message: 'Image processing error',
         error: error.stderr || error.message
       });
     }
@@ -356,7 +356,7 @@ app.post('/upload', upload.fields([
     console.error(`Error uploading files: ${err}`);
     res.status(500).json({
       success: false,
-      message: 'Error interno del servidor',
+      message: 'Internal server error',
       error: err.message
     });
   }
