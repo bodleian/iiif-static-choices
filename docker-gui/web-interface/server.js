@@ -325,13 +325,13 @@ app.post('/upload', upload.fields([
 
     try {
       // Generate manifest
-      await execCommand(`cd /app && python iiif_generator.py manifest -f ${outputId}-config.yml -o ${outputId}.json`);
+      await execCommand(`cd /app && uv run python iiif_generator.py manifest -f ${outputId}-config.yml -o ${outputId}.json`);
       console.log('Manifest generated. Generating tiles...');
 
       // Generate tiles
-      await execCommand(`cd /app && python iiif_generator.py tiles -t 256 -v 3.0 -f ${outputId}-config.yml`);
+      await execCommand(`cd /app && uv run python iiif_generator.py tiles -t 256 -v 3.0 -f ${outputId}-config.yml`);
       console.log('Tiles generated. Generating viewer page...');
-      
+
       // Fix URLs in generated files
       fixUrlsInGeneratedFiles(outputId, [albedoId, normalsId]);
 
