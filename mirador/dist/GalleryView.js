@@ -1,535 +1,488 @@
-import { bd as z, r as f, w as P, h as K, b as S, j as W, bc as F, R as u, cJ as G, aC as g, cK as M, bv as I, b2 as B, a1 as A, a3 as E, cL as H, cM as L, cN as J, cO as Q, av as U, cP as X, cQ as Y, cR as Z, cS as ee, aP as te, P as ne, a2 as re, cT as ae, b9 as oe } from "./index.js";
-import { A as ie } from "./WorkspaceArea.js";
-const se = z(/* @__PURE__ */ f.createElement("path", {
-  d: "M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"
-}));
-var ce = function(e) {
-  return {
-    /* Styles applied to the root element. */
-    root: {
-      position: "relative",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      flexShrink: 0,
-      width: 40,
-      height: 40,
-      fontFamily: e.typography.fontFamily,
-      fontSize: e.typography.pxToRem(20),
-      lineHeight: 1,
-      borderRadius: "50%",
-      overflow: "hidden",
-      userSelect: "none"
-    },
-    /* Styles applied to the root element if not `src` or `srcSet`. */
-    colorDefault: {
-      color: e.palette.background.default,
-      backgroundColor: e.palette.type === "light" ? e.palette.grey[400] : e.palette.grey[600]
-    },
-    /* Styles applied to the root element if `variant="circle"`. */
-    circle: {},
-    /* Styles applied to the root element if `variant="circular"`. */
-    circular: {},
-    /* Styles applied to the root element if `variant="rounded"`. */
-    rounded: {
-      borderRadius: e.shape.borderRadius
-    },
-    /* Styles applied to the root element if `variant="square"`. */
-    square: {
-      borderRadius: 0
-    },
-    /* Styles applied to the img element if either `src` or `srcSet` is defined. */
-    img: {
-      width: "100%",
-      height: "100%",
-      textAlign: "center",
-      // Handle non-square image. The property isn't supported by IE 11.
-      objectFit: "cover",
-      // Hide alt text.
-      color: "transparent",
-      // Hide the image broken icon, only works on Chrome.
-      textIndent: 1e4
-    },
-    /* Styles applied to the fallback icon */
-    fallback: {
-      width: "75%",
-      height: "75%"
-    }
-  };
+import { o as e } from "./chunk.js";
+import { $t as t, Ai as n, Bt as r, Ci as i, D as a, G as o, K as s, Ln as c, Oi as l, R as u, bn as d, da as f, gn as p, gr as m, mr as ee, oa as h, or as g, sa as _, sr as v, ta as y, vt as b, wi as te } from "./selectors.js";
+import { M as x, Z as S, t as C, x as w } from "./actions.js";
+import { t as ne } from "./Paper.js";
+import { t as re } from "./classnames.js";
+import { i as ie, n as T, r as ae, t as oe } from "./SearchSharp.js";
+import { M as se, j as ce } from "./ButtonBase.js";
+import { n as le } from "./WorkspaceArea.js";
+//#region node_modules/@material-ui/core/esm/internal/svg-icons/Person.js
+var E = /* @__PURE__ */ e(f());
+se();
+var ue = ce(/*#__PURE__*/ E.createElement("path", { d: "M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" }), "Person");
+_(), te(), m(), g();
+var de = function(e) {
+	return {
+		root: {
+			position: "relative",
+			display: "flex",
+			alignItems: "center",
+			justifyContent: "center",
+			flexShrink: 0,
+			width: 40,
+			height: 40,
+			fontFamily: e.typography.fontFamily,
+			fontSize: e.typography.pxToRem(20),
+			lineHeight: 1,
+			borderRadius: "50%",
+			overflow: "hidden",
+			userSelect: "none"
+		},
+		colorDefault: {
+			color: e.palette.background.default,
+			backgroundColor: e.palette.type === "light" ? e.palette.grey[400] : e.palette.grey[600]
+		},
+		circle: {},
+		circular: {},
+		rounded: { borderRadius: e.shape.borderRadius },
+		square: { borderRadius: 0 },
+		img: {
+			width: "100%",
+			height: "100%",
+			textAlign: "center",
+			objectFit: "cover",
+			color: "transparent",
+			textIndent: 1e4
+		},
+		fallback: {
+			width: "75%",
+			height: "75%"
+		}
+	};
 };
-function le(t) {
-  var e = t.src, r = t.srcSet, n = f.useState(!1), i = n[0], o = n[1];
-  return f.useEffect(function() {
-    if (!(!e && !r)) {
-      o(!1);
-      var s = !0, a = new Image();
-      return a.src = e, a.srcSet = r, a.onload = function() {
-        s && o("loaded");
-      }, a.onerror = function() {
-        s && o("error");
-      }, function() {
-        s = !1;
-      };
-    }
-  }, [e, r]), i;
+function D(e) {
+	var t = e.src, n = e.srcSet, r = E.useState(!1), i = r[0], a = r[1];
+	return E.useEffect(function() {
+		if (!(!t && !n)) {
+			a(!1);
+			var e = !0, r = new Image();
+			return r.src = t, r.srcSet = n, r.onload = function() {
+				e && a("loaded");
+			}, r.onerror = function() {
+				e && a("error");
+			}, function() {
+				e = !1;
+			};
+		}
+	}, [t, n]), i;
 }
-var ue = /* @__PURE__ */ f.forwardRef(function(e, r) {
-  var n = e.alt, i = e.children, o = e.classes, s = e.className, a = e.component, c = a === void 0 ? "div" : a, l = e.imgProps, p = e.sizes, d = e.src, v = e.srcSet, O = e.variant, D = O === void 0 ? "circular" : O, q = K(e, ["alt", "children", "classes", "className", "component", "imgProps", "sizes", "src", "srcSet", "variant"]), h = null, V = le({
-    src: d,
-    srcSet: v
-  }), _ = d || v, j = _ && V !== "error";
-  return j ? h = /* @__PURE__ */ f.createElement("img", S({
-    alt: n,
-    src: d,
-    srcSet: v,
-    sizes: p,
-    className: o.img
-  }, l)) : i != null ? h = i : _ && n ? h = n[0] : h = /* @__PURE__ */ f.createElement(se, {
-    className: o.fallback
-  }), /* @__PURE__ */ f.createElement(c, S({
-    className: W(o.root, o.system, o[D], s, !j && o.colorDefault),
-    ref: r
-  }, q), h);
-});
-const $ = P(ce, {
-  name: "MuiAvatar"
-})(ue);
-function fe(t, e) {
-  if (!(t instanceof e)) throw new TypeError("Cannot call a class as a function");
+var O = /*#__PURE__*/ E.forwardRef(function(e, t) {
+	var n = e.alt, r = e.children, a = e.classes, o = e.className, s = e.component, c = s === void 0 ? "div" : s, l = e.imgProps, u = e.sizes, d = e.src, f = e.srcSet, p = e.variant, m = p === void 0 ? "circular" : p, g = i(e, [
+		"alt",
+		"children",
+		"classes",
+		"className",
+		"component",
+		"imgProps",
+		"sizes",
+		"src",
+		"srcSet",
+		"variant"
+	]), _ = null, v = D({
+		src: d,
+		srcSet: f
+	}), y = d || f, b = y && v !== "error";
+	return _ = b ? /*#__PURE__*/ E.createElement("img", h({
+		alt: n,
+		src: d,
+		srcSet: f,
+		sizes: u,
+		className: a.img
+	}, l)) : r ?? (y && n ? n[0] : /*#__PURE__*/ E.createElement(ue, { className: a.fallback })), /*#__PURE__*/ E.createElement(c, h({
+		className: ee(a.root, a.system, a[m], o, !b && a.colorDefault),
+		ref: t
+	}, g), _);
+}), k = v(de, { name: "MuiAvatar" })(O);
+//#endregion
+//#region node_modules/mirador/dist/es/src/components/GalleryViewThumbnail.js
+n();
+var A = /* @__PURE__ */ e(d()), j = /* @__PURE__ */ e(le()), M = /* @__PURE__ */ e(oe()), N = /* @__PURE__ */ e(re());
+function P(e, t) {
+	if (!(e instanceof t)) throw TypeError("Cannot call a class as a function");
 }
-function pe(t, e) {
-  for (var r = 0; r < e.length; r++) {
-    var n = e[r];
-    n.enumerable = n.enumerable || !1, n.configurable = !0, "value" in n && (n.writable = !0), Object.defineProperty(t, ve(n.key), n);
-  }
+function F(e, t) {
+	for (var n = 0; n < t.length; n++) {
+		var r = t[n];
+		r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(e, L(r.key), r);
+	}
 }
-function de(t, e, r) {
-  return e && pe(t.prototype, e), Object.defineProperty(t, "prototype", { writable: !1 }), t;
+function I(e, t, n) {
+	return t && F(e.prototype, t), n && F(e, n), Object.defineProperty(e, "prototype", { writable: !1 }), e;
 }
-function ve(t) {
-  var e = he(t, "string");
-  return typeof e == "symbol" ? e : e + "";
+function L(e) {
+	var t = R(e, "string");
+	return typeof t == "symbol" ? t : t + "";
 }
-function he(t, e) {
-  if (typeof t != "object" || !t) return t;
-  var r = t[Symbol.toPrimitive];
-  if (r !== void 0) {
-    var n = r.call(t, e);
-    if (typeof n != "object") return n;
-    throw new TypeError("@@toPrimitive must return a primitive value.");
-  }
-  return String(t);
+function R(e, t) {
+	if (typeof e != "object" || !e) return e;
+	var n = e[Symbol.toPrimitive];
+	if (n !== void 0) {
+		var r = n.call(e, t || "default");
+		if (typeof r != "object") return r;
+		throw TypeError("@@toPrimitive must return a primitive value.");
+	}
+	return (t === "string" ? String : Number)(e);
 }
-function ye(t, e, r) {
-  return e = y(e), me(t, T() ? Reflect.construct(e, r || [], y(t).constructor) : e.apply(t, r));
+function z(e, t, n) {
+	return t = U(t), B(e, H() ? Reflect.construct(t, n || [], U(e).constructor) : t.apply(e, n));
 }
-function me(t, e) {
-  if (e && (typeof e == "object" || typeof e == "function")) return e;
-  if (e !== void 0) throw new TypeError("Derived constructors may only return object or undefined");
-  return ge(t);
+function B(e, t) {
+	if (t && (typeof t == "object" || typeof t == "function")) return t;
+	if (t !== void 0) throw TypeError("Derived constructors may only return object or undefined");
+	return V(e);
 }
-function ge(t) {
-  if (t === void 0) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-  return t;
+function V(e) {
+	if (e === void 0) throw ReferenceError("this hasn't been initialised - super() hasn't been called");
+	return e;
 }
-function T() {
-  try {
-    var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function() {
-    }));
-  } catch {
-  }
-  return (T = function() {
-    return !!t;
-  })();
+function H() {
+	try {
+		var e = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function() {}));
+	} catch {}
+	return (H = function() {
+		return !!e;
+	})();
 }
-function y(t) {
-  return y = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function(e) {
-    return e.__proto__ || Object.getPrototypeOf(e);
-  }, y(t);
+function U(e) {
+	return U = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function(e) {
+		return e.__proto__ || Object.getPrototypeOf(e);
+	}, U(e);
 }
-function be(t, e) {
-  if (typeof e != "function" && e !== null) throw new TypeError("Super expression must either be null or a function");
-  t.prototype = Object.create(e && e.prototype, { constructor: { value: t, writable: !0, configurable: !0 } }), Object.defineProperty(t, "prototype", { writable: !1 }), e && w(t, e);
+function fe(e, t) {
+	if (typeof t != "function" && t !== null) throw TypeError("Super expression must either be null or a function");
+	e.prototype = Object.create(t && t.prototype, { constructor: {
+		value: e,
+		writable: !0,
+		configurable: !0
+	} }), Object.defineProperty(e, "prototype", { writable: !1 }), t && W(e, t);
 }
-function w(t, e) {
-  return w = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function(r, n) {
-    return r.__proto__ = n, r;
-  }, w(t, e);
+function W(e, t) {
+	return W = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function(e, t) {
+		return e.__proto__ = t, e;
+	}, W(e, t);
 }
-var k = /* @__PURE__ */ function(t) {
-  function e(r) {
-    var n;
-    return fe(this, e), n = ye(this, e, [r]), n.state = {
-      requestedAnnotations: !1
-    }, n.handleSelect = n.handleSelect.bind(n), n.handleKey = n.handleKey.bind(n), n.handleIntersection = n.handleIntersection.bind(n), n;
-  }
-  return be(e, t), de(e, [{
-    key: "handleSelect",
-    value: function() {
-      var n = this.props, i = n.canvas, o = n.selected, s = n.setCanvas, a = n.focusOnCanvas;
-      o ? a() : s(i.id);
-    }
-    /** @private */
-  }, {
-    key: "handleKey",
-    value: function(n) {
-      var i = this.props, o = i.canvas, s = i.setCanvas, a = i.focusOnCanvas;
-      this.keys = {
-        enter: "Enter",
-        space: " "
-      }, this.chars = {
-        enter: 13,
-        space: 32
-      };
-      var c = n.key === this.keys.enter || n.which === this.chars.enter || n.key === this.keys.space || n.which === this.chars.space;
-      c ? a() : s(o.id);
-    }
-    /** */
-  }, {
-    key: "handleIntersection",
-    value: function(n) {
-      var i = n.isIntersecting, o = this.props, s = o.annotationsCount, a = o.requestCanvasAnnotations, c = this.state.requestedAnnotations;
-      !i || s === void 0 || s > 0 || c || (this.setState({
-        requestedAnnotations: !0
-      }), a());
-    }
-    /**
-     * Renders things
-     */
-  }, {
-    key: "render",
-    value: function() {
-      var n = this.props, i = n.annotationsCount, o = n.searchAnnotationsCount, s = n.canvas, a = n.classes, c = n.config, l = n.selected, p = new F(s);
-      return /* @__PURE__ */ u.createElement(G, {
-        onChange: this.handleIntersection
-      }, /* @__PURE__ */ u.createElement("div", {
-        key: s.index,
-        className: g(a.galleryViewItem, l ? a.selected : "", o > 0 ? a.hasAnnotations : ""),
-        onClick: this.handleSelect,
-        onKeyUp: this.handleKey,
-        role: "button",
-        tabIndex: 0
-      }, /* @__PURE__ */ u.createElement(M, {
-        resource: s,
-        labelled: !0,
-        variant: "outside",
-        maxWidth: c.width,
-        maxHeight: c.height,
-        style: {
-          margin: "0 auto",
-          maxWidth: "".concat(Math.ceil(c.height * p.aspectRatio), "px")
-        }
-      }, /* @__PURE__ */ u.createElement("div", {
-        className: a.chips
-      }, o > 0 && /* @__PURE__ */ u.createElement(I, {
-        avatar: /* @__PURE__ */ u.createElement($, {
-          className: a.avatar,
-          classes: {
-            circle: a.avatarIcon
-          }
-        }, /* @__PURE__ */ u.createElement(B, {
-          fontSize: "small"
-        })),
-        label: o,
-        className: g(a.searchChip),
-        size: "small"
-      }), (i || 0) > 0 && /* @__PURE__ */ u.createElement(I, {
-        avatar: /* @__PURE__ */ u.createElement($, {
-          className: a.avatar,
-          classes: {
-            circle: a.avatarIcon
-          }
-        }, /* @__PURE__ */ u.createElement(ie, {
-          className: a.annotationIcon
-        })),
-        label: i,
-        className: g(a.annotationsChip),
-        size: "small"
-      })))));
-    }
-  }]);
-}(f.Component);
-k.defaultProps = {
-  annotationsCount: void 0,
-  config: {
-    height: 100,
-    width: null
-  },
-  requestCanvasAnnotations: function() {
-  },
-  searchAnnotationsCount: 0,
-  selected: !1
-};
-function x(t, e) {
-  var r = Object.keys(t);
-  if (Object.getOwnPropertySymbols) {
-    var n = Object.getOwnPropertySymbols(t);
-    e && (n = n.filter(function(i) {
-      return Object.getOwnPropertyDescriptor(t, i).enumerable;
-    })), r.push.apply(r, n);
-  }
-  return r;
+var G = /*#__PURE__*/ function(e) {
+	function t(e) {
+		var n;
+		return P(this, t), n = z(this, t, [e]), n.state = { requestedAnnotations: !1 }, n.handleSelect = n.handleSelect.bind(n), n.handleKey = n.handleKey.bind(n), n.handleIntersection = n.handleIntersection.bind(n), n;
+	}
+	return fe(t, e), I(t, [
+		{
+			key: "handleSelect",
+			value: function() {
+				var e = this.props, t = e.canvas, n = e.selected, r = e.setCanvas, i = e.focusOnCanvas;
+				n ? i() : r(t.id);
+			}
+		},
+		{
+			key: "handleKey",
+			value: function(e) {
+				var t = this.props, n = t.canvas, r = t.setCanvas, i = t.focusOnCanvas;
+				this.keys = {
+					enter: "Enter",
+					space: " "
+				}, this.chars = {
+					enter: 13,
+					space: 32
+				}, e.key === this.keys.enter || e.which === this.chars.enter || e.key === this.keys.space || e.which === this.chars.space ? i() : r(n.id);
+			}
+		},
+		{
+			key: "handleIntersection",
+			value: function(e) {
+				var t = e.isIntersecting, n = this.props, r = n.annotationsCount, i = n.requestCanvasAnnotations, a = this.state.requestedAnnotations;
+				!t || r === void 0 || r > 0 || a || (this.setState({ requestedAnnotations: !0 }), i());
+			}
+		},
+		{
+			key: "render",
+			value: function() {
+				var e = this.props, t = e.annotationsCount, n = e.searchAnnotationsCount, r = e.canvas, i = e.classes, a = e.config, o = e.selected, s = new p(r);
+				return /*#__PURE__*/ E.createElement(ie, { onChange: this.handleIntersection }, /*#__PURE__*/ E.createElement("div", {
+					key: r.index,
+					className: (0, N.default)(i.galleryViewItem, o ? i.selected : "", n > 0 ? i.hasAnnotations : ""),
+					onClick: this.handleSelect,
+					onKeyUp: this.handleKey,
+					role: "button",
+					tabIndex: 0
+				}, /*#__PURE__*/ E.createElement(ae, {
+					resource: r,
+					labelled: !0,
+					variant: "outside",
+					maxWidth: a.width,
+					maxHeight: a.height,
+					style: {
+						margin: "0 auto",
+						maxWidth: `${Math.ceil(a.height * s.aspectRatio)}px`
+					}
+				}, /*#__PURE__*/ E.createElement("div", { className: i.chips }, n > 0 && /*#__PURE__*/ E.createElement(T, {
+					avatar: /*#__PURE__*/ E.createElement(k, {
+						className: i.avatar,
+						classes: { circle: i.avatarIcon }
+					}, /*#__PURE__*/ E.createElement(M.default, { fontSize: "small" })),
+					label: n,
+					className: (0, N.default)(i.searchChip),
+					size: "small"
+				}), (t || 0) > 0 && /*#__PURE__*/ E.createElement(T, {
+					avatar: /*#__PURE__*/ E.createElement(k, {
+						className: i.avatar,
+						classes: { circle: i.avatarIcon }
+					}, /*#__PURE__*/ E.createElement(j.default, { className: i.annotationIcon })),
+					label: t,
+					className: (0, N.default)(i.annotationsChip),
+					size: "small"
+				})))));
+			}
+		}
+	]);
+}(E.Component);
+//#endregion
+//#region node_modules/mirador/dist/es/src/containers/GalleryViewThumbnail.js
+G.defaultProps = {
+	annotationsCount: void 0,
+	config: {
+		height: 100,
+		width: null
+	},
+	requestCanvasAnnotations: function() {},
+	searchAnnotationsCount: 0,
+	selected: !1
+}, g();
+function K(e, t) {
+	var n = Object.keys(e);
+	if (Object.getOwnPropertySymbols) {
+		var r = Object.getOwnPropertySymbols(e);
+		t && (r = r.filter(function(t) {
+			return Object.getOwnPropertyDescriptor(e, t).enumerable;
+		})), n.push.apply(n, r);
+	}
+	return n;
 }
-function b(t) {
-  for (var e = 1; e < arguments.length; e++) {
-    var r = arguments[e] != null ? arguments[e] : {};
-    e % 2 ? x(Object(r), !0).forEach(function(n) {
-      we(t, n, r[n]);
-    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(t, Object.getOwnPropertyDescriptors(r)) : x(Object(r)).forEach(function(n) {
-      Object.defineProperty(t, n, Object.getOwnPropertyDescriptor(r, n));
-    });
-  }
-  return t;
+function q(e) {
+	for (var t = 1; t < arguments.length; t++) {
+		var n = arguments[t] == null ? {} : arguments[t];
+		t % 2 ? K(Object(n), !0).forEach(function(t) {
+			pe(e, t, n[t]);
+		}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(n)) : K(Object(n)).forEach(function(t) {
+			Object.defineProperty(e, t, Object.getOwnPropertyDescriptor(n, t));
+		});
+	}
+	return e;
 }
-function we(t, e, r) {
-  return (e = Ce(e)) in t ? Object.defineProperty(t, e, { value: r, enumerable: !0, configurable: !0, writable: !0 }) : t[e] = r, t;
+function pe(e, t, n) {
+	return (t = me(t)) in e ? Object.defineProperty(e, t, {
+		value: n,
+		enumerable: !0,
+		configurable: !0,
+		writable: !0
+	}) : e[t] = n, e;
 }
-function Ce(t) {
-  var e = Pe(t, "string");
-  return typeof e == "symbol" ? e : e + "";
+function me(e) {
+	var t = he(e, "string");
+	return typeof t == "symbol" ? t : t + "";
 }
-function Pe(t, e) {
-  if (typeof t != "object" || !t) return t;
-  var r = t[Symbol.toPrimitive];
-  if (r !== void 0) {
-    var n = r.call(t, e);
-    if (typeof n != "object") return n;
-    throw new TypeError("@@toPrimitive must return a primitive value.");
-  }
-  return (e === "string" ? String : Number)(t);
+function he(e, t) {
+	if (typeof e != "object" || !e) return e;
+	var n = e[Symbol.toPrimitive];
+	if (n !== void 0) {
+		var r = n.call(e, t || "default");
+		if (typeof r != "object") return r;
+		throw TypeError("@@toPrimitive must return a primitive value.");
+	}
+	return (t === "string" ? String : Number)(e);
 }
-var Oe = function(e) {
-  return {
-    annotationIcon: {
-      height: "1rem",
-      width: "1rem"
-    },
-    annotationsChip: b({}, e.typography.caption),
-    avatar: {
-      backgroundColor: "transparent"
-    },
-    chips: {
-      opacity: 0.875,
-      position: "absolute",
-      right: 0,
-      textAlign: "right",
-      top: 0
-    },
-    galleryViewItem: {
-      "&$hasAnnotations": {
-        border: "2px solid ".concat(e.palette.action.selected)
-      },
-      "&$selected,&$selected$hasAnnotations": {
-        border: "2px solid ".concat(e.palette.primary.main)
-      },
-      "&:focus": {
-        outline: "none"
-      },
-      "&:hover": {
-        backgroundColor: e.palette.action.hover
-      },
-      border: "2px solid transparent",
-      cursor: "pointer",
-      display: "inline-block",
-      margin: "".concat(e.spacing(1), "px ").concat(e.spacing(0.5), "px"),
-      maxHeight: function(n) {
-        return n.config.height + 45;
-      },
-      minWidth: "60px",
-      overflow: "hidden",
-      padding: e.spacing(0.5),
-      position: "relative",
-      width: "min-content"
-    },
-    hasAnnotations: {},
-    searchChip: b(b({}, e.typography.caption), {}, {
-      "&$selected $avatar": {
-        backgroundColor: e.palette.highlights.primary
-      },
-      marginTop: 2
-    }),
-    selected: {}
-  };
-}, _e = function(e, r) {
-  var n = r.canvas, i = r.windowId, o = H(e, {
-    windowId: i
-  }), s = L(e, {
-    windowId: i
-  }), a = J(s.map(function(l) {
-    return l.resources;
-  })).filter(function(l) {
-    return l.targetId === n.id;
-  }), c = Q(e, {
-    content: "annotations",
-    windowId: i
-  }).length > 0;
-  return {
-    annotationsCount: function() {
-      if (c) {
-        var l = X(e, {
-          canvasId: n.id
-        });
-        return l.reduce(function(p, d) {
-          return p + d.resources.filter(function(v) {
-            return v.targetId === n.id;
-          }).length;
-        }, 0);
-      }
-    }(),
-    config: U(e).galleryView,
-    searchAnnotationsCount: a.length,
-    selected: o && o.id === n.id
-  };
-}, je = function(e, r) {
-  var n = r.canvas;
-  r.id;
-  var i = r.windowId;
-  return {
-    focusOnCanvas: function() {
-      return e(te(i, "single"));
-    },
-    requestCanvasAnnotations: function() {
-      return e(ee(i, n.id));
-    },
-    setCanvas: function() {
-      for (var s = arguments.length, a = new Array(s), c = 0; c < s; c++)
-        a[c] = arguments[c];
-      return e(Y.apply(Z, [i].concat(a)));
-    }
-  };
-}, Se = A(
-  E(_e, je),
-  P(Oe)
-  // further HOC go here
-);
-const Ie = Se(k);
-function $e(t, e) {
-  if (!(t instanceof e)) throw new TypeError("Cannot call a class as a function");
+var ge = l(y(function(e, n) {
+	var i = n.canvas, o = n.windowId, c = s(e, { windowId: o }), l = (0, A.default)(a(e, { windowId: o }).map(function(e) {
+		return e.resources;
+	})).filter(function(e) {
+		return e.targetId === i.id;
+	}), d = t(e, {
+		content: "annotations",
+		windowId: o
+	}).length > 0;
+	return {
+		annotationsCount: function() {
+			if (d) return u(e, { canvasId: i.id }).reduce(function(e, t) {
+				return e + t.resources.filter(function(e) {
+					return e.targetId === i.id;
+				}).length;
+			}, 0);
+		}(),
+		config: r(e).galleryView,
+		searchAnnotationsCount: l.length,
+		selected: c && c.id === i.id
+	};
+}, function(e, t) {
+	var n = t.canvas;
+	t.id;
+	var r = t.windowId;
+	return {
+		focusOnCanvas: function() {
+			return e(S(r, "single"));
+		},
+		requestCanvasAnnotations: function() {
+			return e(w(r, n.id));
+		},
+		setCanvas: function() {
+			var t = [...arguments];
+			return e(x.apply(C, [r].concat(t)));
+		}
+	};
+}), v(function(e) {
+	return {
+		annotationIcon: {
+			height: "1rem",
+			width: "1rem"
+		},
+		annotationsChip: q({}, e.typography.caption),
+		avatar: { backgroundColor: "transparent" },
+		chips: {
+			opacity: .875,
+			position: "absolute",
+			right: 0,
+			textAlign: "right",
+			top: 0
+		},
+		galleryViewItem: {
+			"&$hasAnnotations": { border: `2px solid ${e.palette.action.selected}` },
+			"&$selected,&$selected$hasAnnotations": { border: `2px solid ${e.palette.primary.main}` },
+			"&:focus": { outline: "none" },
+			"&:hover": { backgroundColor: e.palette.action.hover },
+			border: "2px solid transparent",
+			cursor: "pointer",
+			display: "inline-block",
+			margin: `${e.spacing(1)}px ${e.spacing(.5)}px`,
+			maxHeight: function(e) {
+				return e.config.height + 45;
+			},
+			minWidth: "60px",
+			overflow: "hidden",
+			padding: e.spacing(.5),
+			position: "relative",
+			width: "min-content"
+		},
+		hasAnnotations: {},
+		searchChip: q(q({}, e.typography.caption), {}, {
+			"&$selected $avatar": { backgroundColor: e.palette.highlights.primary },
+			marginTop: 2
+		}),
+		selected: {}
+	};
+}))(G);
+//#endregion
+//#region node_modules/mirador/dist/es/src/components/GalleryView.js
+function _e(e, t) {
+	if (!(e instanceof t)) throw TypeError("Cannot call a class as a function");
 }
-function xe(t, e) {
-  for (var r = 0; r < e.length; r++) {
-    var n = e[r];
-    n.enumerable = n.enumerable || !1, n.configurable = !0, "value" in n && (n.writable = !0), Object.defineProperty(t, Ee(n.key), n);
-  }
+function J(e, t) {
+	for (var n = 0; n < t.length; n++) {
+		var r = t[n];
+		r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(e, ve(r.key), r);
+	}
 }
-function Ae(t, e, r) {
-  return e && xe(t.prototype, e), Object.defineProperty(t, "prototype", { writable: !1 }), t;
+function Y(e, t, n) {
+	return t && J(e.prototype, t), n && J(e, n), Object.defineProperty(e, "prototype", { writable: !1 }), e;
 }
-function Ee(t) {
-  var e = Te(t, "string");
-  return typeof e == "symbol" ? e : e + "";
+function ve(e) {
+	var t = ye(e, "string");
+	return typeof t == "symbol" ? t : t + "";
 }
-function Te(t, e) {
-  if (typeof t != "object" || !t) return t;
-  var r = t[Symbol.toPrimitive];
-  if (r !== void 0) {
-    var n = r.call(t, e);
-    if (typeof n != "object") return n;
-    throw new TypeError("@@toPrimitive must return a primitive value.");
-  }
-  return String(t);
+function ye(e, t) {
+	if (typeof e != "object" || !e) return e;
+	var n = e[Symbol.toPrimitive];
+	if (n !== void 0) {
+		var r = n.call(e, t || "default");
+		if (typeof r != "object") return r;
+		throw TypeError("@@toPrimitive must return a primitive value.");
+	}
+	return (t === "string" ? String : Number)(e);
 }
-function ke(t, e, r) {
-  return e = m(e), Re(t, R() ? Reflect.construct(e, r || [], m(t).constructor) : e.apply(t, r));
+function be(e, t, n) {
+	return t = Z(t), xe(e, X() ? Reflect.construct(t, n || [], Z(e).constructor) : t.apply(e, n));
 }
-function Re(t, e) {
-  if (e && (typeof e == "object" || typeof e == "function")) return e;
-  if (e !== void 0) throw new TypeError("Derived constructors may only return object or undefined");
-  return Ne(t);
+function xe(e, t) {
+	if (t && (typeof t == "object" || typeof t == "function")) return t;
+	if (t !== void 0) throw TypeError("Derived constructors may only return object or undefined");
+	return Se(e);
 }
-function Ne(t) {
-  if (t === void 0) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-  return t;
+function Se(e) {
+	if (e === void 0) throw ReferenceError("this hasn't been initialised - super() hasn't been called");
+	return e;
 }
-function R() {
-  try {
-    var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function() {
-    }));
-  } catch {
-  }
-  return (R = function() {
-    return !!t;
-  })();
+function X() {
+	try {
+		var e = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function() {}));
+	} catch {}
+	return (X = function() {
+		return !!e;
+	})();
 }
-function m(t) {
-  return m = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function(e) {
-    return e.__proto__ || Object.getPrototypeOf(e);
-  }, m(t);
+function Z(e) {
+	return Z = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function(e) {
+		return e.__proto__ || Object.getPrototypeOf(e);
+	}, Z(e);
 }
-function De(t, e) {
-  if (typeof e != "function" && e !== null) throw new TypeError("Super expression must either be null or a function");
-  t.prototype = Object.create(e && e.prototype, { constructor: { value: t, writable: !0, configurable: !0 } }), Object.defineProperty(t, "prototype", { writable: !1 }), e && C(t, e);
+function Ce(e, t) {
+	if (typeof t != "function" && t !== null) throw TypeError("Super expression must either be null or a function");
+	e.prototype = Object.create(t && t.prototype, { constructor: {
+		value: e,
+		writable: !0,
+		configurable: !0
+	} }), Object.defineProperty(e, "prototype", { writable: !1 }), t && Q(e, t);
 }
-function C(t, e) {
-  return C = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function(r, n) {
-    return r.__proto__ = n, r;
-  }, C(t, e);
+function Q(e, t) {
+	return Q = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function(e, t) {
+		return e.__proto__ = t, e;
+	}, Q(e, t);
 }
-var N = /* @__PURE__ */ function(t) {
-  function e() {
-    return $e(this, e), ke(this, e, arguments);
-  }
-  return De(e, t), Ae(e, [{
-    key: "render",
-    value: (
-      /**
-       * Renders things
-       */
-      function() {
-        var n = this.props, i = n.canvases, o = n.classes, s = n.viewingDirection, a = n.windowId, c = s === "right-to-left" ? "rtl" : "ltr";
-        return /* @__PURE__ */ u.createElement(ne, {
-          component: "section",
-          dir: c,
-          square: !0,
-          elevation: 0,
-          className: o.galleryContainer,
-          id: "".concat(a, "-gallery")
-        }, i.map(function(l) {
-          return /* @__PURE__ */ u.createElement(Ie, {
-            key: l.id,
-            windowId: a,
-            canvas: l
-          });
-        }));
-      }
-    )
-  }]);
-}(f.Component);
-N.defaultProps = {
-  classes: {},
-  viewingDirection: ""
-};
-var qe = function(e, r) {
-  var n = r.windowId;
-  return {
-    canvases: oe(e, {
-      windowId: n
-    }),
-    viewingDirection: ae(e, {
-      windowId: n
-    })
-  };
-}, Ve = function(e) {
-  return {
-    galleryContainer: {
-      alignItems: "flex-start",
-      display: "flex",
-      flexDirection: "row",
-      flexWrap: "wrap",
-      overflowX: "hidden",
-      overflowY: "scroll",
-      padding: "50px 0 50px 20px",
-      width: "100%"
-    }
-  };
-}, ze = A(
-  P(Ve),
-  E(qe),
-  re("GalleryView")
-  // further HOC go here
-);
-const Fe = ze(N);
-export {
-  Fe as default
-};
+var $ = /*#__PURE__*/ function(e) {
+	function t() {
+		return _e(this, t), be(this, t, arguments);
+	}
+	return Ce(t, e), Y(t, [{
+		key: "render",
+		value: function() {
+			var e = this.props, t = e.canvases, n = e.classes, r = e.viewingDirection, i = e.windowId, a = r === "right-to-left" ? "rtl" : "ltr";
+			return /*#__PURE__*/ E.createElement(ne, {
+				component: "section",
+				dir: a,
+				square: !0,
+				elevation: 0,
+				className: n.galleryContainer,
+				id: `${i}-gallery`
+			}, t.map(function(e) {
+				return /*#__PURE__*/ E.createElement(ge, {
+					key: e.id,
+					windowId: i,
+					canvas: e
+				});
+			}));
+		}
+	}]);
+}(E.Component);
+$.defaultProps = {
+	classes: {},
+	viewingDirection: ""
+}, n(), g();
+var we = l(v(function(e) {
+	return { galleryContainer: {
+		alignItems: "flex-start",
+		display: "flex",
+		flexDirection: "row",
+		flexWrap: "wrap",
+		overflowX: "hidden",
+		overflowY: "scroll",
+		padding: "50px 0 50px 20px",
+		width: "100%"
+	} };
+}), y(function(e, t) {
+	var n = t.windowId;
+	return {
+		canvases: o(e, { windowId: n }),
+		viewingDirection: b(e, { windowId: n })
+	};
+}), c("GalleryView"))($);
+//#endregion
+export { we as default };
+
 //# sourceMappingURL=GalleryView.js.map

@@ -1,133 +1,123 @@
-import { R as i, r as s, a1 as v, a2 as b, a3 as m, w, a5 as g, bC as h, av as O, cI as _ } from "./index.js";
-function P(t, e) {
-  if (!(t instanceof e)) throw new TypeError("Cannot call a class as a function");
+import { o as e } from "./chunk.js";
+import { $ as t, Ai as n, Bt as r, Ln as i, Oi as a, X as o, ci as s, da as c, or as l, sr as u, ta as d } from "./selectors.js";
+//#region node_modules/mirador/dist/es/src/components/VideoViewer.js
+n();
+var f = /* @__PURE__ */ e(c());
+function p(e, t) {
+	if (!(e instanceof t)) throw TypeError("Cannot call a class as a function");
 }
-function j(t, e) {
-  for (var n = 0; n < e.length; n++) {
-    var r = e[n];
-    r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(t, R(r.key), r);
-  }
+function m(e, t) {
+	for (var n = 0; n < t.length; n++) {
+		var r = t[n];
+		r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(e, g(r.key), r);
+	}
 }
-function C(t, e, n) {
-  return e && j(t.prototype, e), Object.defineProperty(t, "prototype", { writable: !1 }), t;
+function h(e, t, n) {
+	return t && m(e.prototype, t), n && m(e, n), Object.defineProperty(e, "prototype", { writable: !1 }), e;
 }
-function R(t) {
-  var e = E(t, "string");
-  return typeof e == "symbol" ? e : e + "";
+function g(e) {
+	var t = _(e, "string");
+	return typeof t == "symbol" ? t : t + "";
 }
-function E(t, e) {
-  if (typeof t != "object" || !t) return t;
-  var n = t[Symbol.toPrimitive];
-  if (n !== void 0) {
-    var r = n.call(t, e);
-    if (typeof r != "object") return r;
-    throw new TypeError("@@toPrimitive must return a primitive value.");
-  }
-  return String(t);
+function _(e, t) {
+	if (typeof e != "object" || !e) return e;
+	var n = e[Symbol.toPrimitive];
+	if (n !== void 0) {
+		var r = n.call(e, t || "default");
+		if (typeof r != "object") return r;
+		throw TypeError("@@toPrimitive must return a primitive value.");
+	}
+	return (t === "string" ? String : Number)(e);
 }
-function V(t, e, n) {
-  return e = a(e), T(t, l() ? Reflect.construct(e, n || [], a(t).constructor) : e.apply(t, n));
+function v(e, t, n) {
+	return t = S(t), y(e, x() ? Reflect.construct(t, n || [], S(e).constructor) : t.apply(e, n));
 }
-function T(t, e) {
-  if (e && (typeof e == "object" || typeof e == "function")) return e;
-  if (e !== void 0) throw new TypeError("Derived constructors may only return object or undefined");
-  return S(t);
+function y(e, t) {
+	if (t && (typeof t == "object" || typeof t == "function")) return t;
+	if (t !== void 0) throw TypeError("Derived constructors may only return object or undefined");
+	return b(e);
 }
-function S(t) {
-  if (t === void 0) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-  return t;
+function b(e) {
+	if (e === void 0) throw ReferenceError("this hasn't been initialised - super() hasn't been called");
+	return e;
 }
-function l() {
-  try {
-    var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function() {
-    }));
-  } catch {
-  }
-  return (l = function() {
-    return !!t;
-  })();
+function x() {
+	try {
+		var e = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function() {}));
+	} catch {}
+	return (x = function() {
+		return !!e;
+	})();
 }
-function a(t) {
-  return a = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function(e) {
-    return e.__proto__ || Object.getPrototypeOf(e);
-  }, a(t);
+function S(e) {
+	return S = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function(e) {
+		return e.__proto__ || Object.getPrototypeOf(e);
+	}, S(e);
 }
-function k(t, e) {
-  if (typeof e != "function" && e !== null) throw new TypeError("Super expression must either be null or a function");
-  t.prototype = Object.create(e && e.prototype, { constructor: { value: t, writable: !0, configurable: !0 } }), Object.defineProperty(t, "prototype", { writable: !1 }), e && c(t, e);
+function C(e, t) {
+	if (typeof t != "function" && t !== null) throw TypeError("Super expression must either be null or a function");
+	e.prototype = Object.create(t && t.prototype, { constructor: {
+		value: e,
+		writable: !0,
+		configurable: !0
+	} }), Object.defineProperty(e, "prototype", { writable: !1 }), t && w(e, t);
 }
-function c(t, e) {
-  return c = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function(n, r) {
-    return n.__proto__ = r, n;
-  }, c(t, e);
+function w(e, t) {
+	return w = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function(e, t) {
+		return e.__proto__ = t, e;
+	}, w(e, t);
 }
-var f = /* @__PURE__ */ function(t) {
-  function e() {
-    return P(this, e), V(this, e, arguments);
-  }
-  return k(e, t), C(e, [{
-    key: "render",
-    value: (
-      /* eslint-disable jsx-a11y/media-has-caption */
-      /** */
-      function() {
-        var r = this.props, p = r.captions, u = r.classes, d = r.videoOptions, y = r.videoResources;
-        return /* @__PURE__ */ i.createElement("div", {
-          className: u.container
-        }, /* @__PURE__ */ i.createElement("video", Object.assign({
-          className: u.video
-        }, d), y.map(function(o) {
-          return /* @__PURE__ */ i.createElement(s.Fragment, {
-            key: o.id
-          }, /* @__PURE__ */ i.createElement("source", {
-            src: o.id,
-            type: o.getFormat()
-          }));
-        }), p.map(function(o) {
-          return /* @__PURE__ */ i.createElement(s.Fragment, {
-            key: o.id
-          }, /* @__PURE__ */ i.createElement("track", {
-            src: o.id,
-            label: o.getDefaultLabel(),
-            srcLang: o.getProperty("language")
-          }));
-        })));
-      }
-    )
-    /* eslint-enable jsx-a11y/media-has-caption */
-  }]);
-}(s.Component);
-f.defaultProps = {
-  captions: [],
-  videoOptions: {},
-  videoResources: []
-};
-var x = function(e, n) {
-  var r = n.windowId;
-  return {
-    captions: _(e, {
-      windowId: r
-    }) || [],
-    videoOptions: O(e).videoOptions,
-    videoResources: h(e, {
-      windowId: r
-    }) || []
-  };
-}, I = function() {
-  return {
-    container: {
-      alignItems: "center",
-      display: "flex",
-      width: "100%"
-    },
-    video: {
-      maxHeight: "100%",
-      width: "100%"
-    }
-  };
-}, N = v(g(), w(I), m(x, null), b("VideoViewer"));
-const B = N(f);
-export {
-  B as default
-};
+var T = /*#__PURE__*/ function(e) {
+	function t() {
+		return p(this, t), v(this, t, arguments);
+	}
+	return C(t, e), h(t, [{
+		key: "render",
+		value: function() {
+			var e = this.props, t = e.captions, n = e.classes, r = e.videoOptions, i = e.videoResources;
+			return /*#__PURE__*/ f.createElement("div", { className: n.container }, /*#__PURE__*/ f.createElement("video", Object.assign({ className: n.video }, r), i.map(function(e) {
+				return /*#__PURE__*/ f.createElement(f.Fragment, { key: e.id }, /*#__PURE__*/ f.createElement("source", {
+					src: e.id,
+					type: e.getFormat()
+				}));
+			}), t.map(function(e) {
+				return /*#__PURE__*/ f.createElement(f.Fragment, { key: e.id }, /*#__PURE__*/ f.createElement("track", {
+					src: e.id,
+					label: e.getDefaultLabel(),
+					srcLang: e.getProperty("language")
+				}));
+			})));
+		}
+	}]);
+}(f.Component);
+//#endregion
+//#region node_modules/mirador/dist/es/src/containers/VideoViewer.js
+T.defaultProps = {
+	captions: [],
+	videoOptions: {},
+	videoResources: []
+}, l();
+var E = a(s(), u(function() {
+	return {
+		container: {
+			alignItems: "center",
+			display: "flex",
+			width: "100%"
+		},
+		video: {
+			maxHeight: "100%",
+			width: "100%"
+		}
+	};
+}), d(function(e, n) {
+	var i = n.windowId;
+	return {
+		captions: o(e, { windowId: i }) || [],
+		videoOptions: r(e).videoOptions,
+		videoResources: t(e, { windowId: i }) || []
+	};
+}, null), i("VideoViewer"))(T);
+//#endregion
+export { E as default };
+
 //# sourceMappingURL=VideoViewer.js.map
