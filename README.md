@@ -43,7 +43,7 @@ For this quick guide we'll be using the existing example images and manifest-con
 1. Run the tile generation as follows, this will generate v3 static tiles in the `iiif/image` folder:
 
     ```bash
-    uv run python iiif_generator.py tiles -t 256 -v 3.0
+    uv run python iiif_generator.py tiles -t 256 -v 3.0 -f ammonite-config.yml
     ```
     **Note**: for Windows/WSL users: Add `-i http://localhost:8000/iiif/ -d image` to the command to avoid connection issues.
 
