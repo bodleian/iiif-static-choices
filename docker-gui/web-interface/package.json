@@ -1,6 +1,9 @@
 {
   "name": "iiif-static-choices-gui",
   "version": "1.0.0",
+  "engines": {
+    "npm": ">=11.10.0"
+  },
   "description": "Interfaz web para IIIF Static Choices",
   "main": "server.js",
   "scripts": {
@@ -8,12 +11,12 @@
     "dev": "nodemon --max-old-space-size=8192 server.js"
   },
   "dependencies": {
-    "express": "^4.18.2",
-    "multer": "^2.0.0",
-    "ejs": "^3.1.9",
-    "body-parser": "^1.20.2",
-    "cors": "^2.8.5",
-    "archiver": "^5.3.1"
+    "express": "4.22.2",
+    "multer": "2.1.1",
+    "ejs": "3.1.10",
+    "body-parser": "1.20.5",
+    "cors": "2.8.5",
+    "archiver": "5.3.1"
   },
   "devDependencies": {
     "nodemon": "^3.0.1"

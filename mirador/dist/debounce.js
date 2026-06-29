@@ -1,0 +1,59 @@
+import { t as e } from "./chunk.js";
+import { Qi as t, Xn as n, qi as r } from "./selectors.js";
+//#region node_modules/lodash/now.js
+var i = /* @__PURE__ */ e(((e, n) => {
+	var r = t();
+	n.exports = function() {
+		return r.Date.now();
+	};
+})), a = /* @__PURE__ */ e(((e, t) => {
+	var a = r(), o = i(), s = n(), c = "Expected a function", l = Math.max, u = Math.min;
+	function d(e, t, n) {
+		var r, i, d, f, p, m, h = 0, g = !1, _ = !1, v = !0;
+		if (typeof e != "function") throw TypeError(c);
+		t = s(t) || 0, a(n) && (g = !!n.leading, _ = "maxWait" in n, d = _ ? l(s(n.maxWait) || 0, t) : d, v = "trailing" in n ? !!n.trailing : v);
+		function y(t) {
+			var n = r, a = i;
+			return r = i = void 0, h = t, f = e.apply(a, n), f;
+		}
+		function b(e) {
+			return h = e, p = setTimeout(C, t), g ? y(e) : f;
+		}
+		function x(e) {
+			var n = e - m, r = e - h, i = t - n;
+			return _ ? u(i, d - r) : i;
+		}
+		function S(e) {
+			var n = e - m, r = e - h;
+			return m === void 0 || n >= t || n < 0 || _ && r >= d;
+		}
+		function C() {
+			var e = o();
+			if (S(e)) return w(e);
+			p = setTimeout(C, x(e));
+		}
+		function w(e) {
+			return p = void 0, v && r ? y(e) : (r = i = void 0, f);
+		}
+		function T() {
+			p !== void 0 && clearTimeout(p), h = 0, r = m = i = p = void 0;
+		}
+		function E() {
+			return p === void 0 ? f : w(o());
+		}
+		function D() {
+			var e = o(), n = S(e);
+			if (r = arguments, i = this, m = e, n) {
+				if (p === void 0) return b(m);
+				if (_) return clearTimeout(p), p = setTimeout(C, t), y(m);
+			}
+			return p === void 0 && (p = setTimeout(C, t)), f;
+		}
+		return D.cancel = T, D.flush = E, D;
+	}
+	t.exports = d;
+}));
+//#endregion
+export { a as t };
+
+//# sourceMappingURL=debounce.js.map

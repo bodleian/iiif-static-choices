@@ -1,140 +1,137 @@
-import { a7 as m, a8 as y, a9 as b, aa as w, ab as _, R as i, x as g, a0 as C, r as P, a1 as S, a2 as I, a3 as O, bx as j, w as E, a5 as R, b5 as D } from "./index.js";
-import { S as p } from "./WorkspaceArea.js";
-var a = {}, f;
-function z() {
-  if (f) return a;
-  f = 1;
-  var t = m(), e = y();
-  Object.defineProperty(a, "__esModule", {
-    value: !0
-  }), a.default = void 0;
-  var o = e(b()), r = t(/* @__PURE__ */ w()), n = (0, r.default)(/* @__PURE__ */ o.createElement("path", {
-    d: "M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7zm-4 6h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"
-  }), "ListSharp");
-  return a.default = n, a;
+import { o as e, t } from "./chunk.js";
+import { Ai as n, Ln as r, Oi as i, ci as a, da as o, dn as s, or as c, sr as l, ta as u } from "./selectors.js";
+import { Q as d } from "./actions.js";
+import { B as f, R as p, V as m, l as h } from "./ButtonBase.js";
+import { t as g } from "./Button.js";
+import { t as _ } from "./Grid.js";
+//#region node_modules/@material-ui/icons/ListSharp.js
+var v = /* @__PURE__ */ t(((e) => {
+	var t = f(), n = p();
+	Object.defineProperty(e, "__esModule", { value: !0 }), e.default = void 0;
+	var r = n(o());
+	e.default = (0, t(h()).default)(/*#__PURE__*/ r.createElement("path", { d: "M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7zm-4 6h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z" }), "ListSharp");
+}));
+//#endregion
+//#region node_modules/mirador/dist/es/src/components/SelectCollection.js
+n();
+var y = /* @__PURE__ */ e(o()), b = /* @__PURE__ */ e(v());
+function x(e, t) {
+	if (!(e instanceof t)) throw TypeError("Cannot call a class as a function");
 }
-var H = /* @__PURE__ */ z();
-const q = /* @__PURE__ */ _(H);
-function T(t, e) {
-  if (!(t instanceof e)) throw new TypeError("Cannot call a class as a function");
+function S(e, t) {
+	for (var n = 0; n < t.length; n++) {
+		var r = t[n];
+		r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(e, w(r.key), r);
+	}
 }
-function x(t, e) {
-  for (var o = 0; o < e.length; o++) {
-    var r = e[o];
-    r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(t, k(r.key), r);
-  }
+function C(e, t, n) {
+	return t && S(e.prototype, t), n && S(e, n), Object.defineProperty(e, "prototype", { writable: !1 }), e;
 }
-function L(t, e, o) {
-  return e && x(t.prototype, e), Object.defineProperty(t, "prototype", { writable: !1 }), t;
+function w(e) {
+	var t = T(e, "string");
+	return typeof t == "symbol" ? t : t + "";
 }
-function k(t) {
-  var e = M(t, "string");
-  return typeof e == "symbol" ? e : e + "";
+function T(e, t) {
+	if (typeof e != "object" || !e) return e;
+	var n = e[Symbol.toPrimitive];
+	if (n !== void 0) {
+		var r = n.call(e, t || "default");
+		if (typeof r != "object") return r;
+		throw TypeError("@@toPrimitive must return a primitive value.");
+	}
+	return (t === "string" ? String : Number)(e);
 }
-function M(t, e) {
-  if (typeof t != "object" || !t) return t;
-  var o = t[Symbol.toPrimitive];
-  if (o !== void 0) {
-    var r = o.call(t, e);
-    if (typeof r != "object") return r;
-    throw new TypeError("@@toPrimitive must return a primitive value.");
-  }
-  return String(t);
+function E(e, t, n) {
+	return t = A(t), D(e, k() ? Reflect.construct(t, n || [], A(e).constructor) : t.apply(e, n));
 }
-function V(t, e, o) {
-  return e = l(e), B(t, v() ? Reflect.construct(e, o || [], l(t).constructor) : e.apply(t, o));
+function D(e, t) {
+	if (t && (typeof t == "object" || typeof t == "function")) return t;
+	if (t !== void 0) throw TypeError("Derived constructors may only return object or undefined");
+	return O(e);
 }
-function B(t, e) {
-  if (e && (typeof e == "object" || typeof e == "function")) return e;
-  if (e !== void 0) throw new TypeError("Derived constructors may only return object or undefined");
-  return W(t);
+function O(e) {
+	if (e === void 0) throw ReferenceError("this hasn't been initialised - super() hasn't been called");
+	return e;
 }
-function W(t) {
-  if (t === void 0) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-  return t;
+function k() {
+	try {
+		var e = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function() {}));
+	} catch {}
+	return (k = function() {
+		return !!e;
+	})();
 }
-function v() {
-  try {
-    var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function() {
-    }));
-  } catch {
-  }
-  return (v = function() {
-    return !!t;
-  })();
+function A(e) {
+	return A = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function(e) {
+		return e.__proto__ || Object.getPrototypeOf(e);
+	}, A(e);
 }
-function l(t) {
-  return l = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function(e) {
-    return e.__proto__ || Object.getPrototypeOf(e);
-  }, l(t);
+function j(e, t) {
+	if (typeof t != "function" && t !== null) throw TypeError("Super expression must either be null or a function");
+	e.prototype = Object.create(t && t.prototype, { constructor: {
+		value: e,
+		writable: !0,
+		configurable: !0
+	} }), Object.defineProperty(e, "prototype", { writable: !1 }), t && M(e, t);
 }
-function N(t, e) {
-  if (typeof e != "function" && e !== null) throw new TypeError("Super expression must either be null or a function");
-  t.prototype = Object.create(e && e.prototype, { constructor: { value: t, writable: !0, configurable: !0 } }), Object.defineProperty(t, "prototype", { writable: !1 }), e && s(t, e);
+function M(e, t) {
+	return M = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function(e, t) {
+		return e.__proto__ = t, e;
+	}, M(e, t);
 }
-function s(t, e) {
-  return s = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function(o, r) {
-    return o.__proto__ = r, o;
-  }, s(t, e);
-}
-var h = /* @__PURE__ */ function(t) {
-  function e(o) {
-    var r;
-    return T(this, e), r = V(this, e, [o]), r.openCollectionDialog = r.openCollectionDialog.bind(r), r;
-  }
-  return N(e, t), L(e, [{
-    key: "openCollectionDialog",
-    value: function() {
-      var r = this.props, n = r.collectionPath, c = r.manifestId, u = r.showCollectionDialog, d = r.windowId;
-      u(c, n.slice(0, -1), d);
-    }
-    /** */
-  }, {
-    key: "render",
-    value: function() {
-      var r = this.props.t;
-      return /* @__PURE__ */ i.createElement(p, {
-        container: !0,
-        justifyContent: "center",
-        alignItems: "center"
-      }, /* @__PURE__ */ i.createElement(p, {
-        container: !0,
-        direction: "column",
-        alignItems: "center"
-      }, /* @__PURE__ */ i.createElement(g, {
-        variant: "h4",
-        paragraph: !0
-      }, /* @__PURE__ */ i.createElement("em", null, r("noItemSelected"))), /* @__PURE__ */ i.createElement(C, {
-        color: "primary",
-        variant: "contained",
-        onClick: this.openCollectionDialog,
-        startIcon: /* @__PURE__ */ i.createElement(q, null)
-      }, r("showCollection"))));
-    }
-  }]);
-}(P.Component);
-h.defaultProps = {
-  collectionPath: [],
-  manifestId: null,
-  t: function() {
-  },
-  windowId: null
-};
-var $ = function(e, o) {
-  var r = o.windowId, n = D(e, {
-    windowId: r
-  }) || {}, c = n.collectionPath, u = n.manifestId;
-  return {
-    collectionPath: c,
-    manifestId: u
-  };
-}, F = {
-  showCollectionDialog: j
-}, G = function(e) {
-  return {};
-}, K = S(R(), E(G), O($, F), I("SelectCollection"));
-const Q = K(h);
-export {
-  Q as default
-};
+var N = /*#__PURE__*/ function(e) {
+	function t(e) {
+		var n;
+		return x(this, t), n = E(this, t, [e]), n.openCollectionDialog = n.openCollectionDialog.bind(n), n;
+	}
+	return j(t, e), C(t, [{
+		key: "openCollectionDialog",
+		value: function() {
+			var e = this.props, t = e.collectionPath, n = e.manifestId, r = e.showCollectionDialog, i = e.windowId;
+			r(n, t.slice(0, -1), i);
+		}
+	}, {
+		key: "render",
+		value: function() {
+			var e = this.props.t;
+			return /*#__PURE__*/ y.createElement(_, {
+				container: !0,
+				justifyContent: "center",
+				alignItems: "center"
+			}, /*#__PURE__*/ y.createElement(_, {
+				container: !0,
+				direction: "column",
+				alignItems: "center"
+			}, /*#__PURE__*/ y.createElement(m, {
+				variant: "h4",
+				paragraph: !0
+			}, /*#__PURE__*/ y.createElement("em", null, e("noItemSelected"))), /*#__PURE__*/ y.createElement(g, {
+				color: "primary",
+				variant: "contained",
+				onClick: this.openCollectionDialog,
+				startIcon: /*#__PURE__*/ y.createElement(b.default, null)
+			}, e("showCollection"))));
+		}
+	}]);
+}(y.Component);
+//#endregion
+//#region node_modules/mirador/dist/es/src/containers/SelectCollection.js
+N.defaultProps = {
+	collectionPath: [],
+	manifestId: null,
+	t: function() {},
+	windowId: null
+}, c();
+var P = function(e, t) {
+	var n = t.windowId, r = s(e, { windowId: n }) || {};
+	return {
+		collectionPath: r.collectionPath,
+		manifestId: r.manifestId
+	};
+}, F = { showCollectionDialog: d }, I = i(a(), l(function(e) {
+	return {};
+}), u(P, F), r("SelectCollection"))(N);
+//#endregion
+export { I as default };
+
 //# sourceMappingURL=SelectCollection.js.map

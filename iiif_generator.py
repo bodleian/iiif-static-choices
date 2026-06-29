@@ -46,7 +46,7 @@ def main(arguments) -> bool:
         # find files
         input_files: List = []
         for image in os.listdir(arguments.input_directory):
-            if image.endswith((".png", ".jpg", "webp")) and image.split('.')[0] in image_filter:
+            if image.endswith((".png", ".jpg", ".webp")) and image.split('.')[0] in image_filter:
                 input_files.append(os.path.join(arguments.input_directory, image))
 
         if not input_files:

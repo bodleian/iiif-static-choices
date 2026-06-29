@@ -1,741 +1,638 @@
-import { a7 as x, a8 as T, a9 as z, aa as D, ab as V, R as o, aq as ae, ai as h, r as l, a1 as b, a2 as w, a3 as E, cU as ie, w as $, a5 as Z, bh as se, aA as ce, aC as q, aw as u, x as j, b9 as ue, cV as le, cL as fe, cW as pe, cT as ve, cX as de, cY as ye, cZ as me, c_ as he, P as be, ay as we, c$ as Ce, bG as _e, ag as Pe } from "./index.js";
-var d = {}, A;
-function Oe() {
-  if (A) return d;
-  A = 1;
-  var t = x(), e = T();
-  Object.defineProperty(d, "__esModule", {
-    value: !0
-  }), d.default = void 0;
-  var n = e(z()), r = t(/* @__PURE__ */ D()), a = (0, r.default)(/* @__PURE__ */ n.createElement("path", {
-    d: "M13 7h-2v4H7v2h4v4h2v-4h4v-2h-4V7zm-1-5C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"
-  }), "AddCircleOutlineSharp");
-  return d.default = a, d;
+import { o as e, t } from "./chunk.js";
+import { Ai as n, G as r, Gt as i, J as a, K as o, Ln as s, Oi as c, W as l, ci as u, da as d, hn as ee, mt as te, or as f, q as ne, sr as p, ta as m, un as re, vt as ie } from "./selectors.js";
+import { n as ae, r as h, t as g } from "./colorManipulator.js";
+import { F as oe, N as se, P as ce } from "./actions.js";
+import { t as le } from "./Paper.js";
+import { t as ue } from "./classnames.js";
+import { B as _, N as de, P as fe, R as v, V as y, l as b } from "./ButtonBase.js";
+import { n as x, t as pe } from "./PluginHook.js";
+//#region node_modules/@material-ui/icons/AddCircleOutlineSharp.js
+var me = /* @__PURE__ */ t(((e) => {
+	var t = _(), n = v();
+	Object.defineProperty(e, "__esModule", { value: !0 }), e.default = void 0;
+	var r = n(d());
+	e.default = (0, t(b()).default)(/*#__PURE__*/ r.createElement("path", { d: "M13 7h-2v4H7v2h4v4h2v-4h4v-2h-4V7zm-1-5C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" }), "AddCircleOutlineSharp");
+})), S = /* @__PURE__ */ t(((e) => {
+	var t = _(), n = v();
+	Object.defineProperty(e, "__esModule", { value: !0 }), e.default = void 0;
+	var r = n(d());
+	e.default = (0, t(b()).default)(/*#__PURE__*/ r.createElement("path", { d: "M7 11v2h10v-2H7zm5-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" }), "RemoveCircleOutlineSharp");
+}));
+//#endregion
+//#region node_modules/mirador/dist/es/src/components/icons/RestoreZoomIcon.js
+n();
+var C = /* @__PURE__ */ e(ue()), he = ae(), ge = g(), _e = /* @__PURE__ */ e(me()), ve = /* @__PURE__ */ e(S()), w = /* @__PURE__ */ e(d());
+de();
+function ye(e) {
+	return /*#__PURE__*/ w.createElement(fe, e, /*#__PURE__*/ w.createElement("svg", {
+		xmlns: "http://www.w3.org/2000/svg",
+		width: "24",
+		height: "24",
+		viewBox: "0 0 24 24"
+	}, /*#__PURE__*/ w.createElement("path", { d: "M6,15H9v3h2V13H6Zm9-6V6H13v5h5V9Z" }), /*#__PURE__*/ w.createElement("path", { d: "M12,2A10,10,0,1,0,22,12,10,10,0,0,0,12,2Zm0,18a8,8,0,1,1,8-8,8,8,0,0,1-8,8Z" })));
 }
-var ge = /* @__PURE__ */ Oe();
-const Ee = /* @__PURE__ */ V(ge);
-var y = {}, M;
-function $e() {
-  if (M) return y;
-  M = 1;
-  var t = x(), e = T();
-  Object.defineProperty(y, "__esModule", {
-    value: !0
-  }), y.default = void 0;
-  var n = e(z()), r = t(/* @__PURE__ */ D()), a = (0, r.default)(/* @__PURE__ */ n.createElement("path", {
-    d: "M7 11v2h10v-2H7zm5-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"
-  }), "RemoveCircleOutlineSharp");
-  return y.default = a, y;
+//#endregion
+//#region node_modules/mirador/dist/es/src/components/ZoomControls.js
+function be(e, t) {
+	if (!(e instanceof t)) throw TypeError("Cannot call a class as a function");
 }
-var je = /* @__PURE__ */ $e();
-const Se = /* @__PURE__ */ V(je);
-function Ie(t) {
-  return /* @__PURE__ */ o.createElement(ae, t, /* @__PURE__ */ o.createElement("svg", {
-    xmlns: "http://www.w3.org/2000/svg",
-    width: "24",
-    height: "24",
-    viewBox: "0 0 24 24"
-  }, /* @__PURE__ */ o.createElement("path", {
-    d: "M6,15H9v3h2V13H6Zm9-6V6H13v5h5V9Z"
-  }), /* @__PURE__ */ o.createElement("path", {
-    d: "M12,2A10,10,0,1,0,22,12,10,10,0,0,0,12,2Zm0,18a8,8,0,1,1,8-8,8,8,0,0,1-8,8Z"
-  })));
+function T(e, t) {
+	for (var n = 0; n < t.length; n++) {
+		var r = t[n];
+		r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(e, Se(r.key), r);
+	}
 }
-function Re(t, e) {
-  if (!(t instanceof e)) throw new TypeError("Cannot call a class as a function");
+function xe(e, t, n) {
+	return t && T(e.prototype, t), n && T(e, n), Object.defineProperty(e, "prototype", { writable: !1 }), e;
 }
-function ke(t, e) {
-  for (var n = 0; n < e.length; n++) {
-    var r = e[n];
-    r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(t, xe(r.key), r);
-  }
+function Se(e) {
+	var t = Ce(e, "string");
+	return typeof t == "symbol" ? t : t + "";
 }
-function Ne(t, e, n) {
-  return e && ke(t.prototype, e), Object.defineProperty(t, "prototype", { writable: !1 }), t;
+function Ce(e, t) {
+	if (typeof e != "object" || !e) return e;
+	var n = e[Symbol.toPrimitive];
+	if (n !== void 0) {
+		var r = n.call(e, t || "default");
+		if (typeof r != "object") return r;
+		throw TypeError("@@toPrimitive must return a primitive value.");
+	}
+	return (t === "string" ? String : Number)(e);
 }
-function xe(t) {
-  var e = Te(t, "string");
-  return typeof e == "symbol" ? e : e + "";
+function we(e, t, n) {
+	return t = k(t), E(e, O() ? Reflect.construct(t, n || [], k(e).constructor) : t.apply(e, n));
 }
-function Te(t, e) {
-  if (typeof t != "object" || !t) return t;
-  var n = t[Symbol.toPrimitive];
-  if (n !== void 0) {
-    var r = n.call(t, e);
-    if (typeof r != "object") return r;
-    throw new TypeError("@@toPrimitive must return a primitive value.");
-  }
-  return String(t);
+function E(e, t) {
+	if (t && (typeof t == "object" || typeof t == "function")) return t;
+	if (t !== void 0) throw TypeError("Derived constructors may only return object or undefined");
+	return D(e);
 }
-function ze(t, e, n) {
-  return e = C(e), De(t, G() ? Reflect.construct(e, n || [], C(t).constructor) : e.apply(t, n));
+function D(e) {
+	if (e === void 0) throw ReferenceError("this hasn't been initialised - super() hasn't been called");
+	return e;
 }
-function De(t, e) {
-  if (e && (typeof e == "object" || typeof e == "function")) return e;
-  if (e !== void 0) throw new TypeError("Derived constructors may only return object or undefined");
-  return Ve(t);
+function O() {
+	try {
+		var e = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function() {}));
+	} catch {}
+	return (O = function() {
+		return !!e;
+	})();
 }
-function Ve(t) {
-  if (t === void 0) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-  return t;
+function k(e) {
+	return k = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function(e) {
+		return e.__proto__ || Object.getPrototypeOf(e);
+	}, k(e);
+}
+function Te(e, t) {
+	if (typeof t != "function" && t !== null) throw TypeError("Super expression must either be null or a function");
+	e.prototype = Object.create(t && t.prototype, { constructor: {
+		value: e,
+		writable: !0,
+		configurable: !0
+	} }), Object.defineProperty(e, "prototype", { writable: !1 }), t && A(e, t);
+}
+function A(e, t) {
+	return A = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function(e, t) {
+		return e.__proto__ = t, e;
+	}, A(e, t);
+}
+var j = /*#__PURE__*/ function(e) {
+	function t(e) {
+		var n;
+		return be(this, t), n = we(this, t, [e]), n.handleZoomInClick = n.handleZoomInClick.bind(n), n.handleZoomOutClick = n.handleZoomOutClick.bind(n), n;
+	}
+	return Te(t, e), xe(t, [
+		{
+			key: "handleZoomInClick",
+			value: function() {
+				var e = this.props, t = e.windowId, n = e.updateViewport, r = e.viewer;
+				n(t, { zoom: r.zoom * 2 });
+			}
+		},
+		{
+			key: "handleZoomOutClick",
+			value: function() {
+				var e = this.props, t = e.windowId, n = e.updateViewport, r = e.viewer;
+				n(t, { zoom: r.zoom / 2 });
+			}
+		},
+		{
+			key: "render",
+			value: function() {
+				var e = this.props, t = e.displayDivider, n = e.showZoomControls, r = e.classes, i = e.t, a = e.zoomToWorld;
+				return n ? /*#__PURE__*/ w.createElement("div", { className: r.zoom_controls }, /*#__PURE__*/ w.createElement(h, {
+					"aria-label": i("zoomIn"),
+					onClick: this.handleZoomInClick
+				}, /*#__PURE__*/ w.createElement(_e.default, null)), /*#__PURE__*/ w.createElement(h, {
+					"aria-label": i("zoomOut"),
+					onClick: this.handleZoomOutClick
+				}, /*#__PURE__*/ w.createElement(ve.default, null)), /*#__PURE__*/ w.createElement(h, {
+					"aria-label": i("zoomReset"),
+					onClick: function() {
+						return a(!1);
+					}
+				}, /*#__PURE__*/ w.createElement(ye, null)), t && /*#__PURE__*/ w.createElement("span", { className: r.divider })) : /*#__PURE__*/ w.createElement(w.Fragment, null);
+			}
+		}
+	]);
+}(w.Component);
+//#endregion
+//#region node_modules/mirador/dist/es/src/containers/ZoomControls.js
+j.defaultProps = {
+	displayDivider: !0,
+	showZoomControls: !1,
+	t: function(e) {
+		return e;
+	},
+	updateViewport: function() {},
+	viewer: {},
+	windowId: ""
+}, f();
+var Ee = function(e, t) {
+	var n = t.windowId;
+	return {
+		showZoomControls: i(e),
+		viewer: re(e, { windowId: n })
+	};
+}, De = { updateViewport: oe }, Oe = c(u(), p(function(e) {
+	return {
+		divider: {
+			borderRight: "1px solid #808080",
+			display: "inline-block",
+			height: "24px",
+			margin: "12px 6px"
+		},
+		ListItem: {
+			paddingBottom: 0,
+			paddingTop: 0
+		},
+		zoom_controls: {
+			display: "flex",
+			flexDirection: "row",
+			justifyContent: "center"
+		}
+	};
+}), m(Ee, De), s("ZoomControls"))(j);
+//#endregion
+//#region node_modules/mirador/dist/es/src/components/ViewerInfo.js
+function ke(e, t) {
+	if (!(e instanceof t)) throw TypeError("Cannot call a class as a function");
+}
+function M(e, t) {
+	for (var n = 0; n < t.length; n++) {
+		var r = t[n];
+		r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(e, je(r.key), r);
+	}
+}
+function Ae(e, t, n) {
+	return t && M(e.prototype, t), n && M(e, n), Object.defineProperty(e, "prototype", { writable: !1 }), e;
+}
+function je(e) {
+	var t = Me(e, "string");
+	return typeof t == "symbol" ? t : t + "";
+}
+function Me(e, t) {
+	if (typeof e != "object" || !e) return e;
+	var n = e[Symbol.toPrimitive];
+	if (n !== void 0) {
+		var r = n.call(e, t || "default");
+		if (typeof r != "object") return r;
+		throw TypeError("@@toPrimitive must return a primitive value.");
+	}
+	return (t === "string" ? String : Number)(e);
+}
+function Ne(e, t, n) {
+	return t = P(t), Pe(e, N() ? Reflect.construct(t, n || [], P(e).constructor) : t.apply(e, n));
+}
+function Pe(e, t) {
+	if (t && (typeof t == "object" || typeof t == "function")) return t;
+	if (t !== void 0) throw TypeError("Derived constructors may only return object or undefined");
+	return Fe(e);
+}
+function Fe(e) {
+	if (e === void 0) throw ReferenceError("this hasn't been initialised - super() hasn't been called");
+	return e;
+}
+function N() {
+	try {
+		var e = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function() {}));
+	} catch {}
+	return (N = function() {
+		return !!e;
+	})();
+}
+function P(e) {
+	return P = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function(e) {
+		return e.__proto__ || Object.getPrototypeOf(e);
+	}, P(e);
+}
+function Ie(e, t) {
+	if (typeof t != "function" && t !== null) throw TypeError("Super expression must either be null or a function");
+	e.prototype = Object.create(t && t.prototype, { constructor: {
+		value: e,
+		writable: !0,
+		configurable: !0
+	} }), Object.defineProperty(e, "prototype", { writable: !1 }), t && F(e, t);
+}
+function F(e, t) {
+	return F = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function(e, t) {
+		return e.__proto__ = t, e;
+	}, F(e, t);
+}
+var I = /*#__PURE__*/ function(e) {
+	function t() {
+		return ke(this, t), Ne(this, t, arguments);
+	}
+	return Ie(t, e), Ae(t, [{
+		key: "render",
+		value: function() {
+			var e = this.props, t = e.canvasCount, n = e.canvasIndex, r = e.canvasLabel, i = e.classes, a = e.t;
+			return /*#__PURE__*/ w.createElement("div", { className: (0, C.default)(x("osd-info"), i.osdInfo) }, /*#__PURE__*/ w.createElement(y, {
+				display: "inline",
+				variant: "caption",
+				className: x("canvas-count")
+			}, a("pagination", {
+				current: n + 1,
+				total: t
+			})), /*#__PURE__*/ w.createElement(y, {
+				display: "inline",
+				variant: "caption",
+				className: x("canvas-label")
+			}, r && ` • ${r}`));
+		}
+	}]);
+}(w.Component);
+I.defaultProps = {
+	canvasLabel: void 0,
+	t: function() {}
+}, n(), f();
+var L = c(p({ osdInfo: {
+	order: 2,
+	overflow: "hidden",
+	paddingBottom: 3,
+	textOverflow: "ellipsis",
+	unicodeBidi: "plaintext",
+	whiteSpace: "nowrap",
+	width: "100%"
+} }), u(), m(function(e, t) {
+	var n = t.windowId, i = r(e, { windowId: n }), a = te(e, { windowId: n }), s = (o(e, { windowId: n }) || {}).id;
+	return {
+		canvasCount: i.length,
+		canvasIndex: a,
+		canvasLabel: l(e, {
+			canvasId: s,
+			windowId: n
+		})
+	};
+}, null), s("ViewerInfo"))(I), R = /* @__PURE__ */ e((/* @__PURE__ */ t(((e) => {
+	var t = _(), n = v();
+	Object.defineProperty(e, "__esModule", { value: !0 }), e.default = void 0;
+	var r = n(d());
+	e.default = (0, t(b()).default)(/*#__PURE__*/ r.createElement("path", { d: "M10 16.5l6-4.5-6-4.5v9zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" }), "PlayCircleOutlineSharp");
+})))());
+function Le(e, t) {
+	if (!(e instanceof t)) throw TypeError("Cannot call a class as a function");
+}
+function z(e, t) {
+	for (var n = 0; n < t.length; n++) {
+		var r = t[n];
+		r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(e, ze(r.key), r);
+	}
+}
+function Re(e, t, n) {
+	return t && z(e.prototype, t), n && z(e, n), Object.defineProperty(e, "prototype", { writable: !1 }), e;
+}
+function ze(e) {
+	var t = Be(e, "string");
+	return typeof t == "symbol" ? t : t + "";
+}
+function Be(e, t) {
+	if (typeof e != "object" || !e) return e;
+	var n = e[Symbol.toPrimitive];
+	if (n !== void 0) {
+		var r = n.call(e, t || "default");
+		if (typeof r != "object") return r;
+		throw TypeError("@@toPrimitive must return a primitive value.");
+	}
+	return (t === "string" ? String : Number)(e);
+}
+function Ve(e, t, n) {
+	return t = V(t), He(e, B() ? Reflect.construct(t, n || [], V(e).constructor) : t.apply(e, n));
+}
+function He(e, t) {
+	if (t && (typeof t == "object" || typeof t == "function")) return t;
+	if (t !== void 0) throw TypeError("Derived constructors may only return object or undefined");
+	return Ue(e);
+}
+function Ue(e) {
+	if (e === void 0) throw ReferenceError("this hasn't been initialised - super() hasn't been called");
+	return e;
+}
+function B() {
+	try {
+		var e = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function() {}));
+	} catch {}
+	return (B = function() {
+		return !!e;
+	})();
+}
+function V(e) {
+	return V = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function(e) {
+		return e.__proto__ || Object.getPrototypeOf(e);
+	}, V(e);
+}
+function We(e, t) {
+	if (typeof t != "function" && t !== null) throw TypeError("Super expression must either be null or a function");
+	e.prototype = Object.create(t && t.prototype, { constructor: {
+		value: e,
+		writable: !0,
+		configurable: !0
+	} }), Object.defineProperty(e, "prototype", { writable: !1 }), t && H(e, t);
+}
+function H(e, t) {
+	return H = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function(e, t) {
+		return e.__proto__ = t, e;
+	}, H(e, t);
+}
+var U = /*#__PURE__*/ function(e) {
+	function t() {
+		return Le(this, t), Ve(this, t, arguments);
+	}
+	return We(t, e), Re(t, [{
+		key: "render",
+		value: function() {
+			var e = this.props, t = e.hasNextCanvas, n = e.hasPreviousCanvas, r = e.setNextCanvas, i = e.setPreviousCanvas, a = e.t, o = e.classes, s = e.viewingDirection, c = "ltr", l = {}, u = {};
+			switch (s) {
+				case "top-to-bottom":
+					l = { transform: "rotate(270deg)" }, u = { transform: "rotate(90deg)" };
+					break;
+				case "bottom-to-top":
+					l = { transform: "rotate(90deg)" }, u = { transform: "rotate(270deg)" };
+					break;
+				case "right-to-left":
+					c = "rtl", l = {}, u = { transform: "rotate(180deg)" };
+					break;
+				default: l = { transform: "rotate(180deg)" }, u = {};
+			}
+			return /*#__PURE__*/ w.createElement("div", {
+				className: (0, C.default)(x("osd-navigation"), o.osdNavigation),
+				dir: c
+			}, /*#__PURE__*/ w.createElement(h, {
+				"aria-label": a("previousCanvas"),
+				className: x("previous-canvas-button"),
+				disabled: !n,
+				onClick: function() {
+					n && i();
+				}
+			}, /*#__PURE__*/ w.createElement(R.default, { style: l })), /*#__PURE__*/ w.createElement(h, {
+				"aria-label": a("nextCanvas"),
+				className: x("next-canvas-button"),
+				disabled: !t,
+				onClick: function() {
+					t && r();
+				}
+			}, /*#__PURE__*/ w.createElement(R.default, { style: u })));
+		}
+	}]);
+}(w.Component);
+U.defaultProps = {
+	hasNextCanvas: !1,
+	hasPreviousCanvas: !1,
+	setNextCanvas: function() {},
+	setPreviousCanvas: function() {},
+	viewingDirection: ""
+}, n(), f();
+var Ge = c(p({ osdNavigation: { order: 1 } }), u(), m(function(e, t) {
+	var n = t.windowId;
+	return {
+		hasNextCanvas: !!ne(e, { windowId: n }),
+		hasPreviousCanvas: !!a(e, { windowId: n }),
+		viewingDirection: ie(e, { windowId: n })
+	};
+}, function(e, t) {
+	var n = t.windowId;
+	return {
+		setNextCanvas: function() {
+			return e(se(n));
+		},
+		setPreviousCanvas: function() {
+			return e(ce(n));
+		}
+	};
+}), s("ViewerNavigation"))(U);
+//#endregion
+//#region node_modules/mirador/dist/es/src/components/WindowCanvasNavigationControls.js
+function Ke(e, t) {
+	if (!(e instanceof t)) throw TypeError("Cannot call a class as a function");
+}
+function W(e, t) {
+	for (var n = 0; n < t.length; n++) {
+		var r = t[n];
+		r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(e, Je(r.key), r);
+	}
+}
+function qe(e, t, n) {
+	return t && W(e.prototype, t), n && W(e, n), Object.defineProperty(e, "prototype", { writable: !1 }), e;
+}
+function Je(e) {
+	var t = Ye(e, "string");
+	return typeof t == "symbol" ? t : t + "";
+}
+function Ye(e, t) {
+	if (typeof e != "object" || !e) return e;
+	var n = e[Symbol.toPrimitive];
+	if (n !== void 0) {
+		var r = n.call(e, t || "default");
+		if (typeof r != "object") return r;
+		throw TypeError("@@toPrimitive must return a primitive value.");
+	}
+	return (t === "string" ? String : Number)(e);
+}
+function Xe(e, t, n) {
+	return t = K(t), Ze(e, G() ? Reflect.construct(t, n || [], K(e).constructor) : t.apply(e, n));
+}
+function Ze(e, t) {
+	if (t && (typeof t == "object" || typeof t == "function")) return t;
+	if (t !== void 0) throw TypeError("Derived constructors may only return object or undefined");
+	return Qe(e);
+}
+function Qe(e) {
+	if (e === void 0) throw ReferenceError("this hasn't been initialised - super() hasn't been called");
+	return e;
 }
 function G() {
-  try {
-    var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function() {
-    }));
-  } catch {
-  }
-  return (G = function() {
-    return !!t;
-  })();
+	try {
+		var e = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function() {}));
+	} catch {}
+	return (G = function() {
+		return !!e;
+	})();
 }
-function C(t) {
-  return C = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function(e) {
-    return e.__proto__ || Object.getPrototypeOf(e);
-  }, C(t);
+function K(e) {
+	return K = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function(e) {
+		return e.__proto__ || Object.getPrototypeOf(e);
+	}, K(e);
 }
-function Ze(t, e) {
-  if (typeof e != "function" && e !== null) throw new TypeError("Super expression must either be null or a function");
-  t.prototype = Object.create(e && e.prototype, { constructor: { value: t, writable: !0, configurable: !0 } }), Object.defineProperty(t, "prototype", { writable: !1 }), e && S(t, e);
+function $e(e, t) {
+	if (typeof t != "function" && t !== null) throw TypeError("Super expression must either be null or a function");
+	e.prototype = Object.create(t && t.prototype, { constructor: {
+		value: e,
+		writable: !0,
+		configurable: !0
+	} }), Object.defineProperty(e, "prototype", { writable: !1 }), t && q(e, t);
 }
-function S(t, e) {
-  return S = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function(n, r) {
-    return n.__proto__ = r, n;
-  }, S(t, e);
+function q(e, t) {
+	return q = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function(e, t) {
+		return e.__proto__ = t, e;
+	}, q(e, t);
 }
-var U = /* @__PURE__ */ function(t) {
-  function e(n) {
-    var r;
-    return Re(this, e), r = ze(this, e, [n]), r.handleZoomInClick = r.handleZoomInClick.bind(r), r.handleZoomOutClick = r.handleZoomOutClick.bind(r), r;
-  }
-  return Ze(e, t), Ne(e, [{
-    key: "handleZoomInClick",
-    value: function() {
-      var r = this.props, a = r.windowId, s = r.updateViewport, i = r.viewer;
-      s(a, {
-        zoom: i.zoom * 2
-      });
-    }
-    /**
-     * @private
-     */
-  }, {
-    key: "handleZoomOutClick",
-    value: function() {
-      var r = this.props, a = r.windowId, s = r.updateViewport, i = r.viewer;
-      s(a, {
-        zoom: i.zoom / 2
-      });
-    }
-    /**
-     * render
-     * @return
-     */
-  }, {
-    key: "render",
-    value: function() {
-      var r = this.props, a = r.displayDivider, s = r.showZoomControls, i = r.classes, c = r.t, f = r.zoomToWorld;
-      return s ? /* @__PURE__ */ o.createElement("div", {
-        className: i.zoom_controls
-      }, /* @__PURE__ */ o.createElement(h, {
-        "aria-label": c("zoomIn"),
-        onClick: this.handleZoomInClick
-      }, /* @__PURE__ */ o.createElement(Ee, null)), /* @__PURE__ */ o.createElement(h, {
-        "aria-label": c("zoomOut"),
-        onClick: this.handleZoomOutClick
-      }, /* @__PURE__ */ o.createElement(Se, null)), /* @__PURE__ */ o.createElement(h, {
-        "aria-label": c("zoomReset"),
-        onClick: function() {
-          return f(!1);
-        }
-      }, /* @__PURE__ */ o.createElement(Ie, null)), a && /* @__PURE__ */ o.createElement("span", {
-        className: i.divider
-      })) : /* @__PURE__ */ o.createElement(o.Fragment, null);
-    }
-  }]);
-}(l.Component);
-U.defaultProps = {
-  displayDivider: !0,
-  showZoomControls: !1,
-  t: function(e) {
-    return e;
-  },
-  updateViewport: function() {
-  },
-  viewer: {},
-  windowId: ""
-};
-var qe = function(e, n) {
-  var r = n.windowId;
-  return {
-    showZoomControls: ce(e),
-    viewer: se(e, {
-      windowId: r
-    })
-  };
-}, We = {
-  updateViewport: ie
-}, Be = function(e) {
-  return {
-    divider: {
-      borderRight: "1px solid #808080",
-      display: "inline-block",
-      height: "24px",
-      margin: "12px 6px"
-    },
-    ListItem: {
-      paddingBottom: 0,
-      paddingTop: 0
-    },
-    zoom_controls: {
-      display: "flex",
-      flexDirection: "row",
-      justifyContent: "center"
-    }
-  };
-}, Ae = b(Z(), $(Be), E(qe, We), w("ZoomControls"));
-const Me = Ae(U);
-function Le(t, e) {
-  if (!(t instanceof e)) throw new TypeError("Cannot call a class as a function");
+var J = /*#__PURE__*/ function(e) {
+	function t() {
+		return Ke(this, t), Xe(this, t, arguments);
+	}
+	return $e(t, e), qe(t, [{
+		key: "canvasNavControlsAreStacked",
+		value: function() {
+			var e = this.props.size;
+			return e && e.width && e.width <= 253;
+		}
+	}, {
+		key: "render",
+		value: function() {
+			var e = this.props, t = e.classes, n = e.visible, r = e.windowId, i = e.zoomToWorld;
+			return n ? /*#__PURE__*/ w.createElement(le, {
+				square: !0,
+				className: (0, C.default)(t.controls, x("canvas-nav"), t.canvasNav, this.canvasNavControlsAreStacked() ? x("canvas-nav-stacked") : null, this.canvasNavControlsAreStacked() ? t.canvasNavStacked : null),
+				elevation: 0
+			}, /*#__PURE__*/ w.createElement(Oe, {
+				displayDivider: !this.canvasNavControlsAreStacked(),
+				windowId: r,
+				zoomToWorld: i
+			}), /*#__PURE__*/ w.createElement(Ge, { windowId: r }), /*#__PURE__*/ w.createElement(L, { windowId: r }), /*#__PURE__*/ w.createElement(pe, this.props)) : /*#__PURE__*/ w.createElement(y, {
+				variant: "srOnly",
+				component: "div"
+			}, /*#__PURE__*/ w.createElement(L, { windowId: r }));
+		}
+	}]);
+}(w.Component);
+J.defaultProps = {
+	classes: {},
+	visible: !0
+}, n(), f();
+var et = c(m(function(e, t) {
+	var n = t.windowId;
+	return { visible: ee(e).focusedWindowId === n };
+}), p(function(e) {
+	return {
+		canvasNav: {
+			display: "flex",
+			flexDirection: "row",
+			flexWrap: "wrap",
+			justifyContent: "center",
+			textAlign: "center"
+		},
+		canvasNavStacked: { flexDirection: "column" },
+		controls: {
+			backgroundColor: (0, ge.alpha)(e.palette.background.paper, .5),
+			bottom: 0,
+			position: "absolute",
+			width: "100%",
+			zIndex: 50
+		}
+	};
+}), (0, he.withSize)(), s("WindowCanvasNavigationControls"))(J);
+//#endregion
+//#region node_modules/mirador/dist/es/src/components/WindowViewer.js
+function tt(e, t) {
+	if (!(e instanceof t)) throw TypeError("Cannot call a class as a function");
 }
-function He(t, e) {
-  for (var n = 0; n < e.length; n++) {
-    var r = e[n];
-    r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(t, Ke(r.key), r);
-  }
+function Y(e, t) {
+	for (var n = 0; n < t.length; n++) {
+		var r = t[n];
+		r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(e, X(r.key), r);
+	}
 }
-function Fe(t, e, n) {
-  return e && He(t.prototype, e), Object.defineProperty(t, "prototype", { writable: !1 }), t;
+function nt(e, t, n) {
+	return t && Y(e.prototype, t), n && Y(e, n), Object.defineProperty(e, "prototype", { writable: !1 }), e;
 }
-function Ke(t) {
-  var e = Ge(t, "string");
-  return typeof e == "symbol" ? e : e + "";
+function X(e) {
+	var t = rt(e, "string");
+	return typeof t == "symbol" ? t : t + "";
 }
-function Ge(t, e) {
-  if (typeof t != "object" || !t) return t;
-  var n = t[Symbol.toPrimitive];
-  if (n !== void 0) {
-    var r = n.call(t, e);
-    if (typeof r != "object") return r;
-    throw new TypeError("@@toPrimitive must return a primitive value.");
-  }
-  return String(t);
+function rt(e, t) {
+	if (typeof e != "object" || !e) return e;
+	var n = e[Symbol.toPrimitive];
+	if (n !== void 0) {
+		var r = n.call(e, t || "default");
+		if (typeof r != "object") return r;
+		throw TypeError("@@toPrimitive must return a primitive value.");
+	}
+	return (t === "string" ? String : Number)(e);
 }
-function Ue(t, e, n) {
-  return e = _(e), Xe(t, X() ? Reflect.construct(e, n || [], _(t).constructor) : e.apply(t, n));
+function it(e, t, n) {
+	return t = Q(t), at(e, Z() ? Reflect.construct(t, n || [], Q(e).constructor) : t.apply(e, n));
 }
-function Xe(t, e) {
-  if (e && (typeof e == "object" || typeof e == "function")) return e;
-  if (e !== void 0) throw new TypeError("Derived constructors may only return object or undefined");
-  return Ye(t);
+function at(e, t) {
+	if (t && (typeof t == "object" || typeof t == "function")) return t;
+	if (t !== void 0) throw TypeError("Derived constructors may only return object or undefined");
+	return ot(e);
 }
-function Ye(t) {
-  if (t === void 0) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-  return t;
+function ot(e) {
+	if (e === void 0) throw ReferenceError("this hasn't been initialised - super() hasn't been called");
+	return e;
 }
-function X() {
-  try {
-    var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function() {
-    }));
-  } catch {
-  }
-  return (X = function() {
-    return !!t;
-  })();
+function Z() {
+	try {
+		var e = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function() {}));
+	} catch {}
+	return (Z = function() {
+		return !!e;
+	})();
 }
-function _(t) {
-  return _ = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function(e) {
-    return e.__proto__ || Object.getPrototypeOf(e);
-  }, _(t);
+function Q(e) {
+	return Q = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function(e) {
+		return e.__proto__ || Object.getPrototypeOf(e);
+	}, Q(e);
 }
-function Je(t, e) {
-  if (typeof e != "function" && e !== null) throw new TypeError("Super expression must either be null or a function");
-  t.prototype = Object.create(e && e.prototype, { constructor: { value: t, writable: !0, configurable: !0 } }), Object.defineProperty(t, "prototype", { writable: !1 }), e && I(t, e);
+function st(e, t) {
+	if (typeof t != "function" && t !== null) throw TypeError("Super expression must either be null or a function");
+	e.prototype = Object.create(t && t.prototype, { constructor: {
+		value: e,
+		writable: !0,
+		configurable: !0
+	} }), Object.defineProperty(e, "prototype", { writable: !1 }), t && $(e, t);
 }
-function I(t, e) {
-  return I = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function(n, r) {
-    return n.__proto__ = r, n;
-  }, I(t, e);
+function $(e, t) {
+	return $ = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function(e, t) {
+		return e.__proto__ = t, e;
+	}, $(e, t);
 }
-var Y = /* @__PURE__ */ function(t) {
-  function e() {
-    return Le(this, e), Ue(this, e, arguments);
-  }
-  return Je(e, t), Fe(e, [{
-    key: "render",
-    value: (
-      /** */
-      function() {
-        var r = this.props, a = r.canvasCount, s = r.canvasIndex, i = r.canvasLabel, c = r.classes, f = r.t;
-        return /* @__PURE__ */ o.createElement("div", {
-          className: q(u("osd-info"), c.osdInfo)
-        }, /* @__PURE__ */ o.createElement(j, {
-          display: "inline",
-          variant: "caption",
-          className: u("canvas-count")
-        }, f("pagination", {
-          current: s + 1,
-          total: a
-        })), /* @__PURE__ */ o.createElement(j, {
-          display: "inline",
-          variant: "caption",
-          className: u("canvas-label")
-        }, i && " • ".concat(i)));
-      }
-    )
-  }]);
-}(l.Component);
-Y.defaultProps = {
-  canvasLabel: void 0,
-  t: function() {
-  }
-};
-var Qe = function(e, n) {
-  var r = n.windowId, a = ue(e, {
-    windowId: r
-  }), s = le(e, {
-    windowId: r
-  }), i = (fe(e, {
-    windowId: r
-  }) || {}).id;
-  return {
-    canvasCount: a.length,
-    canvasIndex: s,
-    canvasLabel: pe(e, {
-      canvasId: i,
-      windowId: r
-    })
-  };
-}, et = {
-  osdInfo: {
-    order: 2,
-    overflow: "hidden",
-    paddingBottom: 3,
-    textOverflow: "ellipsis",
-    unicodeBidi: "plaintext",
-    whiteSpace: "nowrap",
-    width: "100%"
-  }
-}, tt = b($(et), Z(), E(Qe, null), w("ViewerInfo"));
-const L = tt(Y);
-var m = {}, H;
-function rt() {
-  if (H) return m;
-  H = 1;
-  var t = x(), e = T();
-  Object.defineProperty(m, "__esModule", {
-    value: !0
-  }), m.default = void 0;
-  var n = e(z()), r = t(/* @__PURE__ */ D()), a = (0, r.default)(/* @__PURE__ */ n.createElement("path", {
-    d: "M10 16.5l6-4.5-6-4.5v9zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"
-  }), "PlayCircleOutlineSharp");
-  return m.default = a, m;
-}
-var nt = /* @__PURE__ */ rt();
-const F = /* @__PURE__ */ V(nt);
-function ot(t, e) {
-  if (!(t instanceof e)) throw new TypeError("Cannot call a class as a function");
-}
-function at(t, e) {
-  for (var n = 0; n < e.length; n++) {
-    var r = e[n];
-    r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(t, st(r.key), r);
-  }
-}
-function it(t, e, n) {
-  return e && at(t.prototype, e), Object.defineProperty(t, "prototype", { writable: !1 }), t;
-}
-function st(t) {
-  var e = ct(t, "string");
-  return typeof e == "symbol" ? e : e + "";
-}
-function ct(t, e) {
-  if (typeof t != "object" || !t) return t;
-  var n = t[Symbol.toPrimitive];
-  if (n !== void 0) {
-    var r = n.call(t, e);
-    if (typeof r != "object") return r;
-    throw new TypeError("@@toPrimitive must return a primitive value.");
-  }
-  return String(t);
-}
-function ut(t, e, n) {
-  return e = P(e), lt(t, J() ? Reflect.construct(e, n || [], P(t).constructor) : e.apply(t, n));
-}
-function lt(t, e) {
-  if (e && (typeof e == "object" || typeof e == "function")) return e;
-  if (e !== void 0) throw new TypeError("Derived constructors may only return object or undefined");
-  return ft(t);
-}
-function ft(t) {
-  if (t === void 0) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-  return t;
-}
-function J() {
-  try {
-    var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function() {
-    }));
-  } catch {
-  }
-  return (J = function() {
-    return !!t;
-  })();
-}
-function P(t) {
-  return P = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function(e) {
-    return e.__proto__ || Object.getPrototypeOf(e);
-  }, P(t);
-}
-function pt(t, e) {
-  if (typeof e != "function" && e !== null) throw new TypeError("Super expression must either be null or a function");
-  t.prototype = Object.create(e && e.prototype, { constructor: { value: t, writable: !0, configurable: !0 } }), Object.defineProperty(t, "prototype", { writable: !1 }), e && R(t, e);
-}
-function R(t, e) {
-  return R = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function(n, r) {
-    return n.__proto__ = r, n;
-  }, R(t, e);
-}
-var Q = /* @__PURE__ */ function(t) {
-  function e() {
-    return ot(this, e), ut(this, e, arguments);
-  }
-  return pt(e, t), it(e, [{
-    key: "render",
-    value: (
-      /**
-       * Renders things
-       */
-      function() {
-        var r = this.props, a = r.hasNextCanvas, s = r.hasPreviousCanvas, i = r.setNextCanvas, c = r.setPreviousCanvas, f = r.t, W = r.classes, ne = r.viewingDirection, B = "ltr", p = {}, v = {};
-        switch (ne) {
-          case "top-to-bottom":
-            p = {
-              transform: "rotate(270deg)"
-            }, v = {
-              transform: "rotate(90deg)"
-            };
-            break;
-          case "bottom-to-top":
-            p = {
-              transform: "rotate(90deg)"
-            }, v = {
-              transform: "rotate(270deg)"
-            };
-            break;
-          case "right-to-left":
-            B = "rtl", p = {}, v = {
-              transform: "rotate(180deg)"
-            };
-            break;
-          default:
-            p = {
-              transform: "rotate(180deg)"
-            }, v = {};
-        }
-        return /* @__PURE__ */ o.createElement("div", {
-          className: q(u("osd-navigation"), W.osdNavigation),
-          dir: B
-        }, /* @__PURE__ */ o.createElement(h, {
-          "aria-label": f("previousCanvas"),
-          className: u("previous-canvas-button"),
-          disabled: !s,
-          onClick: function() {
-            s && c();
-          }
-        }, /* @__PURE__ */ o.createElement(F, {
-          style: p
-        })), /* @__PURE__ */ o.createElement(h, {
-          "aria-label": f("nextCanvas"),
-          className: u("next-canvas-button"),
-          disabled: !a,
-          onClick: function() {
-            a && i();
-          }
-        }, /* @__PURE__ */ o.createElement(F, {
-          style: v
-        })));
-      }
-    )
-  }]);
-}(l.Component);
-Q.defaultProps = {
-  hasNextCanvas: !1,
-  hasPreviousCanvas: !1,
-  setNextCanvas: function() {
-  },
-  setPreviousCanvas: function() {
-  },
-  viewingDirection: ""
-};
-var vt = function(e, n) {
-  var r = n.windowId;
-  return {
-    hasNextCanvas: !!ye(e, {
-      windowId: r
-    }),
-    hasPreviousCanvas: !!de(e, {
-      windowId: r
-    }),
-    viewingDirection: ve(e, {
-      windowId: r
-    })
-  };
-}, dt = function(e, n) {
-  var r = n.windowId;
-  return {
-    setNextCanvas: function() {
-      return e(he(r));
-    },
-    setPreviousCanvas: function() {
-      return e(me(r));
-    }
-  };
-}, yt = {
-  osdNavigation: {
-    order: 1
-  }
-}, mt = b(
-  $(yt),
-  Z(),
-  E(vt, dt),
-  w("ViewerNavigation")
-  // further HOC go here
-);
-const ht = mt(Q);
-function bt(t, e) {
-  if (!(t instanceof e)) throw new TypeError("Cannot call a class as a function");
-}
-function wt(t, e) {
-  for (var n = 0; n < e.length; n++) {
-    var r = e[n];
-    r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(t, _t(r.key), r);
-  }
-}
-function Ct(t, e, n) {
-  return e && wt(t.prototype, e), Object.defineProperty(t, "prototype", { writable: !1 }), t;
-}
-function _t(t) {
-  var e = Pt(t, "string");
-  return typeof e == "symbol" ? e : e + "";
-}
-function Pt(t, e) {
-  if (typeof t != "object" || !t) return t;
-  var n = t[Symbol.toPrimitive];
-  if (n !== void 0) {
-    var r = n.call(t, e);
-    if (typeof r != "object") return r;
-    throw new TypeError("@@toPrimitive must return a primitive value.");
-  }
-  return String(t);
-}
-function Ot(t, e, n) {
-  return e = O(e), gt(t, ee() ? Reflect.construct(e, n || [], O(t).constructor) : e.apply(t, n));
-}
-function gt(t, e) {
-  if (e && (typeof e == "object" || typeof e == "function")) return e;
-  if (e !== void 0) throw new TypeError("Derived constructors may only return object or undefined");
-  return Et(t);
-}
-function Et(t) {
-  if (t === void 0) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-  return t;
-}
-function ee() {
-  try {
-    var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function() {
-    }));
-  } catch {
-  }
-  return (ee = function() {
-    return !!t;
-  })();
-}
-function O(t) {
-  return O = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function(e) {
-    return e.__proto__ || Object.getPrototypeOf(e);
-  }, O(t);
-}
-function $t(t, e) {
-  if (typeof e != "function" && e !== null) throw new TypeError("Super expression must either be null or a function");
-  t.prototype = Object.create(e && e.prototype, { constructor: { value: t, writable: !0, configurable: !0 } }), Object.defineProperty(t, "prototype", { writable: !1 }), e && k(t, e);
-}
-function k(t, e) {
-  return k = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function(n, r) {
-    return n.__proto__ = r, n;
-  }, k(t, e);
-}
-var te = /* @__PURE__ */ function(t) {
-  function e() {
-    return bt(this, e), Ot(this, e, arguments);
-  }
-  return $t(e, t), Ct(e, [{
-    key: "canvasNavControlsAreStacked",
-    value: (
-      /**
-       * Determine if canvasNavControls are stacked (based on a hard-coded width)
-      */
-      function() {
-        var r = this.props.size;
-        return r && r.width && r.width <= 253;
-      }
-    )
-    /** */
-  }, {
-    key: "render",
-    value: function() {
-      var r = this.props, a = r.classes, s = r.visible, i = r.windowId, c = r.zoomToWorld;
-      return s ? /* @__PURE__ */ o.createElement(be, {
-        square: !0,
-        className: q(a.controls, u("canvas-nav"), a.canvasNav, this.canvasNavControlsAreStacked() ? u("canvas-nav-stacked") : null, this.canvasNavControlsAreStacked() ? a.canvasNavStacked : null),
-        elevation: 0
-      }, /* @__PURE__ */ o.createElement(Me, {
-        displayDivider: !this.canvasNavControlsAreStacked(),
-        windowId: i,
-        zoomToWorld: c
-      }), /* @__PURE__ */ o.createElement(ht, {
-        windowId: i
-      }), /* @__PURE__ */ o.createElement(L, {
-        windowId: i
-      }), /* @__PURE__ */ o.createElement(we, this.props)) : /* @__PURE__ */ o.createElement(j, {
-        variant: "srOnly",
-        component: "div"
-      }, /* @__PURE__ */ o.createElement(L, {
-        windowId: i
-      }));
-    }
-  }]);
-}(l.Component);
-te.defaultProps = {
-  classes: {},
-  visible: !0
-};
-var jt = function(e, n) {
-  var r = n.windowId;
-  return {
-    visible: Pe(e).focusedWindowId === r
-  };
-}, St = function(e) {
-  return {
-    canvasNav: {
-      display: "flex",
-      flexDirection: "row",
-      flexWrap: "wrap",
-      justifyContent: "center",
-      textAlign: "center"
-    },
-    canvasNavStacked: {
-      flexDirection: "column"
-    },
-    controls: {
-      backgroundColor: _e.alpha(e.palette.background.paper, 0.5),
-      bottom: 0,
-      position: "absolute",
-      width: "100%",
-      zIndex: 50
-    }
-  };
-}, It = b(E(jt), $(St), Ce.withSize(), w("WindowCanvasNavigationControls"));
-const Rt = It(te);
-function kt(t, e) {
-  if (!(t instanceof e)) throw new TypeError("Cannot call a class as a function");
-}
-function K(t, e) {
-  for (var n = 0; n < e.length; n++) {
-    var r = e[n];
-    r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(t, xt(r.key), r);
-  }
-}
-function Nt(t, e, n) {
-  return e && K(t.prototype, e), n && K(t, n), Object.defineProperty(t, "prototype", { writable: !1 }), t;
-}
-function xt(t) {
-  var e = Tt(t, "string");
-  return typeof e == "symbol" ? e : e + "";
-}
-function Tt(t, e) {
-  if (typeof t != "object" || !t) return t;
-  var n = t[Symbol.toPrimitive];
-  if (n !== void 0) {
-    var r = n.call(t, e);
-    if (typeof r != "object") return r;
-    throw new TypeError("@@toPrimitive must return a primitive value.");
-  }
-  return String(t);
-}
-function zt(t, e, n) {
-  return e = g(e), Dt(t, re() ? Reflect.construct(e, n || [], g(t).constructor) : e.apply(t, n));
-}
-function Dt(t, e) {
-  if (e && (typeof e == "object" || typeof e == "function")) return e;
-  if (e !== void 0) throw new TypeError("Derived constructors may only return object or undefined");
-  return Vt(t);
-}
-function Vt(t) {
-  if (t === void 0) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-  return t;
-}
-function re() {
-  try {
-    var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function() {
-    }));
-  } catch {
-  }
-  return (re = function() {
-    return !!t;
-  })();
-}
-function g(t) {
-  return g = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function(e) {
-    return e.__proto__ || Object.getPrototypeOf(e);
-  }, g(t);
-}
-function Zt(t, e) {
-  if (typeof e != "function" && e !== null) throw new TypeError("Super expression must either be null or a function");
-  t.prototype = Object.create(e && e.prototype, { constructor: { value: t, writable: !0, configurable: !0 } }), Object.defineProperty(t, "prototype", { writable: !1 }), e && N(t, e);
-}
-function N(t, e) {
-  return N = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function(n, r) {
-    return n.__proto__ = r, n;
-  }, N(t, e);
-}
-var qt = /* @__PURE__ */ l.lazy(function() {
-  return import("./OpenSeadragonViewer.js");
-}), Wt = /* @__PURE__ */ function(t) {
-  function e(n) {
-    var r;
-    return kt(this, e), r = zt(this, e, [n]), r.state = {}, r;
-  }
-  return Zt(e, t), Nt(e, [{
-    key: "render",
-    value: (
-      /**
-       * Renders things
-       */
-      function() {
-        var r = this.props.windowId, a = this.state.hasError;
-        return a ? /* @__PURE__ */ o.createElement(o.Fragment, null) : /* @__PURE__ */ o.createElement(l.Suspense, {
-          fallback: /* @__PURE__ */ o.createElement("div", null)
-        }, /* @__PURE__ */ o.createElement(qt, {
-          windowId: r
-        }, /* @__PURE__ */ o.createElement(Rt, {
-          windowId: r
-        })));
-      }
-    )
-  }], [{
-    key: "getDerivedStateFromError",
-    value: function(r) {
-      return {
-        hasError: !0
-      };
-    }
-  }]);
-}(l.Component), Bt = b(
-  w("WindowViewer")
-  // further HOC go here
-);
-const Mt = Bt(Wt);
-export {
-  Mt as default
-};
+var ct = /*#__PURE__*/ (0, w.lazy)(function() {
+	return import("./OpenSeadragonViewer.js");
+}), lt = /*#__PURE__*/ function(e) {
+	function t(e) {
+		var n;
+		return tt(this, t), n = it(this, t, [e]), n.state = {}, n;
+	}
+	return st(t, e), nt(t, [{
+		key: "render",
+		value: function() {
+			var e = this.props.windowId;
+			return this.state.hasError ? /*#__PURE__*/ w.createElement(w.Fragment, null) : /*#__PURE__*/ w.createElement(w.Suspense, { fallback: /*#__PURE__*/ w.createElement("div", null) }, /*#__PURE__*/ w.createElement(ct, { windowId: e }, /*#__PURE__*/ w.createElement(et, { windowId: e })));
+		}
+	}], [{
+		key: "getDerivedStateFromError",
+		value: function(e) {
+			return { hasError: !0 };
+		}
+	}]);
+}(w.Component);
+//#endregion
+//#region node_modules/mirador/dist/es/src/containers/WindowViewer.js
+n();
+var ut = c(s("WindowViewer"))(lt);
+//#endregion
+export { ut as default };
+
 //# sourceMappingURL=WindowViewer.js.map

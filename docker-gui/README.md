@@ -163,10 +163,10 @@ For advanced users who want to run generation commands manually:
 
 ```bash
 # Manual tile generation
-docker exec -w /app iiif-static-choices-iiif-static-choices-1 python iiif_generator.py tiles -t 256 -v 3.0
+docker exec -w /app iiif-static-choices-iiif-static-choices-1 uv run python iiif_generator.py tiles -t 256 -v 3.0
 
 # Manual manifest generation
-docker exec -w /app iiif-static-choices-iiif-static-choices-1 bash -c 'cp image/ammonite-config.yml . && python iiif_generator.py manifest -f ammonite-config.yml -o iiif/manifest/pyritised-ammonite.json -d .'
+docker exec -w /app iiif-static-choices-iiif-static-choices-1 bash -c 'cp image/ammonite-config.yml . && uv run python iiif_generator.py manifest -f ammonite-config.yml -o iiif/manifest/pyritised-ammonite.json -d .'
 ```
 
  > **Note**: These commands are useful for debugging or when you need more control over the generation process. For normal usage, the web interface handles all these steps automatically.

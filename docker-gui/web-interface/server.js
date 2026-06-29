@@ -325,13 +325,13 @@ app.post('/upload', upload.fields([
 
     try {
       // Generate manifest
-      await execCommand(`cd /app && python iiif_generator.py manifest -f ${outputId}-config.yml -o ${outputId}.json`);
+      await execCommand(`cd /app && uv run python iiif_generator.py manifest -f ${outputId}-config.yml -o ${outputId}.json`);
       console.log('Manifest generated. Generating tiles...');
 
       // Generate tiles
-      await execCommand(`cd /app && python iiif_generator.py tiles -t 256 -v 3.0 -f ${outputId}-config.yml`);
+      await execCommand(`cd /app && uv run python iiif_generator.py tiles -t 256 -v 3.0 -f ${outputId}-config.yml`);
       console.log('Tiles generated. Generating viewer page...');
-      
+
       // Fix URLs in generated files
       fixUrlsInGeneratedFiles(outputId, [albedoId, normalsId]);
 
@@ -341,14 +341,14 @@ app.post('/upload', upload.fields([
       // Return success response
       res.json({
         success: true,
-        message: 'Visor generado correctamente',
+        message: 'Viewer successfully generated',
         viewerUrl,
         manifestUrl
       });
     } catch (error) {
       return res.status(500).json({
         success: false,
-        message: 'Error procesando imágenes',
+        message: 'Image processing error',
         error: error.stderr || error.message
       });
     }
@@ -356,7 +356,7 @@ app.post('/upload', upload.fields([
     console.error(`Error uploading files: ${err}`);
     res.status(500).json({
       success: false,
-      message: 'Error interno del servidor',
+      message: 'Internal server error',
       error: err.message
     });
   }

@@ -37,6 +37,8 @@ npm-debug.log*
 .Python
 **/.venv/
 **/.pytest_cache/
+**/.ruff_cache
+**/.mypy_cache
 
 # Exclude system files
 .DS_Store
