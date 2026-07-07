@@ -1,17 +1,21 @@
-[tool.poetry]
+[project]
 name = "iiif-tiler-py"
-version = "0.1.0"
+version = "1.0"
 description = ""
-authors = ["Richard Benjamin Allen <richard@palaeopi.org.uk>"]
+requires-python  = ">=3.12"
 readme = "README.md"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+]
+dependencies = [
+    "pyyaml==6.0.1",
+    "pillow==12.2.0",
+    "numpy==2.4.6",
+]
 
-[tool.poetry.dependencies]
-python = "^3.9"
-pyyaml = "^6.0.1"
-imageio = "^2.34.0"
-
-
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
 

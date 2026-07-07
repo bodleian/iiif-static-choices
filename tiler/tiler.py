@@ -6,8 +6,6 @@
 
 Copyright © 2024 Bodleian Libraries
 """
-
-import imageio
 import json
 import logging.config
 import math
@@ -96,7 +94,7 @@ class Tiler:
             os.makedirs(os.path.dirname(output_file), exist_ok=True)
             log.debug(output_file)
 
-            imageio.v2.imwrite(output_file, scaled_image, self.image_format)
+            Image.fromarray(scaled_image).save(output_file, format=self.image_format.strip('.'))
             if size.get("x") == self.image.get_width() and size.get("y") == self.image.get_height():
                 if self.version == VERSION3:
                     image_size = "max"
@@ -105,7 +103,7 @@ class Tiler:
 
                 output_file = os.path.join(image_path, "./full/", image_size + "/0/default" + self.image_format)
                 os.makedirs(os.path.dirname(output_file), exist_ok=True)
-                imageio.v2.imwrite(output_file, scaled_image, self.image_format)
+                Image.fromarray(scaled_image).save(output_file, format=self.image_format.strip('.'))
 
     def _generate_scale_tiles(self, image_path: str):
         """
@@ -200,7 +198,7 @@ class Tiler:
                         scaled_image: numpy.ndarray = numpy.asarray(resized_image)
 
                     try:
-                        imageio.v2.imwrite(output_file, scaled_image, self.image_format)
+                        Image.fromarray(scaled_image).save(output_file, format=self.image_format.strip('.'))
                     except IOError as error:
                         log.error("Failed to write s%", output_file)
                         raise error

@@ -22,17 +22,17 @@ The tile generation part of this project is based on and translated from the wor
 
 Dependencies
 ===
-
-- Python 3.9
-- Poetry
+- UV
 
 Installation Instructions
 ===
 
-Install the project after installing Python and Poetry, as follows:
+Install UV on your system according to the instructions found here: https://docs.astral.sh/uv/getting-started/installation/
+
+Install the project after installing UV, as follows:
 
 ```bash
-poetry install --no-root
+uv sync
 ```
 
 Basic Instructions
@@ -43,21 +43,21 @@ For this quick guide we'll be using the existing example images and manifest-con
 1. Run the tile generation as follows, this will generate v3 static tiles in the `iiif/image` folder:
 
     ```bash
-    poetry run python iiif_generator.py tiles -t 256 -v 3.0
+    uv run python iiif_generator.py tiles -t 256 -v 3.0 -f ammonite-config.yml
     ```
     **Note**: for Windows/WSL users: Add `-i http://localhost:8000/iiif/ -d image` to the command to avoid connection issues.
 
 2. Run the manifest generator as follows, this will generate a v3 manifest in the `iiif/manifest` folder:
 
     ```bash
-    poetry run python iiif_generator.py manifest -f ammonite-config.yml -o pyritised-ammonite.json 
+    uv run python iiif_generator.py manifest -f ammonite-config.yml -o pyritised-ammonite.json 
     ```
     **Note**: for Windows/WSL users: Add `-s http://localhost:8000 -d image` to the command to avoid connection issues.
 
 3. Run the basic server application as follows:
 
     ```bash
-    poetry run python server 8000
+    uv run python server 8000
     ```
 
 Using your own images and manifest-config.yml

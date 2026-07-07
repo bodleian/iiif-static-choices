@@ -75,7 +75,12 @@ class CORSRequestHandler(SimpleHTTPRequestHandler):
                           self.log_date_time_string(),
                           format % args))
         
-        # If this is a request for a manifest or image, log more details
+        # If this is a request for a manifest or image, log more details.
+        # On error responses, BaseHTTPRequestHandler.log_error passes the
+        # HTTPStatus code as args[0], not the request-line string, so guard
+        # against non-str values to avoid crashing the request handler on 404s.
+        if not args or not isinstance(args[0], str):
+            return
         request = args[0].split()
         if len(request) > 1:
             path = request[1]

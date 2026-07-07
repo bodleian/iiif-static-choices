@@ -5,6 +5,7 @@
     <meta charset="utf-8" />
     <!-- By default Mirador uses Roboto font. Be sure to load this or change the font -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
+    <link rel="stylesheet" href="./mirador/dist/mirador-with-plugins.css">
     <title>Mirador Example</title>
     <script type="module">
       import {Mirador, MiradorPlugins} from "./mirador/dist/mirador-with-plugins.js";
@@ -14,9 +15,13 @@
           windows: [{
             // enable and show the image tools plugin controls
             imageToolsEnabled: true,
-            imageToolsOpen: true,
+            normalsInverted: true,
+            imageToolsOpen: false,
+            sideBarOpen: false,
+            archioxPluginOpen: true,
             // open a specific manifest (optional)
             manifestId: 'http://localhost:8000/iiif/manifest/pyritised-ammonite.json',
+            showRelightDraggableLightButton: true,
           }],
 
           /* If you want to try this repository out with bodleian objects Manipulate IIIF HTTP requests
@@ -24,12 +29,17 @@
           Bodleian v3 manifests and images. */
           requests: {
             preprocessors: [
-              (url, options) => ({...options,
+              (url, options) => ({
+                ...options,
                 headers: {
+                  /* Preflight checks are triggered by the use of a colon in the profile, so if the CORS
+                  options aren't set correctly on the host server, the request will be rejected.
+                  Due to this, only use v3 content negotiation on Bodleian resources */
                   ...options.headers,
                   Accept: url.endsWith('/info.json')
-                          ? 'application/ld+json;profile=http://iiif.io/api/image/3/context.json'
-                          : 'application/ld+json;profile="http://iiif.io/api/presentation/3/context.json"'
+                          ? 'application/ld+json;profile="http://iiif.io/api/image/3/context.json"'
+                          : 'application/ld+json;profile="http://iiif.io/api/presentation/3/context.json"',
+                  ...(url.endsWith('/info.json') && {'Cache-Control': 'no-cache'})
                 }
               })
             ],
@@ -41,7 +51,7 @@
               },
             },
           },
-          osdConfig:{
+          osdConfig: {
             crossOriginPolicy: "Anonymous",
             subPixelRoundingForTransparency: 2,
             immediateRender: true,
