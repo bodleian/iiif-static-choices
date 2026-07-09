@@ -128,6 +128,7 @@ function generateConfigFile(outputId, formData) {
     description,
     summary,
     shelfmark,
+    canvasLabel,
     language = 'en',
     providerName = 'Digital Repository'
   } = formData;
@@ -166,7 +167,7 @@ part_of:
 
 items:
   canvas_id: "canvas-1"
-  folio: "folio-1"
+  canvas_label: "${canvasLabel || 'folio-1'}"
   preferred_image: "${albedoId}.png"
   images:
     - image_id: "${albedoId}"
