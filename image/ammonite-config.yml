@@ -21,7 +21,7 @@ part_of:
 
 items:
   canvas_id: "pyritised-ammonite"
-  folio: "Lateral right side view"
+  canvas_label: "Left lateral view"
   preferred_image: "ammonite-albedo.png"
   images:
     - image_id: "ammonite-albedo"

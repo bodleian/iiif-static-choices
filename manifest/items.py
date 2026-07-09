@@ -21,7 +21,7 @@ class Items:
     Attributes:
         host: String containing the host part of the IIIF URIs e.g. http://localhost:8000.
         language: String containing the two letter language code the manuscript is in.
-        folio: String containing the page folio label.
+        canvas_label: String containing the canvas label.
         preferred_image_format: String containing the preferred format of the images e.g. jpg, webp, png etc.
         body_items: List containing the images in the choices annotation.
         items: List containing the canvas and body items.
@@ -35,7 +35,7 @@ class Items:
         """
         self.host: str = host
         self.language: str = language
-        self.folio: str = imagedata.get("folio")
+        self.canvas_label: str = imagedata.get("canvas_label")
         preferred_image: str = os.path.join("./image/", imagedata.get("preferred_image"))
         self.preferred_image_format: str = os.path.splitext(imagedata.get("preferred_image"))[1]
         preferred_image_metrics: Dict = self.get_image_metrics(preferred_image)
@@ -50,7 +50,7 @@ class Items:
                 "type": "Canvas",
                 "label": {
                     language: [
-                        self.folio
+                        self.canvas_label
                     ]
                 },
                 "width": canvas_width,
@@ -124,7 +124,7 @@ class Items:
             "format": f"image/{self.preferred_image_format.strip('.')}",
             "label": {
                 self.language: [
-                    self.folio
+                    self.canvas_label
                 ]
             },
             "width": image_width,
